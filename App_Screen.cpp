@@ -50,6 +50,7 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint    (LiquidCrystal_I2C      
                                                          uint8                  u8Digit,            uint8               u8ValuesPerRow,
                                                          uint8                  u8DigitsPerValue,   bool                bReset              );
 static void _v_AppScreen_GetValues_SetValuesDefined     (T_ScreenGetValues    * pt_Screen                                                   );
+static void _v_AppScreen_GetValues_Cpy_IndexVars        (T_IndexVariables     * pt_Index,           T_IndexVariables  * pt_IndexCpy         );
 static void _v_AppScreen_GetValues_Clr_IndexVars        (T_IndexVariables     * pt_Index                                                    );
 static void _v_AppScreen_GetValues_CpyAndClr_IndexVars  (T_IndexVariables     * pt_Index,           T_IndexVariables  * pt_IndexCpy         );
 static void _v_AppScreen_GetValues_Restore_IndexVars    (T_IndexVariables     * pt_Index,           T_IndexVariables  * pt_IndexCpy         );
@@ -429,6 +430,18 @@ static void _v_AppScreen_GetValues_SetValuesDefined(T_ScreenGetValues * pt_Scree
 
 
 /**
+ * \brief  This function makes a backup copy of all loop count variables 
+ * \return Each member of pt_Index is copied into pt_IndexCpy
+ */
+static void _v_AppScreen_GetValues_Cpy_IndexVars   (T_IndexVariables * pt_Index,    // [I, ] Screen data
+                                                    T_IndexVariables * pt_IndexCpy) // [ ,O] Copy of Loop Count Variables
+{
+    // Copy all of the index variables
+    *pt_IndexCpy = *pt_Index;
+}
+
+
+/**
  * \brief  This function clears all loop count variables of a 'Get Values' screen
  * \return Each member of pt_Index is cleared
  */
@@ -450,11 +463,8 @@ static void _v_AppScreen_GetValues_Clr_IndexVars(T_IndexVariables * pt_Index) //
 static void _v_AppScreen_GetValues_CpyAndClr_IndexVars (T_IndexVariables * pt_Index,    // [I,O] Screen data
                                                         T_IndexVariables * pt_IndexCpy) // [ ,O] Copy of Loop Count Variables
 {
-    // Create a copy of the index variables
-    *pt_IndexCpy = *pt_Index;
-
-    // Clear all index variables
-    _v_AppScreen_GetValues_Clr_IndexVars(pt_Index);
+    _v_AppScreen_GetValues_Cpy_IndexVars(pt_Index, pt_IndexCpy);    // Create a copy of the index variables
+    _v_AppScreen_GetValues_Clr_IndexVars(pt_Index);                 // Clear all index variables
 }
 
 
@@ -478,7 +488,7 @@ static void _v_AppScreen_GetValues_Restore_IndexVars   (T_IndexVariables * pt_In
  */
 static void _v_AppScreen_GetValues_CpyAndClr_Values (uint8 * pau8Values,    // [I,O] Values from screen
                                                      uint8 * pau8ValuesCpy, // [ ,O] Copy of values
-                                                     uint8   u8NumValues)   // [ ,O] Number of values to Copy
+                                                     uint8   u8NumValues)   // [I, ] Number of values to Copy
 {
     if ((NULL != pau8Values) && (NULL != pau8ValuesCpy))
     { // Check for NULL pointers
@@ -500,9 +510,9 @@ static void _v_AppScreen_GetValues_CpyAndClr_Values (uint8 * pau8Values,    // [
 *         backup copy in a 'Get Values' screen
 * \return u8NumValues of pau8Values are restored from pau8ValuesCpy
 */
-static void _v_AppScreen_GetValues_Restore_Values  (uint8 * pau8Values,    // [I,O] Values from screen
-                                                    uint8 * pau8ValuesCpy, // [ ,O] Copy of values
-                                                    uint8   u8NumValues)   // [ ,O] Number of values to Restore
+static void _v_AppScreen_GetValues_Restore_Values  (uint8 * pau8Values,    // [ ,O] Values from screen
+                                                    uint8 * pau8ValuesCpy, // [I, ] Copy of values
+                                                    uint8   u8NumValues)   // [I, ] Number of values to Restore
 {
     if ((NULL != pau8Values) && (NULL != pau8ValuesCpy))
     { // Check for NULL pointers
@@ -630,10 +640,10 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
                         u8Digit = gc_au8DigitConv[su8PrevPress] + 10;
 
                         // Create a copy, then clear all values printed thus far
-                        _v_AppScreen_GetValues_CpyAndClr_Values   ( pt_Screen->pau8Values, &au8Values[0], pt_Screen->t_Index.u8ValuesPrinted);
+                        _v_AppScreen_GetValues_CpyAndClr_Values   ( pt_Screen->pau8Values,  &au8Values[0], pt_Screen->t_Index.u8ValuesPrinted);
 
                         // Create a copy, then clear all loop count variables
-                        _v_AppScreen_GetValues_CpyAndClr_IndexVars(&pt_Screen->t_Index,    &t_IndexTemp);
+                        _v_AppScreen_GetValues_CpyAndClr_IndexVars(&pt_Screen->t_Index,     &t_IndexTemp);
 
                         // Clear display and reset cursor to top left corner
                         j_Lcd.clear();
@@ -708,9 +718,41 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
                                                              u8DigitsPerValue,
                                                              bReset);
 
-                    if (pt_Screen->bPatternFill)
-                    {
-                        // \todo - Fill in pattern
+                    // Similar to HEX screen selection validity, due to complexity of reprinting screen with 2-digit
+                    // values, only one digit OR one nibble values are currently supported for pattern fill.
+                    if (pt_Screen->bPatternFill && (1 == u8DigitsPerValue))
+                    { // Continue printing until pattern is displayed
+                        // Create a copy, then clear all values printed thus far
+                        _v_AppScreen_GetValues_CpyAndClr_Values ( pt_Screen->pau8Values,    &au8Values[0], pt_Screen->t_Index.u8ValuesPrinted);
+
+                        // Create a copy, but do not clear all loop count variables
+                        _v_AppScreen_GetValues_Cpy_IndexVars    (&pt_Screen->t_Index,       &t_IndexTemp);
+
+                        while (pt_Screen->t_Index.u8ValuesPrinted < pt_Screen->u8NumberValuesTotalDefined)
+                        { // Continue printing pattern fill until all values have been defined
+                            for (size_t i = 0; i < t_IndexTemp.u8ValuesPrinted; i++)
+                            {
+                                if (pt_Screen->t_Index.u8ValuesPrinted >= pt_Screen->u8NumberValuesTotalDefined)
+                                { // Pattern fill is complete - all values are defined
+                                    break; // Break out of for loop
+                                }
+                                else
+                                { // Print the pattern that has been specified by the user thus far
+                                    _v_AppScreen_GetValues_SetCursorAndPrint(j_Lcd, 
+                                                                             pt_Screen, 
+                                                                             au8Values[i],
+                                                                             u8ValuesPerRow,
+                                                                             u8DigitsPerValue,
+                                                                             false);
+                                }
+                            }
+                        }
+
+                        // Now that pattern fill is complete, restore index variables from backup copy
+                        _v_AppScreen_GetValues_Restore_IndexVars(&pt_Screen->t_Index,    &t_IndexTemp);
+
+                        // Now that pattern fill is complete, restore values from backup copy
+                        _v_AppScreen_GetValues_Restore_Values   ( pt_Screen->pau8Values, &au8Values[0], pt_Screen->t_Index.u8ValuesPrinted);
                     }
                 }
             }
