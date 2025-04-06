@@ -363,7 +363,7 @@ static void _v_AppStillLights_StillPatternedEqualSections(LiquidCrystal_I2C j_Lc
             v_AppScreen_GetValues_SetMaxValue       (&st_ScreenPatternOrder,    su8NumUniqueSections);
 
             /* Values Array */
-            v_AppScreen_GetValues_SetValuesArray    (&st_ScreenUniqueSects,     &pt_LedStrip->au8Order[0]);
+            v_AppScreen_GetValues_SetValuesArray    (&st_ScreenPatternOrder,    &pt_LedStrip->au8Order[0]);
 
             /* Total number of values */
             v_AppScreen_GetValues_SetNumValuesTotal (&st_ScreenPatternOrder,    su8NumPatternedSections);

@@ -376,11 +376,6 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lc
 
             if ((u32LatestValue <= pt_Screen->u8MaxValue) && (u32LatestValue >= pt_Screen->u8MinValue))
             { // Value provided by user from keypad is within required range maximum/minimum - set latest value
-                
-                Serial.println("");
-                Serial.println("On Line 378!");
-                Serial.println("");
-
                 // Increment values per row index and tally of number of values printed
                 _v_AppScreen_GetValues_IncrementValue(pt_Screen);
 
@@ -388,36 +383,10 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lc
                     (pt_Screen->u8ValuesPrinted <= pt_Screen->u8NumberValuesTotalDefined) )  // Values printed less than or equal to values to be defined
                 { // Set latest value to next value in array (subtract one since counting from zero)
                     *(pt_Screen->pau8Values + pt_Screen->u8ValuesPrinted - 1) = (uint8) u32LatestValue;
-
-                    Serial.println("");
-                    Serial.println("");
-                    Serial.println("On Line 391!");
-
-                    Serial.print("Latest Value: ");
-                    Serial.println(u32LatestValue);
-
-                    Serial.print("Address of pau8Values to uint8: ");
-                    Serial.println((uint8) pt_Screen->pau8Values);
-
-                    Serial.print("Address of (pt_Screen->pau8Values + pt_Screen->u8ValuesPrinted - 1) cast to uint8: ");
-                    Serial.println((uint8) (pt_Screen->pau8Values + pt_Screen->u8ValuesPrinted - 1));
-
-                    Serial.print("Contents of pointer pau8Values ");
-                    Serial.println(*pt_Screen->pau8Values);
-
-                    Serial.print("Contents of pointer (pt_Screen->pau8Values + pt_Screen->u8ValuesPrinted - 1) ");
-                    Serial.println(*(pt_Screen->pau8Values + pt_Screen->u8ValuesPrinted - 1));
-
-                    Serial.println("");
-                    Serial.println("");
                 }
                 else
                 { // Print error message as punishment for NULL/array overrun
                     Serial.println("SO UNCIVILIZED!");
-
-                    Serial.println("");
-                    Serial.println("On Line 416!");
-                    Serial.println("");
                 }
             }
             else
@@ -552,9 +521,10 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
                 if ((su8PrevPress   == pt_Screen->u8KeypressHex) && // Released keypress is defined for hex selection -AND-
                     (KEYPRESS_NONE  != pt_Screen->u8KeypressHex) )  // Keypress for hex selection is defined
                 {
-                    // Max u8 is 0xFF, so there is no case where a 3 nibble value will fit in a u8
+                    // Max u8 is 0xFF, so there is no case where a 3 nibble value will fit in a u8. However, due to complexity
+                    // of reprinting screen with 2-digit values, only one digit hex values are currently supported.
                     bool    bHexSelectionValid  = (1 == u8DigitsPerValue) && (MAX_VALUE_ONE_DIGIT       < pt_Screen->u8MaxValue);
-                            bHexSelectionValid |= (2 == u8DigitsPerValue) && (MAX_VALUE_TWO_DIGITS      < pt_Screen->u8MaxValue);
+                            // bHexSelectionValid |= (2 == u8DigitsPerValue) && (MAX_VALUE_TWO_DIGITS      < pt_Screen->u8MaxValue);
                     
                     if (bHexSelectionValid && !sbHexSelectionActive)  
                     { // Display screen if hex selection is valid and not yet displayed
@@ -603,7 +573,7 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
                         { // Reprint values that have been printed thus far
                             _v_AppScreen_GetValues_SetCursorAndPrint(j_Lcd, 
                                                                      &t_ScreenCopy, 
-                                                                     pt_Screen->au8Digit[i],
+                                                                     *(pt_Screen->pau8Values + i),
                                                                      u8ValuesPerRow,
                                                                      u8DigitsPerValue,
                                                                      false);
@@ -646,81 +616,6 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
                                                                                  u8ValuesPerRow, 
                                                                                  u8DigitsPerValue,
                                                                                  bReset);
-                
-                Serial.println("");
-                Serial.println("/*----------------------------------*/");
-                Serial.println("/*-          NEW KEYPRESS          -*/");
-                Serial.println("/*----------------------------------*/");
-                Serial.println("");
-
-                Serial.print("Current press: ");
-                Serial.println(u8CurrentPress);
-
-                Serial.print("Previous press: ");
-                Serial.println(su8PrevPress);
-
-                Serial.print("Values per row: ");
-                Serial.println(u8ValuesPerRow);
-
-                Serial.print("Digits per value: ");
-                Serial.println(u8DigitsPerValue);
-
-                Serial.print("Reset? ");
-                Serial.println(bReset ? "TRUE" : "FALSE");
-
-                Serial.print("Ones Place Value: ");
-                Serial.println(pt_Screen->au8Digit[0]);
-
-                Serial.print("Tens Place Value: ");
-                Serial.println(pt_Screen->au8Digit[1]);
-
-                Serial.print("Hundreds Place Value: ");
-                Serial.println(pt_Screen->au8Digit[2]);
-
-                Serial.print("Description? ");
-                Serial.println(pt_Screen->bDescription ? "TRUE" : "FALSE");
-
-                Serial.print("Values Defined? ");
-                Serial.println(pt_Screen->bValuesDefined ? "TRUE" : "FALSE");
-
-                Serial.print("Alignment: ");
-                Serial.println(pt_Screen->eAlignment);
-
-                Serial.print("Cursor Position: (");
-                Serial.print(pt_Screen->t_Cursor.u8x);
-                Serial.print(", ");
-                Serial.print(pt_Screen->t_Cursor.u8y);
-                Serial.println(")");
-
-                Serial.print("Digits per value index: ");
-                Serial.println(pt_Screen->u8DigitsPerValueIndex);
-
-                Serial.print("Keypress Finished: ");
-                Serial.println(pt_Screen->u8KeypressFinished);
-
-                Serial.print("Keypress Hex: ");
-                Serial.println(pt_Screen->u8KeypressHex);
-
-                Serial.print("Latest Value: ");
-                Serial.println(*(pt_Screen->pau8Values + pt_Screen->u8ValuesPrinted - 1));
-
-                Serial.print("Max Value: ");
-                Serial.println(pt_Screen->u8MaxValue);
-
-                Serial.print("Min Value: ");
-                Serial.println(pt_Screen->u8MinValue);
-
-                Serial.print("Number Values Total Defined: ");
-                Serial.println(pt_Screen->u8NumberValuesTotalDefined);
-
-                Serial.print("Row Index: ");
-                Serial.println(pt_Screen->u8RowIndex);
-
-                Serial.print("Values Per Row Index: ");
-                Serial.println(pt_Screen->u8ValuesPerRowIndex);
-
-                Serial.print("Values Printed: ");
-                Serial.println(pt_Screen->u8ValuesPrinted);
             }
 
             su8PrevPress = u8CurrentPress; // Store current key press

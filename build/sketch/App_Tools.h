@@ -57,16 +57,17 @@
 #define CONCAT(a, b)            a b
 
 // Types:
-typedef uint8_t     uint8;
-typedef uint16_t    uint16;
-typedef uint32_t    uint32;
+typedef signed      int sint8   __attribute__ ((__mode__ (__QI__)));
+typedef unsigned    int uint8   __attribute__ ((__mode__ (__QI__)));
 
-typedef int8_t      sint8;
-typedef int16_t     sint16;
-typedef int32_t     sint32;
+typedef signed      int sint16  __attribute__ ((__mode__ (__HI__)));
+typedef unsigned    int uint16  __attribute__ ((__mode__ (__HI__)));
 
-typedef float       float32;
-typedef char        charn;
+typedef signed      int sint32  __attribute__ ((__mode__ (__SI__)));
+typedef unsigned    int uint32  __attribute__ ((__mode__ (__SI__)));
+
+typedef float           float32;
+typedef char            charn;
 
 /***************************
  *          Enums          *

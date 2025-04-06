@@ -11,7 +11,7 @@
         "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src/**",
         "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src/**",
         "C:\\Users\\jaymi\\Documents\\Arduino\\libraries/**",
-        "C:\\Users\\jaymi\\Documents\\Arduino\\20250117_led_code/**"
+        "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs/**"
       ],
       "forcedInclude": [
         "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\Arduino.h"
@@ -43,9 +43,9 @@
         "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
         "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
         "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-        "C:\\Users\\jaymi\\Documents\\Arduino\\20250117_led_code\\build\\sketch\\20250117_led_code.ino.cpp",
+        "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\mpp_smartLEDs.ino.cpp",
         "-o",
-        "C:\\Users\\jaymi\\Documents\\Arduino\\20250117_led_code\\build\\sketch\\20250117_led_code.ino.cpp.o"
+        "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\mpp_smartLEDs.ino.cpp.o"
       ],
       "defines": [
         "F_CPU=16000000L",
