@@ -281,7 +281,7 @@ static void _v_AppStillLights_StillPatternedEqualSections(LiquidCrystal_I2C j_Lc
         // Run task loop update until values are defined
         v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenSectsLeds);
 
-        if (1 == st_ScreenSectsLeds.u8ValuesPrinted)
+        if (1 == st_ScreenSectsLeds.t_Index.u8ValuesPrinted)
         { // First (and in this case, only) value has been printed
             switch(st_SectsMethodMenu.u8Selection)
             {
@@ -378,7 +378,7 @@ static void _v_AppStillLights_StillPatternedEqualSections(LiquidCrystal_I2C j_Lc
         v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenPatternOrder);
 
         // Store number of values printed thus far
-        su8PrevValuesPrinted = st_ScreenPatternOrder.u8ValuesPrinted;
+        su8PrevValuesPrinted = st_ScreenPatternOrder.t_Index.u8ValuesPrinted;
     }
 
                 // done = 0;

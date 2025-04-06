@@ -35,26 +35,33 @@
  *   Function Prototypes   *
  ***************************/
 // Selection menu
-static void _v_AppScreen_MenuSelection_PrintHeader  (LiquidCrystal_I2C      j_Lcd,              T_MenuSelection   * pt_Menu             );
-static void _v_AppScreen_MenuSelection_PrintOptions (LiquidCrystal_I2C      j_Lcd,              T_MenuSelection   * pt_Menu             );
-static void _v_AppScreen_MenuSelection_ScrollArrows (T_MenuSelection      * pt_Menu,            uint8               u8Press             );
-static void _v_AppScreen_MenuSelection_Reset        (LiquidCrystal_I2C      j_Lcd,              T_MenuSelection   * pt_Menu             );
+static void _v_AppScreen_MenuSelection_PrintHeader      (LiquidCrystal_I2C      j_Lcd,              T_MenuSelection   * pt_Menu             );
+static void _v_AppScreen_MenuSelection_PrintOptions     (LiquidCrystal_I2C      j_Lcd,              T_MenuSelection   * pt_Menu             );
+static void _v_AppScreen_MenuSelection_ScrollArrows     (T_MenuSelection      * pt_Menu,            uint8               u8Press             );
+static void _v_AppScreen_MenuSelection_Reset            (LiquidCrystal_I2C      j_Lcd,              T_MenuSelection   * pt_Menu             );
 
 // RGB          screen
-static void _v_AppScreen_RGB_Reset                  (LiquidCrystal_I2C      j_Lcd,              T_ScreenRGB       * pt_Screen           );
+static void _v_AppScreen_RGB_Reset                      (LiquidCrystal_I2C      j_Lcd,              T_ScreenRGB       * pt_Screen           );
 
 // 'Get Values' screen
-static void _v_AppScreen_GetValues_GetCursorPosition(T_ScreenGetValues    * pt_Screen,          uint8               u8FirstAvailableRow,
-                                                     uint8                  u8RowsUnused,       uint8               u8DigitsUnused      );
-static void _v_AppScreen_GetValues_IncrementValue   (T_ScreenGetValues    * pt_Screen                                                   );
-static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lcd,              T_ScreenGetValues * pt_Screen,
-                                                     uint8                  u8Digit,            uint8               u8ValuesPerRow,
-                                                     uint8                  u8DigitsPerValue,   bool                bReset              );
-static void _v_AppScreen_GetValues_SetValuesDefined (T_ScreenGetValues   *  pt_Screen                                                   );
-static void _v_AppScreen_GetValues_PrintValues      (LiquidCrystal_I2C      j_Lcd,              Keypad              j_Keypad,
-                                                     T_ScreenGetValues    * pt_Screen,          bool                bReset              );
-static void _v_AppScreen_GetValues_Reset            (LiquidCrystal_I2C      j_Lcd,              Keypad              j_Keypad,
-                                                     T_ScreenGetValues    * pt_Screen                                                   );
+static void _v_AppScreen_GetValues_GetCursorPosition    (T_ScreenGetValues    * pt_Screen,          uint8               u8FirstAvailableRow,
+                                                         uint8                  u8RowsUnused,       uint8               u8DigitsUnused      );
+static void _v_AppScreen_GetValues_IncrementValue       (T_ScreenGetValues    * pt_Screen                                                   );
+static void _v_AppScreen_GetValues_SetCursorAndPrint    (LiquidCrystal_I2C      j_Lcd,              T_ScreenGetValues * pt_Screen,
+                                                         uint8                  u8Digit,            uint8               u8ValuesPerRow,
+                                                         uint8                  u8DigitsPerValue,   bool                bReset              );
+static void _v_AppScreen_GetValues_SetValuesDefined     (T_ScreenGetValues    * pt_Screen                                                   );
+static void _v_AppScreen_GetValues_Clr_IndexVars        (T_IndexVariables     * pt_Index                                                    );
+static void _v_AppScreen_GetValues_CpyAndClr_IndexVars  (T_IndexVariables     * pt_Index,           T_IndexVariables  * pt_IndexCpy         );
+static void _v_AppScreen_GetValues_Restore_IndexVars    (T_IndexVariables     * pt_Index,           T_IndexVariables  * pt_IndexCpy         );
+static void _v_AppScreen_GetValues_CpyAndClr_Values     (uint8                * pau8Values,         uint8             * pau8ValuesCpy,
+                                                         uint8                  u8NumValues                                                 );
+static void _v_AppScreen_GetValues_Restore_Values       (uint8                * pau8Values,         uint8             * pau8ValuesCpy,
+                                                         uint8                  u8NumValues                                                 );
+static void _v_AppScreen_GetValues_PrintValues          (LiquidCrystal_I2C      j_Lcd,              Keypad              j_Keypad,
+                                                         T_ScreenGetValues    * pt_Screen,          bool                bReset              );
+static void _v_AppScreen_GetValues_Reset                (LiquidCrystal_I2C      j_Lcd,              Keypad              j_Keypad,
+                                                         T_ScreenGetValues    * pt_Screen                                                   );
 
 /***************************
  *         Objects         *
@@ -292,18 +299,18 @@ static void _v_AppScreen_GetValues_GetCursorPosition(T_ScreenGetValues    * pt_S
 
 /**
  * \brief  This function increments values printed tally and the index for the values per row
- * \return pt_Screen->u8ValuesPerRowIndex and pt_Screen->u8ValuesPrinted incremented
+ * \return pt_Screen->t_Index.u8ValueOfRow and pt_Screen->t_Index.u8ValuesPrinted incremented
  */
 static void _v_AppScreen_GetValues_IncrementValue(T_ScreenGetValues * pt_Screen) // [ ,O] Screen data
 {
-    pt_Screen->u8ValuesPerRowIndex++; // Move to next value
-    pt_Screen->u8ValuesPrinted++;     // Keep track of the total number of values printed so far
+    pt_Screen->t_Index.u8ValueOfRow++;      // Move to next value
+    pt_Screen->t_Index.u8ValuesPrinted++;   // Keep track of the total number of values printed so far
 }
 
 
 /**
  * \brief  This function prints placeholder 'blanks' where value entry will occur
- * \return pt_Screen->u8LatestValue set if value entered and in range; pt_Screen->u8ValuesPrinted incremented for each value entered
+ * \return pt_Screen->u8LatestValue set if value entered and in range; pt_Screen->t_Index.u8ValuesPrinted incremented for each value entered
  */
 static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lcd,              // [I, ] Lcd object
                                                      T_ScreenGetValues    * pt_Screen,          // [I,O] Screen data
@@ -312,53 +319,46 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lc
                                                      uint8                  u8DigitsPerValue,   // [I, ] 
                                                      bool                   bReset)             // [I, ] Bool to determine if screen reset is required
 {
-    if ((pt_Screen->u8NumberValuesTotalDefined - pt_Screen->u8ValuesPrinted) < u8ValuesPerRow)
+    if ((pt_Screen->u8NumberValuesTotalDefined - pt_Screen->t_Index.u8ValuesPrinted) < u8ValuesPerRow)
     { // On last row - recalculate cursor position to align final values
 
         // Re-calculate number of unused digits based on remaining values to print
-        uint8 u8DigitsUnused = DISPLAY_WIDTH_X - (pt_Screen->u8NumberValuesTotalDefined - pt_Screen->u8ValuesPrinted) * (u8DigitsPerValue + 1);
+        uint8 u8DigitsUnused = DISPLAY_WIDTH_X 
+                             - (pt_Screen->u8NumberValuesTotalDefined 
+                             -  pt_Screen->t_Index.u8ValuesPrinted) * (u8DigitsPerValue + 1);
 
         // Re-calculate cursor positions based on number of digits used
         if      (ALIGN_CENTER_X & pt_Screen->eAlignment)    pt_Screen->t_Cursor.u8x = u8DigitsUnused / 2;   // Center aligned case
         else if (ALIGN_RIGHT_X  & pt_Screen->eAlignment)    pt_Screen->t_Cursor.u8x = u8DigitsUnused;       // Right aligned case
     }
 
-    if (pt_Screen->u8ValuesPerRowIndex < u8ValuesPerRow)
+    if (pt_Screen->t_Index.u8ValueOfRow < u8ValuesPerRow)
     {
-        if (pt_Screen->u8DigitsPerValueIndex < u8DigitsPerValue)
+        if (pt_Screen->t_Index.u8DigitOfValue < u8DigitsPerValue)
         { // Set cursor position and print digit/blank
-            j_Lcd.setCursor(pt_Screen->t_Cursor.u8x + pt_Screen->u8ValuesPerRowIndex * 
-                            (u8DigitsPerValue + 1)  + pt_Screen->u8DigitsPerValueIndex,
-                            pt_Screen->t_Cursor.u8y + pt_Screen->u8RowIndex);
+            j_Lcd.setCursor(pt_Screen->t_Cursor.u8x + pt_Screen->t_Index.u8ValueOfRow * 
+                            (u8DigitsPerValue + 1)  + pt_Screen->t_Index.u8DigitOfValue,
+                            pt_Screen->t_Cursor.u8y + pt_Screen->t_Index.u8Row);
 
             if (bReset) 
             { // Reset mode - print underscore 'blank'
                 j_Lcd.print(F("_"));
             }
-            else if (pt_Screen->bPatternFill)
-            {
-                /// \todo - create logic for pattern fill
-            }
             else
             { // Else - get and print digit
-                if (pt_Screen->u8DigitsPerValueIndex < LENGTHOF(pt_Screen->au8Digit)) // Array size check
-                    pt_Screen->au8Digit[pt_Screen->u8DigitsPerValueIndex] = u8Digit;
+                if (pt_Screen->t_Index.u8DigitOfValue < LENGTHOF(pt_Screen->au8Digit)) // Array size check
+                    pt_Screen->au8Digit[pt_Screen->t_Index.u8DigitOfValue] = u8Digit;
                 
                 v_AppTools_PrintHex(j_Lcd, u8Digit);
             }
 
-            pt_Screen->u8DigitsPerValueIndex++; // Move to next digit
+            pt_Screen->t_Index.u8DigitOfValue++; // Move to next digit
         }
     }
 
-    if (pt_Screen->u8DigitsPerValueIndex >= u8DigitsPerValue)
+    if (pt_Screen->t_Index.u8DigitOfValue >= u8DigitsPerValue)
     {
-        pt_Screen->u8DigitsPerValueIndex = 0;
-
-        /// \todo - don't think printing space is necessary; remove when tested
-        // Print space
-        // j_Lcd.setCursor(pt_Screen->t_Cursor.u8x + pt_Screen->u8ValuesPerRowIndex * (u8DigitsPerValue + 1) + u8DigitsPerValue, pt_Screen->t_Cursor.u8y + pt_Screen->u8RowIndex);
-        // j_Lcd.print(F(" "));
+        pt_Screen->t_Index.u8DigitOfValue = 0;
 
         // Calculate value from digits if not in reset mode
         if (!bReset)
@@ -379,10 +379,10 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lc
                 // Increment values per row index and tally of number of values printed
                 _v_AppScreen_GetValues_IncrementValue(pt_Screen);
 
-                if ((NULL                       != pt_Screen->pau8Values                ) && // Pointer to value array is not NULL
-                    (pt_Screen->u8ValuesPrinted <= pt_Screen->u8NumberValuesTotalDefined) )  // Values printed less than or equal to values to be defined
-                { // Set latest value to next value in array (subtract one since counting from zero)
-                    *(pt_Screen->pau8Values + pt_Screen->u8ValuesPrinted - 1) = (uint8) u32LatestValue;
+                if ((NULL                               != pt_Screen->pau8Values                ) && // Pointer to value array is not NULL
+                    (pt_Screen->t_Index.u8ValuesPrinted <= pt_Screen->u8NumberValuesTotalDefined) )  // Values printed less than or equal to values to be defined
+                { // Set next value in array to latest value (subtract one since counting from zero)
+                    *(pt_Screen->pau8Values + pt_Screen->t_Index.u8ValuesPrinted - 1) = (uint8) u32LatestValue;
                 }
                 else
                 { // Print error message as punishment for NULL/array overrun
@@ -393,8 +393,9 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lc
             { // Value provided by user from keypad is outside required maximum/minimum range - reset last value to 'blanks'
                 for (size_t i = 0; i < u8DigitsPerValue; i++)
                 { // Set cursor to each digit in last printed value and replace with underscores
-                    j_Lcd.setCursor(pt_Screen->t_Cursor.u8x + pt_Screen->u8ValuesPerRowIndex * (u8DigitsPerValue + 1) + i, pt_Screen->t_Cursor.u8y + pt_Screen->u8RowIndex);
-                    j_Lcd.print(F("_"));
+                    j_Lcd.setCursor(pt_Screen->t_Cursor.u8x + pt_Screen->t_Index.u8ValueOfRow * (u8DigitsPerValue + 1) + i, 
+                                    pt_Screen->t_Cursor.u8y + pt_Screen->t_Index.u8Row);
+                    j_Lcd.print    (F("_"));
                 }
             }
         }
@@ -403,10 +404,10 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lc
             _v_AppScreen_GetValues_IncrementValue(pt_Screen);
         }
 
-        if (pt_Screen->u8ValuesPerRowIndex >= u8ValuesPerRow)
+        if (pt_Screen->t_Index.u8ValueOfRow >= u8ValuesPerRow)
         { // Values per row reached; move to next row
-            pt_Screen->u8ValuesPerRowIndex = 0;
-            pt_Screen->u8RowIndex++;
+            pt_Screen->t_Index.u8ValueOfRow = 0;
+            pt_Screen->t_Index.u8Row++;
         }
     }
 }
@@ -422,9 +423,97 @@ static void _v_AppScreen_GetValues_SetValuesDefined(T_ScreenGetValues * pt_Scree
     pt_Screen->bValuesDefined = true;
 
     // Set back to zero since all values are now printed
-    pt_Screen->u8RowIndex             = 0;
-    pt_Screen->u8ValuesPerRowIndex    = 0;
-    pt_Screen->u8DigitsPerValueIndex  = 0;
+    pt_Screen->t_Index.u8Row           = 0;
+    pt_Screen->t_Index.u8ValueOfRow    = 0;
+    pt_Screen->t_Index.u8DigitOfValue  = 0;
+}
+
+
+/**
+ * \brief  This function clears all loop count variables of a 'Get Values' screen
+ * \return Each member of pt_Index is cleared
+ */
+static void _v_AppScreen_GetValues_Clr_IndexVars(T_IndexVariables * pt_Index) // [ ,O] Screen data
+{
+    // Clear all index variables
+    pt_Index->u8Row             = 0;
+    pt_Index->u8ValueOfRow      = 0;
+    pt_Index->u8DigitOfValue    = 0;
+    pt_Index->u8ValuesPrinted   = 0;
+}
+
+
+/**
+ * \brief  This function makes a backup copy of all loop count variables 
+ *         before clearing them in a 'Get Values' screen
+ * \return Each member of pt_Index is copied into pt_IndexCpy and then cleared
+ */
+static void _v_AppScreen_GetValues_CpyAndClr_IndexVars (T_IndexVariables * pt_Index,    // [I,O] Screen data
+                                                        T_IndexVariables * pt_IndexCpy) // [ ,O] Copy of Loop Count Variables
+{
+    // Create a copy of the index variables
+    *pt_IndexCpy = *pt_Index;
+
+    // Clear all index variables
+    _v_AppScreen_GetValues_Clr_IndexVars(pt_Index);
+}
+
+
+/**
+ * \brief  This function restores all loop count variables from a 
+*          backup copy in a 'Get Values' screen
+ * \return Each member of pt_Index is restored from pt_IndexCpy
+ */
+static void _v_AppScreen_GetValues_Restore_IndexVars   (T_IndexVariables * pt_Index,    // [ ,O] Loop count variables from screen
+                                                        T_IndexVariables * pt_IndexCpy) // [I, ] Copy of Loop Count Variables
+{
+    // Restore loop count variables from backup copy
+    *pt_Index = *pt_IndexCpy;
+}
+
+
+/**
+ * \brief  This function makes a backup copy of all values
+ *         before clearing them in a 'Get Values' screen
+ * \return u8NumValues of pau8Values are copied into pau8ValuesCpy and cleared
+ */
+static void _v_AppScreen_GetValues_CpyAndClr_Values (uint8 * pau8Values,    // [I,O] Values from screen
+                                                     uint8 * pau8ValuesCpy, // [ ,O] Copy of values
+                                                     uint8   u8NumValues)   // [ ,O] Number of values to Copy
+{
+    if ((NULL != pau8Values) && (NULL != pau8ValuesCpy))
+    { // Check for NULL pointers
+        for (size_t i = 0; i < u8NumValues; i++)
+        { // Loop through all values to be copied
+            *(pau8ValuesCpy + i) = *(pau8Values + i); // Copy value
+            *(pau8Values    + i) = 0;                 // Clear value
+        }
+    }
+    else
+    { // Print error message as punishment for NULL
+        Serial.println("DON'T GO BREAKING MY HEART!");
+    }
+}
+
+
+/**
+* \brief  This function restores all values from a 
+*         backup copy in a 'Get Values' screen
+* \return u8NumValues of pau8Values are restored from pau8ValuesCpy
+*/
+static void _v_AppScreen_GetValues_Restore_Values  (uint8 * pau8Values,    // [I,O] Values from screen
+                                                    uint8 * pau8ValuesCpy, // [ ,O] Copy of values
+                                                    uint8   u8NumValues)   // [ ,O] Number of values to Restore
+{
+    if ((NULL != pau8Values) && (NULL != pau8ValuesCpy))
+    { // Check for NULL pointers
+        // Loop through and restore all values
+        for (size_t i = 0; i < u8NumValues; i++) *(pau8Values + i) = *(pau8ValuesCpy + i); 
+    }
+    else
+    { // Print error message as punishment for NULL
+        Serial.println("SOMEBODY'S GOT TO DO IT. I AM THE CHOSEN ONE!");
+    }
 }
 
 
@@ -492,8 +581,8 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
         if (bReset)
         { // Print blanks on first loop
 
-            while ((pt_Screen->u8RowIndex      < u8RowsNeeded                         ) && // Row index less than rows needed -AND-
-                   (pt_Screen->u8ValuesPrinted < pt_Screen->u8NumberValuesTotalDefined))   // Printed values still less than number of specified values
+            while ((pt_Screen->t_Index.u8Row           < u8RowsNeeded                         ) &&  // Row index less than rows needed -AND-
+                   (pt_Screen->t_Index.u8ValuesPrinted < pt_Screen->u8NumberValuesTotalDefined))    // Printed values still less than number of specified values
             {
                 _v_AppScreen_GetValues_SetCursorAndPrint(j_Lcd, 
                                                          pt_Screen,
@@ -504,10 +593,7 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
             }
 
             // Set back to zero since all placeholders for values are now printed
-            pt_Screen->u8ValuesPrinted        = 0;
-            pt_Screen->u8RowIndex             = 0;
-            pt_Screen->u8ValuesPerRowIndex    = 0;
-            pt_Screen->u8DigitsPerValueIndex  = 0;
+            _v_AppScreen_GetValues_Clr_IndexVars(&pt_Screen->t_Index);
         }
         else
         { // Print values on key press - Check each loop if a new value is submitted
@@ -515,8 +601,9 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
 
             if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE)) // Falling edge of keypress
             { // New value - check row, value, and digit number for location to print value
-
-                uint8 u8Digit = 0; // Local variable to store value of digit or nibble
+                T_IndexVariables    t_IndexTemp;                        // Temporary storage of loop count variables
+                uint8               au8Values[MAX_PATTERNED_SECTIONS];  // Array of stored values
+                uint8               u8Digit = 0;                        // Local variable to store value of digit or nibble
                 
                 if ((su8PrevPress   == pt_Screen->u8KeypressHex) && // Released keypress is defined for hex selection -AND-
                     (KEYPRESS_NONE  != pt_Screen->u8KeypressHex) )  // Keypress for hex selection is defined
@@ -543,14 +630,11 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
                     { // If selection is valid, add ten to selection to convert into nibble
                         u8Digit = gc_au8DigitConv[su8PrevPress] + 10;
 
-                        // Create copy of 'Get Values' screen 
-                        T_ScreenGetValues t_ScreenCopy = *pt_Screen;
+                        // Create a copy, then clear all values printed thus far
+                        _v_AppScreen_GetValues_CpyAndClr_Values   ( pt_Screen->pau8Values, &au8Values[0], pt_Screen->t_Index.u8ValuesPrinted);
 
-                        // Set back to zero to reprint
-                        t_ScreenCopy.u8ValuesPrinted        = 0;
-                        t_ScreenCopy.u8RowIndex             = 0;
-                        t_ScreenCopy.u8ValuesPerRowIndex    = 0;
-                        t_ScreenCopy.u8DigitsPerValueIndex  = 0;
+                        // Create a copy, then clear all loop count variables
+                        _v_AppScreen_GetValues_CpyAndClr_IndexVars(&pt_Screen->t_Index,    &t_IndexTemp);
 
                         // Clear display and reset cursor to top left corner
                         j_Lcd.clear();
@@ -569,25 +653,31 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
                             j_Lcd.print(String(&pt_Screen->acScreenDescription[0]));
                         }
 
-                        for (size_t i = 0; i < pt_Screen->u8ValuesPrinted; i++)
+                        for (size_t i = 0; i < t_IndexTemp.u8ValuesPrinted; i++)
                         { // Reprint values that have been printed thus far
                             _v_AppScreen_GetValues_SetCursorAndPrint(j_Lcd, 
-                                                                     &t_ScreenCopy, 
-                                                                     *(pt_Screen->pau8Values + i),
+                                                                     pt_Screen, 
+                                                                     au8Values[i],
                                                                      u8ValuesPerRow,
                                                                      u8DigitsPerValue,
                                                                      false);
                         }
 
-                        for (size_t j = pt_Screen->u8ValuesPrinted; j < pt_Screen->u8NumberValuesTotalDefined; j++)
+                        for (size_t j = t_IndexTemp.u8ValuesPrinted; j < pt_Screen->u8NumberValuesTotalDefined; j++)
                         { // Reprint spaces that have not been printed thus far
                             _v_AppScreen_GetValues_SetCursorAndPrint(j_Lcd, 
-                                                                     &t_ScreenCopy,
+                                                                     pt_Screen,
                                                                      0,
                                                                      u8ValuesPerRow,
                                                                      u8DigitsPerValue,
                                                                      true);
                         }
+
+                        // Now that reprint is complete, restore index variables from backup copy
+                        _v_AppScreen_GetValues_Restore_IndexVars(&pt_Screen->t_Index,    &t_IndexTemp);
+
+                        // Now that reprint is complete, restore values from backup copy
+                        _v_AppScreen_GetValues_Restore_Values   ( pt_Screen->pau8Values, &au8Values[0], pt_Screen->t_Index.u8ValuesPrinted);
 
                         sbHexSelectionActive = false; // Clear, so we do not come in here again
                     }
@@ -603,24 +693,32 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
                     u8Digit = gc_au8DigitConv[su8PrevPress];
                 }
     
-                bool    bSetCursorAndPrint  = (pt_Screen->u8RowIndex        //       Row index less than rows needed   
+                bool    bSetCursorAndPrint  = (pt_Screen->t_Index.u8Row        //       Row index less than rows needed   
                                             < u8RowsNeeded);   
-                        bSetCursorAndPrint &= (pt_Screen->u8ValuesPrinted   // -AND- Printed values still less than number of specified values      
+                        bSetCursorAndPrint &= (pt_Screen->t_Index.u8ValuesPrinted   // -AND- Printed values still less than number of specified values      
                                             < pt_Screen->u8NumberValuesTotalDefined);   
                         bSetCursorAndPrint &= !pt_Screen->bValuesDefined;   // -AND- Values not already defined   
                         bSetCursorAndPrint &= !sbHexSelectionActive;        // -AND- Hex selection not already active
 
-                if (bSetCursorAndPrint) _v_AppScreen_GetValues_SetCursorAndPrint(j_Lcd, 
-                                                                                 pt_Screen, 
-                                                                                 u8Digit, 
-                                                                                 u8ValuesPerRow, 
-                                                                                 u8DigitsPerValue,
-                                                                                 bReset);
+                if (bSetCursorAndPrint)
+                { // Print next value
+                    _v_AppScreen_GetValues_SetCursorAndPrint(j_Lcd, 
+                                                             pt_Screen, 
+                                                             u8Digit, 
+                                                             u8ValuesPerRow, 
+                                                             u8DigitsPerValue,
+                                                             bReset);
+
+                    if (pt_Screen->bPatternFill)
+                    {
+                        // \todo - Fill in pattern
+                    }
+                }
             }
 
             su8PrevPress = u8CurrentPress; // Store current key press
             
-            if (pt_Screen->u8ValuesPrinted >= pt_Screen->u8NumberValuesTotalDefined)
+            if (pt_Screen->t_Index.u8ValuesPrinted >= pt_Screen->u8NumberValuesTotalDefined)
             { // Set values defined flag TRUE if values printed are greater than or equal to number of values to be defined
                 _v_AppScreen_GetValues_SetValuesDefined(pt_Screen);
             }

@@ -154,6 +154,20 @@ typedef struct
 
 
 /**
+ * \brief - Struct that stores which row, row value, value digit, 
+ *          and overall value are currently being printed
+ */
+typedef struct
+{
+    uint8 u8Row;            ///< Current row (+ offset) where values are being printed
+    uint8 u8ValueOfRow;     ///< Current value of the row   being printed
+    uint8 u8DigitOfValue;   ///< Current digit of the value being printed
+    uint8 u8ValuesPrinted;  ///< Tally of all the values that have been printed thus far
+
+} T_IndexVariables;
+
+
+/**
  * \brief - Struct with "Get Value" Screen Data
  */
 typedef struct
@@ -172,10 +186,8 @@ typedef struct
 
     /* Transient loop variables */
     uint8               au8Digit            [MAX_DIGITS_PER_UINT8];     ///< Digits recorded in a value
-    uint8               u8RowIndex;                                     ///< Current row (+ offset) where values are being printed
-    uint8               u8ValuesPerRowIndex;                            ///< Current value of the row   being printed
-    uint8               u8DigitsPerValueIndex;                          ///< Current digit of the value being printed
-    uint8               u8ValuesPrinted;                                ///< Tally of all the values that have been printed thus far
+    T_IndexVariables    t_Index;                                        ///< Variables that store which row, row value, value digit, and 
+                                                                        ///< overall value are currently being printed
     T_CursorPosition    t_Cursor;                                       ///< Default X and Y positions of the cursor
     uint8             * pau8Values;                                     ///< Pointer to values array
 

@@ -56,13 +56,15 @@
     .u8MaxValue                 = MIN(NUM_LEDS, 0xFF),                          \
     .u8NumberValuesTotalDefined = 1,                                            \
     .au8Digit                   = {0, 0, 0},                                    \
-    .u8RowIndex                 = 0,                                            \
-    .u8ValuesPerRowIndex        = 0,                                            \
-    .u8DigitsPerValueIndex      = 0,                                            \
-    .u8ValuesPrinted            = 0,                                            \
+    .t_Index                    = {                                             \
+                                    .u8Row              = 0,                    \
+                                    .u8ValueOfRow       = 0,                    \
+                                    .u8DigitOfValue     = 0,                    \
+                                    .u8ValuesPrinted    = 0,                    \
+                                  },                                            \
     .t_Cursor                   = {                                             \
-                                    .u8x = 0,                                   \
-                                    .u8y = 0,                                   \
+                                    .u8x                = 0,                    \
+                                    .u8y                = 0,                    \
                                   },                                            \
 }
 
@@ -83,10 +85,12 @@
     .u8MaxValue                 = MAX_UNIQUE_SECTIONS,                          \
     .u8NumberValuesTotalDefined = 1,                                            \
     .au8Digit                   = {0, 0, 0},                                    \
-    .u8RowIndex                 = 0,                                            \
-    .u8ValuesPerRowIndex        = 0,                                            \
-    .u8DigitsPerValueIndex      = 0,                                            \
-    .u8ValuesPrinted            = 0,                                            \
+    .t_Index                    = {                                             \
+                                    .u8Row              = 0,                    \
+                                    .u8ValueOfRow       = 0,                    \
+                                    .u8DigitOfValue     = 0,                    \
+                                    .u8ValuesPrinted    = 0,                    \
+                                  },                                            \
     .t_Cursor                   = {                                             \
                                     .u8x = 0,                                   \
                                     .u8y = 0,                                   \
@@ -101,7 +105,7 @@
 {                                                                               \
     .bReprintScreen             = true,                                         \
     .bDescription               = false,                                        \
-    .bPatternFill               = false,                                        \
+    .bPatternFill               = true,                                         \
     .bValuesDefined             = false,                                        \
     .eAlignment                 = e_Algn_ULeft,                                 \
     .u8KeypressHex              = KEYPRESS_ASTERISK,                            \
@@ -110,10 +114,12 @@
     .u8MaxValue                 = MAX_UNIQUE_SECTIONS,                          \
     .u8NumberValuesTotalDefined = 1,                                            \
     .au8Digit                   = {0, 0, 0},                                    \
-    .u8RowIndex                 = 0,                                            \
-    .u8ValuesPerRowIndex        = 0,                                            \
-    .u8DigitsPerValueIndex      = 0,                                            \
-    .u8ValuesPrinted            = 0,                                            \
+    .t_Index                    = {                                             \
+                                    .u8Row              = 0,                    \
+                                    .u8ValueOfRow       = 0,                    \
+                                    .u8DigitOfValue     = 0,                    \
+                                    .u8ValuesPrinted    = 0,                    \
+                                  },                                            \
     .t_Cursor                   = {                                             \
                                     .u8x = 0,                                   \
                                     .u8y = 0,                                   \
