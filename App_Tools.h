@@ -91,25 +91,102 @@ typedef struct
 /**
  * \brief - Data to define the color of one section of LEDs
  */
+typedef enum
+{
+    e_SetpointA = 0,
+    e_SetpointB	= 1,
+    e_SetpointC = 2,
+    e_NumLedStripSetpoints,
+    e_InitialSetpoint = e_SetpointA,
+
+} E_LedStripSetpoints;
+
+
+/**
+ * \brief - Data to define the color of one section of LEDs
+ */
+typedef enum
+{
+    e_StyleUndefined        	= 0,
+    e_StylePatternedSections	= 1,
+    e_StyleEqualSections        = 2,
+    e_StyleUnequalSections   	= 3,
+    e_NumSectionStyles,
+
+} E_SectionStyle;
+
+
+/**
+ * \brief - Data to define the color of one section of LEDs
+ */
 typedef struct
 {
-    bool    bDefined;
-    T_RGB   t_Red;
-    T_RGB   t_Green;
-    T_RGB   t_Blue;
+    bool   	bDefined;
+    uint8   u8Red;
+    uint8   u8Green;
+    uint8   u8Blue;
 
 } T_Color;
 
 
 /**
- * \brief - Data to define the colors of each section on an LED strip and the pattern order (of applicable)
+ * \brief - Data to define the patterned LED sections
+ *          (Approx 90 bytes)
  */
 typedef struct
 {
-    bool        bDefined;
-    bool        bDisplayed;
-    T_Color     t_Section[MAX_UNIQUE_SECTIONS];     // Unique sections
-    uint8       au8Order [MAX_PATTERNED_SECTIONS];  // Specifying order of actual sections
+    T_Color	t_Section[MAX_UNIQUE_SECTIONS   ]; // Specifying order of actual sections
+    uint8	au8Order [MAX_PATTERNED_SECTIONS]; // Unique sections
+
+} T_PatternedSections;
+
+
+/**
+ * \brief - Data to define the equal LED sections
+ *          (Approx 120 bytes)
+ */
+typedef struct
+{
+    T_Color	t_Section[MAX_PATTERNED_SECTIONS];
+
+} T_EqualSections;
+
+
+/**
+ * \brief - Data to define the unequal LED sections
+ *          (Approx 75 bytes)
+ */
+typedef struct
+{
+    T_Color	t_Section      [MAX_UNIQUE_SECTIONS];
+    uint8   au8NumberOfLeds[MAX_UNIQUE_SECTIONS];
+
+} T_UnequalSections;
+
+
+/**
+ * \brief - Data to define the LED selections depending on selection style
+ *          (Approx 120 bytes)
+ */
+typedef union
+{
+    T_PatternedSections	t_Pattern;
+    T_EqualSections     t_Equal;
+    T_UnequalSections   t_Unequal;
+
+} U_SectionStyle;
+
+
+/**
+ * \brief - Data to define the colors of each section on an LED strip, number of LEDs, and/or the pattern order (as 
+ *              applicable)
+ */
+typedef struct
+{
+    bool            bDefined;
+    bool            bDisplayed;
+    E_SectionStyle  e_Style; // Section style definition
+    U_SectionStyle	u_Style; // Section definitions dependent on style
 
 } T_LedStrip;
 

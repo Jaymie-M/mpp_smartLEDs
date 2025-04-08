@@ -70,7 +70,7 @@ static void _v_AppStillLights_StillSolidColor(LiquidCrystal_I2C j_Lcd,
     if (!pt_LedStrip->bDefined)
     {
         // Solid Color
-        if (!pt_LedStrip->t_Section[0].bDefined)
+        if (!pt_LedStrip->u_Style.t_Equal.t_Section->bDefined)
         { // Color not yet defined
 
             if (st_ScreenSolidColor.bReprintScreen)
@@ -93,7 +93,7 @@ static void _v_AppStillLights_StillSolidColor(LiquidCrystal_I2C j_Lcd,
             }
             
             /// Set the first (and only) section color
-            v_AppScreen_RGB_TLU(j_Lcd, j_Keypad, &pt_LedStrip->t_Section[0]);
+            v_AppScreen_RGB_TLU(j_Lcd, j_Keypad, &pt_LedStrip->u_Style.t_Equal.t_Section[0]);
         }
         else
         {
@@ -105,9 +105,9 @@ static void _v_AppStillLights_StillSolidColor(LiquidCrystal_I2C j_Lcd,
             { // Display LED section
                 for (uint8 i = 0; i < NUM_LEDS; i++)
                 { // Set RGB values to struct
-                    pat_Leds[i].setRGB(pt_LedStrip->t_Section[0].t_Red  .u8Value, 
-                                       pt_LedStrip->t_Section[0].t_Green.u8Value, 
-                                       pt_LedStrip->t_Section[0].t_Blue .u8Value);
+                    pat_Leds[i].setRGB(pt_LedStrip->u_Style.t_Equal.t_Section[0].u8Red,
+                                       pt_LedStrip->u_Style.t_Equal.t_Section[0].u8Green, 
+                                       pt_LedStrip->u_Style.t_Equal.t_Section[0].u8Blue);
                 }
 
                 FastLED.show(); // Show LEDs
@@ -364,7 +364,7 @@ static void _v_AppStillLights_StillPatternedEqualSections(LiquidCrystal_I2C j_Lc
             v_AppScreen_GetValues_SetMaxValue       (&st_ScreenPatternOrder,    su8NumUniqueSections);
 
             /* Values Array */
-            v_AppScreen_GetValues_SetValuesArray    (&st_ScreenPatternOrder,    &pt_LedStrip->au8Order[0]);
+            v_AppScreen_GetValues_SetValuesArray    (&st_ScreenPatternOrder,    &pt_LedStrip->u_Style.t_Pattern.au8Order[0]);
 
             /* Total number of values */
             v_AppScreen_GetValues_SetNumValuesTotal (&st_ScreenPatternOrder,    su8NumPatternedSections);
@@ -831,11 +831,7 @@ void v_AppStillLights_LedStrip_Reset(T_LedStrip * pt_LedStrip) // [I,O] LED stri
 
     for (size_t i = 0; i < MAX_UNIQUE_SECTIONS; i++)
     {
-        pt_LedStrip->t_Section[i]           .bDefined   = false;
-        pt_LedStrip->t_Section[i].t_Red     .bDefined   = false;
-        pt_LedStrip->t_Section[i].t_Green   .bDefined   = false;
-        pt_LedStrip->t_Section[i].t_Blue    .bDefined   = false;
-
+        pt_LedStrip->u_Style.t_Equal.t_Section[i].bDefined = false;
     }
 }
 

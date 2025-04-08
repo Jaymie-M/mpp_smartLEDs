@@ -960,30 +960,45 @@ void v_AppScreen_RGB_TLU(LiquidCrystal_I2C    j_Lcd,      // [I, ] Lcd    object
                          Keypad               j_Keypad,   // [I, ] Keypad object
                          T_Color            * pt_Section) // [I,O] Section color data
 {
-    if      (!pt_Section->t_Red.bDefined)
+    /// \todo - define default struct if needed
+    static  T_RGB   st_Red      = {.bDefined = false,},
+                    st_Green    = {.bDefined = false,},
+                    st_Blue     = {.bDefined = false,};
+
+    if      (!st_Red.bDefined)
     { // Enter red
         v_AppScreen_RGB_SetValue(j_Lcd, 
                                  j_Keypad, 
-                                 &pt_Section->t_Red, 
+                                 &st_Red, 
                                  DISPLAY_POS_RED_X);
     }
-    else if (!pt_Section->t_Green.bDefined)
+    else if (!st_Green.bDefined)
     { // Enter green
         v_AppScreen_RGB_SetValue(j_Lcd,
                                  j_Keypad,
-                                 &pt_Section->t_Green,
+                                 &st_Green,
                                  DISPLAY_POS_GREEN_X);
     }
-    else if (!pt_Section->t_Blue.bDefined)
+    else if (!st_Blue.bDefined)
     { // Enter blue
         v_AppScreen_RGB_SetValue(j_Lcd,
                                  j_Keypad,
-                                 &pt_Section->t_Blue,
+                                 &st_Blue,
                                  DISPLAY_POS_BLUE_X);
     }
     else
     { // Red, green, and blue defined; therefore section is defined
         pt_Section->bDefined = true;
+
+        // Pass color values to section data
+        pt_Section->u8Red   = st_Red  .u8Value;
+        pt_Section->u8Green = st_Green.u8Value;
+        pt_Section->u8Blue  = st_Blue .u8Value;
+
+        // Clear bDefined flags for next loop
+        st_Red  .bDefined = false;
+        st_Green.bDefined = false;
+        st_Blue .bDefined = false;
     }
 }
 

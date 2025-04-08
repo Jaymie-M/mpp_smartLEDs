@@ -69,8 +69,8 @@ static uint8  mu8MusicMenuSelect          = 0;
 static uint8  mu8SettingsMenuSelect       = 0;
 
 // Structs
-static T_LedStrip       mt_SmartDormLedStrip;           /// \todo - define default struct
-static CRGB             mat_SmartDormLeds[NUM_LEDS];
+static T_LedStrip       mat_SmartDormLedStrip[e_NumLedStripSetpoints]; /// \todo - define default struct
+static CRGB             mat_SmartDormLeds    [NUM_LEDS];
 
 static T_MenuSelection  mt_MainMenu             = T_MAINMENU_DEFAULT();
 static T_MenuSelection  mt_LightsMenu           = T_LIGHTSMENU_DEFAULT();
@@ -211,7 +211,7 @@ void v_AppMain_TLU(void)
                                     }
                                     else if (NOT_BACK_TO_MAIN_MENU(mt_StillLightsMenu.u8Selection))
                                     {
-                                        if (mt_SmartDormLedStrip.bDefined)
+                                        if (mat_SmartDormLedStrip[e_InitialSetpoint].bDefined)
                                         { // LED Strip defined, send back to main menu
                                             mt_StillLightsMenu.u8Selection = BACK_TO_MAIN_MENU;
                                         }
@@ -220,7 +220,7 @@ void v_AppMain_TLU(void)
                                             v_AppStillsLights_Main_TLU(mj_SmartDormLcd,
                                                                        mj_SmartDormKeypad,
                                                                        &mat_SmartDormLeds[0],
-                                                                       &mt_SmartDormLedStrip,
+                                                                       &mat_SmartDormLedStrip[e_InitialSetpoint],
                                                                        mt_StillLightsMenu.u8Selection);
                                         }
                                     }
@@ -367,8 +367,8 @@ void v_AppMain_TLU(void)
  */
 static void v_AppMain_Reset(void)
 {
-    v_ResetMenuSelections();                                // Reset menu selections
-    v_AppStillLights_LedStrip_Reset(&mt_SmartDormLedStrip); // Reset LED strip data
+    v_ResetMenuSelections();                                                    // Reset menu selections
+    v_AppStillLights_LedStrip_Reset(&mat_SmartDormLedStrip[e_InitialSetpoint]); // Reset LED strip data
 }
 
 
