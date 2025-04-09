@@ -38,7 +38,7 @@
 
 #define ASCII_NUM_OFFSET      0x30
 
-#define NUM_LEDS               150 // Change to number of LEDs that are being used
+#define NUM_LEDS                50 // Change to number of LEDs that are being used
 
 #define MAX_DIGITS_RGB           3
 #define MAX_UNIQUE_SECTIONS     15 // Use to change the maximum number of LED unique sections allowed per strip setup

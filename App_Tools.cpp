@@ -102,16 +102,16 @@ uint8 u8_AppTools_GetKeypress(Keypad j_Keypad)    // [I, ] Keypad object
 uint32 u32_AppTools_DigitArray_to_uint32(uint8    * pau8DigitArray, // [I, ] Array  of digits to convert
                                          uint8      u8NumDigits)    // [I, ] Number of digits to convert
 {
-// Local variables
-uint32 u32Return = 0;
+    // Local variables
+    uint32 u32Return = 0;
 
-for (uint8 i = 0; i < u8NumDigits; i++)
-{
-u32Return += (uint32) *(pau8DigitArray + i)                       //   This digit
-* u32_AppTools_BaseExponent_to_uint32(10, u8NumDigits - 1 - i); // * 10^nth place of that digit
-}
+    for (uint8 i = 0; i < u8NumDigits; i++)
+    {
+        u32Return += (uint32) *(pau8DigitArray + i)                                 //   This digit
+                   * u32_AppTools_BaseExponent_to_uint32(10, u8NumDigits - 1 - i);  // * 10^nth place of that digit
+    }
 
-return u32Return;
+    return u32Return;
 }
 
 

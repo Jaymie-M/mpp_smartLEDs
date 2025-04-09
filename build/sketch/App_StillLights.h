@@ -162,6 +162,23 @@
 /**
  * \brief - List of sections method menu options
  */
+ typedef enum
+ {
+     e_StillSectionsInit 					= 0,
+     e_StillSectionsSectsMethodMenu 		= 1,
+     e_StillSectionsSectsLedsScreen		    = 2,
+     e_StillSectionsUniqueSectsScreen		= 3,
+     e_StillSectionsPatternOrderInfoScreen	= 4,
+     e_StillSectionsSetPatternOrderScreen	= 5,
+     e_StillSectionsDefineLedStrip          = 6,
+     e_StillSectionsNumberofSteps,
+     
+ } E_StillSectionsStep;
+
+
+/**
+ * \brief - List of sections method menu options
+ */
 typedef enum
 {
     e_SectsMethodMenuUnd            = 0,

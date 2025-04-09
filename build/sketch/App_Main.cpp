@@ -120,7 +120,12 @@ static uint8    u8_SettingsMenu       (void);
 void v_AppMain_Init(void)
 {
     // Initialize FastLED object and clear LEDs to start
-    FastLED.addLeds<WS2812B, PIN_DOUT_LED_DATA, GRB>(mat_SmartDormLeds, NUM_LEDS);
+
+    /* OLD TikTok style lights */
+    // FastLED.addLeds<WS2812B, PIN_DOUT_LED_DATA, GRB>(mat_SmartDormLeds, NUM_LEDS);
+
+    /* New Christmas style lights */
+    FastLED.addLeds<WS2811, PIN_DOUT_LED_DATA, RGB>(mat_SmartDormLeds, NUM_LEDS);
     FastLED.clear();
 
     // Start serial monitor

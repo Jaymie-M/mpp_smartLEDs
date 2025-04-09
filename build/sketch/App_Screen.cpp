@@ -948,6 +948,7 @@ void v_AppScreen_RGB_SetValue(LiquidCrystal_I2C j_Lcd,                  // [I, ]
     { // All digits have been specified - convert array to 16-bit integer
         pt_RGB->u8Value     = (uint8) u32_AppTools_DigitArray_to_uint32(&pt_RGB->au8Digit[0], MAX_DIGITS_RGB);
         pt_RGB->bDefined    = true; // Set RGB value to defined so this function is no longer called
+        su8PressCount       = 0;    // Reset press count
     }
 }
 
@@ -1000,6 +1001,27 @@ void v_AppScreen_RGB_TLU(LiquidCrystal_I2C    j_Lcd,      // [I, ] Lcd    object
         st_Green.bDefined = false;
         st_Blue .bDefined = false;
     }
+
+    // Serial.println("");
+    // Serial.println("/*-------------------------------------------------*/");
+    // Serial.print("Red Defined: ");
+    // Serial.println(st_Red  .bDefined);        
+    // Serial.print("Green Defined: ");
+    // Serial.println(st_Green.bDefined);
+    // Serial.print("Blue Defined: ");
+    // Serial.println(st_Blue .bDefined);
+    // Serial.println("");
+    // Serial.print("Red Value: ");
+    // Serial.println(st_Red  .u8Value);        
+    // Serial.print("Green Value: ");
+    // Serial.println(st_Green.u8Value);
+    // Serial.print("Blue Value: ");
+    // Serial.println(st_Blue .u8Value);
+    // Serial.println("");
+    // Serial.print("Section defined: ");
+    // Serial.println(pt_Section->bDefined);        
+    // Serial.println("/*-------------------------------------------------*/");
+    // Serial.println("");
 }
 
 

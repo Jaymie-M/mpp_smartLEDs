@@ -947,6 +947,7 @@ void v_AppScreen_RGB_SetValue(LiquidCrystal_I2C j_Lcd,                  // [I, ]
     { // All digits have been specified - convert array to 16-bit integer
         pt_RGB->u8Value     = (uint8) u32_AppTools_DigitArray_to_uint32(&pt_RGB->au8Digit[0], MAX_DIGITS_RGB);
         pt_RGB->bDefined    = true; // Set RGB value to defined so this function is no longer called
+        su8PressCount       = 0;    // Reset press count
     }
 }
 
