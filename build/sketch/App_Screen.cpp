@@ -385,10 +385,12 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lc
                 { // Set next value in array to latest value (subtract one since counting from zero)
                     *(pt_Screen->pau8Values + pt_Screen->t_Index.u8ValuesPrinted - 1) = (uint8) u32LatestValue;
                 }
+#ifdef PRINT_ERROR_STATEMENTS
                 else
                 { // Print error message as punishment for NULL/array overrun
                     Serial.println("SO UNCIVILIZED!");
                 }
+#endif
             }
             else
             { // Value provided by user from keypad is outside required maximum/minimum range - reset last value to 'blanks'
@@ -499,10 +501,12 @@ static void _v_AppScreen_GetValues_CpyAndClr_Values (uint8 * pau8Values,    // [
             *(pau8Values    + i) = 0;                 // Clear value
         }
     }
+#ifdef PRINT_ERROR_STATEMENTS
     else
     { // Print error message as punishment for NULL
         Serial.println("DON'T GO BREAKING MY HEART!");
     }
+#endif
 }
 
 
@@ -520,10 +524,12 @@ static void _v_AppScreen_GetValues_Restore_Values  (uint8 * pau8Values,    // [ 
         // Loop through and restore all values
         for (size_t i = 0; i < u8NumValues; i++) *(pau8Values + i) = *(pau8ValuesCpy + i); 
     }
+#ifdef PRINT_ERROR_STATEMENTS
     else
     { // Print error message as punishment for NULL
         Serial.println("SOMEBODY'S GOT TO DO IT. I AM THE CHOSEN ONE!");
     }
+#endif
 }
 
 
@@ -826,6 +832,17 @@ void v_AppScreen_GetValues_SetDescription(T_ScreenGetValues   * pt_Screen,      
  * \brief  This function sets the max value for a 'Get Values' screen
  * \return Specifies max value
  */
+void v_AppScreen_GetValues_SetMinValue(T_ScreenGetValues   * pt_Screen,  // [I,O] Screen data
+                                       uint8                 u8MinValue) // [I, ] Min allowed input value for this screen
+{
+    pt_Screen->u8MinValue = u8MinValue;
+}
+
+
+/**
+ * \brief  This function sets the max value for a 'Get Values' screen
+ * \return Specifies max value
+ */
 void v_AppScreen_GetValues_SetMaxValue(T_ScreenGetValues   * pt_Screen,  // [I,O] Screen data
                                        uint8                 u8MaxValue) // [I, ] Max allowed input value for this screen
 {
@@ -1001,27 +1018,6 @@ void v_AppScreen_RGB_TLU(LiquidCrystal_I2C    j_Lcd,      // [I, ] Lcd    object
         st_Green.bDefined = false;
         st_Blue .bDefined = false;
     }
-
-    // Serial.println("");
-    // Serial.println("/*-------------------------------------------------*/");
-    // Serial.print("Red Defined: ");
-    // Serial.println(st_Red  .bDefined);        
-    // Serial.print("Green Defined: ");
-    // Serial.println(st_Green.bDefined);
-    // Serial.print("Blue Defined: ");
-    // Serial.println(st_Blue .bDefined);
-    // Serial.println("");
-    // Serial.print("Red Value: ");
-    // Serial.println(st_Red  .u8Value);        
-    // Serial.print("Green Value: ");
-    // Serial.println(st_Green.u8Value);
-    // Serial.print("Blue Value: ");
-    // Serial.println(st_Blue .u8Value);
-    // Serial.println("");
-    // Serial.print("Section defined: ");
-    // Serial.println(pt_Section->bDefined);        
-    // Serial.println("/*-------------------------------------------------*/");
-    // Serial.println("");
 }
 
 

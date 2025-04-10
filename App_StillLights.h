@@ -51,7 +51,7 @@
     .eAlignment                 = e_Algn_LCenter,                               \
     .u8KeypressHex              = KEYPRESS_NONE,                                \
     .u8KeypressFinished         = KEYPRESS_NONE,                                \
-    .u8MinValue                 = 1,                                            \
+    .u8MinValue                 = NUM_LEDS / MAX_PATTERNED_SECTIONS,            \
     .u8MaxValue                 = MIN(NUM_LEDS, 0xFF),                          \
     .u8NumberValuesTotalDefined = 1,                                            \
     .au8Digit                   = {0, 0, 0},                                    \
@@ -164,12 +164,13 @@
  typedef enum
  {
      e_StillSectionsInit 					= 0,
-     e_StillSectionsSectsMethodMenu 		= 1,
-     e_StillSectionsSectsLedsScreen		    = 2,
+     e_StillSectionsMethodMenu 		        = 1,
+     e_StillSectionsOrLedsScreen		    = 2,
      e_StillSectionsUniqueSectsScreen		= 3,
      e_StillSectionsPatternOrderInfoScreen	= 4,
      e_StillSectionsSetPatternOrderScreen	= 5,
-     e_StillSectionsDefineLedStrip          = 6,
+     e_StillSectionsClearLedStrip           = 6,
+     e_StillSectionsDefineLedStrip          = 7,
      e_StillSectionsNumberofSteps,
      
  } E_StillSectionsStep;

@@ -206,6 +206,7 @@ typedef struct
 void    v_AppScreen_GetValues_Init               (LiquidCrystal_I2C     j_Lcd,      Keypad          j_Keypad,       T_ScreenGetValues * pt_Screen                        );
 void    v_AppScreen_GetValues_SetTitle           (T_ScreenGetValues   * pt_Screen,  const charn   * pc_Title                                                             );
 void    v_AppScreen_GetValues_SetDescription     (T_ScreenGetValues   * pt_Screen,  const charn   * pc_Description                                                       );
+void    v_AppScreen_GetValues_SetMinValue        (T_ScreenGetValues   * pt_Screen,  uint8           u8MinValue                                                           );
 void    v_AppScreen_GetValues_SetMaxValue        (T_ScreenGetValues   * pt_Screen,  uint8           u8MaxValue                                                           );
 void    v_AppScreen_GetValues_SetValuesArray     (T_ScreenGetValues   * pt_Screen,  uint8         * pau8Values                                                           );
 void    v_AppScreen_GetValues_SetNumValuesTotal  (T_ScreenGetValues   * pt_Screen,  uint8           u8Total                                                              );

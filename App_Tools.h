@@ -22,6 +22,9 @@
 /***************************
  *         Defines         *
  ***************************/
+// Settings
+#define PRINT_ERROR_STATEMENTS
+
 #define NULL                ((void *) 0)
 #define NUM_ROWS                 4
 #define NUM_COLUMNS              3
@@ -54,6 +57,7 @@
 #define INT_TO_STR_X(a)         #a
 
 #define CONCAT(a, b)            a b
+#define CONCAT_LENGTH(a)        LENGTHOF(a) - strnlen(a, LENGTHOF(a)) - 1
 
 // Types:
 typedef signed      int sint8   __attribute__ ((__mode__ (__QI__)));
