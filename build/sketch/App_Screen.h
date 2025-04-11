@@ -66,6 +66,7 @@
 #define DISPLAY_POS_RED_X            3
 #define DISPLAY_POS_GREEN_X         10
 #define DISPLAY_POS_BLUE_X          17
+#define DISPLAY_POS_LED_X           16
 
 /* Alignment */
 #define ALIGN_LEFT_X               0x1
@@ -213,11 +214,11 @@ void    v_AppScreen_GetValues_SetNumValuesTotal  (T_ScreenGetValues   * pt_Scree
 void    v_AppScreen_GetValues_TLU                (LiquidCrystal_I2C     j_Lcd,      Keypad          j_Keypad,       T_ScreenGetValues * pt_Screen                        );
 
 // RGB screen
-void    v_AppScreen_RGB_Init                     (LiquidCrystal_I2C     j_Lcd,                                      T_ScreenRGB       * pt_Screen                        );
+void    v_AppScreen_RGB_Init                     (LiquidCrystal_I2C     j_Lcd,      T_ScreenRGB   * pt_Screen,  	bool				bSelectNumLeds                   );
 void    v_AppScreen_RGB_SetTitle                 (T_ScreenRGB         * pt_Screen,  const charn   * pc_Title                                                             );
 void    v_AppScreen_RGB_SetDescription           (T_ScreenRGB         * pt_Screen,  const charn   * pc_Description                                                       );
-void    v_AppScreen_RGB_SetValue                 (LiquidCrystal_I2C     j_Lcd,      Keypad          j_Keypad,       T_RGB             * pt_RGB, uint8 u8DisplayPosition_x);
-void    v_AppScreen_RGB_TLU                      (LiquidCrystal_I2C     J_Lcd,      Keypad          j_Keypad,       T_Color           * pt_Section                       );
+void    v_AppScreen_RGB_TLU                      (LiquidCrystal_I2C     j_Lcd,      Keypad          j_Keypad,   	T_Color           * pt_Section,
+                                                  uint8				  * pu8NumLeds, uint8			u8MaxNumLeds,	bool				bSelectNumLeds                   );
 
 // Selection menu
 void    v_AppScreen_MenuSelection_Init           (LiquidCrystal_I2C     j_Lcd,                                      T_MenuSelection   * pt_Menu                          );

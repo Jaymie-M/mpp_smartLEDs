@@ -52,8 +52,8 @@
     .eAlignment                 = e_Algn_LCenter,                               \
     .u8KeypressHex              = KEYPRESS_NONE,                                \
     .u8KeypressFinished         = KEYPRESS_NONE,                                \
-    .u8MinValue                 = NUM_LEDS / MAX_PATTERNED_SECTIONS,            \
-    .u8MaxValue                 = MIN(NUM_LEDS, 0xFF),                          \
+    .u8MinValue                 = 0,                                            \
+    .u8MaxValue                 = MAX_PATTERNED_SECTIONS,                       \
     .u8NumberValuesTotalDefined = 1,                                            \
     .au8Digit                   = {0, 0, 0},                                    \
     .t_Index                    = {                                             \

@@ -35,34 +35,37 @@
  *   Function Prototypes   *
  ***************************/
 // Selection menu
-static void _v_AppScreen_MenuSelection_PrintHeader      (LiquidCrystal_I2C      j_Lcd,              T_MenuSelection   * pt_Menu             );
-static void _v_AppScreen_MenuSelection_PrintOptions     (LiquidCrystal_I2C      j_Lcd,              T_MenuSelection   * pt_Menu             );
-static void _v_AppScreen_MenuSelection_ScrollArrows     (T_MenuSelection      * pt_Menu,            uint8               u8Press             );
-static void _v_AppScreen_MenuSelection_Reset            (LiquidCrystal_I2C      j_Lcd,              T_MenuSelection   * pt_Menu             );
+static void _v_AppScreen_MenuSelection_PrintHeader      (LiquidCrystal_I2C      j_Lcd,                  T_MenuSelection   * pt_Menu             );
+static void _v_AppScreen_MenuSelection_PrintOptions     (LiquidCrystal_I2C      j_Lcd,                  T_MenuSelection   * pt_Menu             );
+static void _v_AppScreen_MenuSelection_ScrollArrows     (T_MenuSelection      * pt_Menu,                uint8               u8Press             );
+static void _v_AppScreen_MenuSelection_Reset            (LiquidCrystal_I2C      j_Lcd,                  T_MenuSelection   * pt_Menu             );
 
 // RGB          screen
-static void _v_AppScreen_RGB_Reset                      (LiquidCrystal_I2C      j_Lcd,              T_ScreenRGB       * pt_Screen           );
+static void _v_AppScreen_RGB_SetValue                   (LiquidCrystal_I2C      j_Lcd,                  Keypad              j_Keypad,
+                                                         T_RGB                * pt_RGB,                 uint8			    u8MaxValue,
+                                                         uint8                  u8DisplayPosition_x,    uint8               u8DisplayPosition_y );
+static void _v_AppScreen_RGB_Reset                      (LiquidCrystal_I2C      j_Lcd,                  T_ScreenRGB       * pt_Screen,
+																									    bool				bSelectNumLeds		);
 
 // 'Get Values' screen
-static void _v_AppScreen_GetValues_GetCursorPosition    (T_ScreenGetValues    * pt_Screen,          uint8               u8FirstAvailableRow,
-                                                         uint8                  u8RowsUnused,       uint8               u8DigitsUnused      );
-static void _v_AppScreen_GetValues_IncrementValue       (T_ScreenGetValues    * pt_Screen                                                   );
-static void _v_AppScreen_GetValues_SetCursorAndPrint    (LiquidCrystal_I2C      j_Lcd,              T_ScreenGetValues * pt_Screen,
-                                                         uint8                  u8Digit,            uint8               u8ValuesPerRow,
-                                                         uint8                  u8DigitsPerValue,   bool                bReset              );
-static void _v_AppScreen_GetValues_SetValuesDefined     (T_ScreenGetValues    * pt_Screen                                                   );
-static void _v_AppScreen_GetValues_Cpy_IndexVars        (T_IndexVariables     * pt_Index,           T_IndexVariables  * pt_IndexCpy         );
-static void _v_AppScreen_GetValues_Clr_IndexVars        (T_IndexVariables     * pt_Index                                                    );
-static void _v_AppScreen_GetValues_CpyAndClr_IndexVars  (T_IndexVariables     * pt_Index,           T_IndexVariables  * pt_IndexCpy         );
-static void _v_AppScreen_GetValues_Restore_IndexVars    (T_IndexVariables     * pt_Index,           T_IndexVariables  * pt_IndexCpy         );
-static void _v_AppScreen_GetValues_CpyAndClr_Values     (uint8                * pau8Values,         uint8             * pau8ValuesCpy,
-                                                         uint8                  u8NumValues                                                 );
-static void _v_AppScreen_GetValues_Restore_Values       (uint8                * pau8Values,         uint8             * pau8ValuesCpy,
-                                                         uint8                  u8NumValues                                                 );
-static void _v_AppScreen_GetValues_PrintValues          (LiquidCrystal_I2C      j_Lcd,              Keypad              j_Keypad,
-                                                         T_ScreenGetValues    * pt_Screen,          bool                bReset              );
-static void _v_AppScreen_GetValues_Reset                (LiquidCrystal_I2C      j_Lcd,              Keypad              j_Keypad,
-                                                         T_ScreenGetValues    * pt_Screen                                                   );
+static void _v_AppScreen_GetValues_GetCursorPosition    (T_ScreenGetValues    * pt_Screen,              uint8               u8FirstAvailableRow,
+                                                         uint8                  u8RowsUnused,           uint8               u8DigitsUnused      );
+static void _v_AppScreen_GetValues_IncrementValue       (T_ScreenGetValues    * pt_Screen                                                       );
+static void _v_AppScreen_GetValues_SetCursorAndPrint    (LiquidCrystal_I2C      j_Lcd,                  T_ScreenGetValues * pt_Screen,
+                                                         uint8                  u8Digit,                uint8               u8ValuesPerRow,
+                                                         uint8                  u8DigitsPerValue,       bool                bReset              );
+static void _v_AppScreen_GetValues_Cpy_IndexVars        (T_IndexVariables     * pt_Index,               T_IndexVariables  * pt_IndexCpy         );
+static void _v_AppScreen_GetValues_Clr_IndexVars        (T_IndexVariables     * pt_Index                                                        );
+static void _v_AppScreen_GetValues_CpyAndClr_IndexVars  (T_IndexVariables     * pt_Index,               T_IndexVariables  * pt_IndexCpy         );
+static void _v_AppScreen_GetValues_Restore_IndexVars    (T_IndexVariables     * pt_Index,               T_IndexVariables  * pt_IndexCpy         );
+static void _v_AppScreen_GetValues_CpyAndClr_Values     (uint8                * pau8Values,             uint8             * pau8ValuesCpy,
+                                                         uint8                  u8NumValues                                                     );
+static void _v_AppScreen_GetValues_Restore_Values       (uint8                * pau8Values,             uint8             * pau8ValuesCpy,
+                                                         uint8                  u8NumValues                                                     );
+static void _v_AppScreen_GetValues_PrintValues          (LiquidCrystal_I2C      j_Lcd,                  Keypad              j_Keypad,
+                                                         T_ScreenGetValues    * pt_Screen,              bool                bReset              );
+static void _v_AppScreen_GetValues_Reset                (LiquidCrystal_I2C      j_Lcd,                  Keypad              j_Keypad,
+                                                         T_ScreenGetValues    * pt_Screen                                                       );
 
 /***************************
  *         Objects         *
@@ -237,8 +240,9 @@ static void _v_AppScreen_MenuSelection_Reset(LiquidCrystal_I2C  j_Lcd,      // [
  * \brief  This function prints/reprints initial RGB screen
  * \return none
  */
-static void _v_AppScreen_RGB_Reset(LiquidCrystal_I2C  j_Lcd,      // [I, ] Lcd object
-                                   T_ScreenRGB      * pt_Screen)  // [I, ] Screen data
+static void _v_AppScreen_RGB_Reset(LiquidCrystal_I2C  j_Lcd,      		// [I, ] Lcd object
+                                   T_ScreenRGB      * pt_Screen,  		// [I, ] Screen data
+								   bool				  bSelectNumLeds)	// [I, ] TRUE = select the number of LEDs for this section
 {
     // Clear display and reset cursor to top left corner
     j_Lcd.clear();
@@ -253,10 +257,23 @@ static void _v_AppScreen_RGB_Reset(LiquidCrystal_I2C  j_Lcd,      // [I, ] Lcd o
     // Print description
     j_Lcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_2ND_LINE_Y);
     j_Lcd.print(String(&pt_Screen->acScreenDescription[0]));
+	
+	if (bSelectNumLeds)
+	{ // Print RGB and blanks for input values on 3rd line
+		j_Lcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_3RD_LINE_Y);
+		j_Lcd.print(F("R: ___ G: ___ B: ___"));
+		
+		// Print num LEDs and blank for input values on 4th line
+		j_Lcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_4TH_LINE_Y);
+		j_Lcd.print(F("Number of LEDs: ___"));
+	}
+	else
+	{ // Print RGB and blanks for input values on 4th line
+		j_Lcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_4TH_LINE_Y);
+		j_Lcd.print(F("R: ___ G: ___ B: ___"));
+	}
 
-    // Print RGB and blanks for input values
-    j_Lcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_4TH_LINE_Y);
-    j_Lcd.print(F("R: ___ G: ___ B: ___"));
+
 }
 
 /**
@@ -417,22 +434,6 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lc
 
 
 /**
- * \brief  This function sets flag to indicate that the 'Get Values' screen is defined
- * \return pt_Screen->bValuesDefined
- */
-static void _v_AppScreen_GetValues_SetValuesDefined(T_ScreenGetValues * pt_Screen)  // [ ,O] Screen data
-{
-    // Set values defined flag TRUE if values printed are greater than or equal to number of values to be defined
-    pt_Screen->bValuesDefined = true;
-
-    // Set back to zero since all values are now printed
-    pt_Screen->t_Index.u8Row           = 0;
-    pt_Screen->t_Index.u8ValueOfRow    = 0;
-    pt_Screen->t_Index.u8DigitOfValue  = 0;
-}
-
-
-/**
  * \brief  This function makes a backup copy of all loop count variables 
  * \return Each member of pt_Index is copied into pt_IndexCpy
  */
@@ -451,10 +452,11 @@ static void _v_AppScreen_GetValues_Cpy_IndexVars   (T_IndexVariables * pt_Index,
 static void _v_AppScreen_GetValues_Clr_IndexVars(T_IndexVariables * pt_Index) // [ ,O] Screen data
 {
     // Clear all index variables
-    pt_Index->u8Row             = 0;
-    pt_Index->u8ValueOfRow      = 0;
-    pt_Index->u8DigitOfValue    = 0;
-    pt_Index->u8ValuesPrinted   = 0;
+    *pt_Index =    {.u8Row              = 0,
+                    .u8ValueOfRow       = 0,
+                    .u8DigitOfValue     = 0,
+                    .u8ValuesPrinted    = 0,
+                   };
 }
 
 
@@ -701,7 +703,7 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
                 else if ((KEYPRESS_NONE != pt_Screen->u8KeypressFinished) && // A keypress is defined to exit get values screen -AND-
                          (su8PrevPress  == pt_Screen->u8KeypressFinished) )  // The key to exit the get values screen was pressed
                 { // Set values defined flag TRUE if exit key is pressed
-                    _v_AppScreen_GetValues_SetValuesDefined(pt_Screen);
+                    pt_Screen->bValuesDefined = true;
                 }
                 else
                 { // Hex selection key not pressed, hex selection not active, -AND- exit key not pressed
@@ -766,9 +768,10 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
 
             su8PrevPress = u8CurrentPress; // Store current key press
             
-            if (pt_Screen->t_Index.u8ValuesPrinted >= pt_Screen->u8NumberValuesTotalDefined)
+            if ((pt_Screen->t_Index.u8ValuesPrinted >= pt_Screen->u8NumberValuesTotalDefined) || pt_Screen->bValuesDefined)
             { // Set values defined flag TRUE if values printed are greater than or equal to number of values to be defined
-                _v_AppScreen_GetValues_SetValuesDefined(pt_Screen);
+                pt_Screen->bValuesDefined = true;
+                _v_AppScreen_GetValues_Clr_IndexVars(&pt_Screen->t_Index); // Clear index variables
             }
         }
     }
@@ -923,11 +926,12 @@ void v_AppScreen_RGB_SetDescription(T_ScreenRGB   * pt_Screen,      // [I,O] Scr
  * \brief  This function prints initial RGB screen by calling the reset function
  * \return none
  */
-void v_AppScreen_RGB_Init(LiquidCrystal_I2C j_Lcd,      // [I, ] Lcd object
-                          T_ScreenRGB     * pt_Screen)  // [I, ] Screen data
+void v_AppScreen_RGB_Init(LiquidCrystal_I2C j_Lcd,      	// [I, ] Lcd object
+                          T_ScreenRGB     * pt_Screen,  	// [I, ] Screen data
+						  bool				bSelectNumLeds)	// [I, ] TRUE = select the number of LEDs for this section
 {
     // Print intial menu
-    _v_AppScreen_RGB_Reset(j_Lcd, pt_Screen);
+    _v_AppScreen_RGB_Reset(j_Lcd, pt_Screen, bSelectNumLeds);
 }
 
 
@@ -935,14 +939,17 @@ void v_AppScreen_RGB_Init(LiquidCrystal_I2C j_Lcd,      // [I, ] Lcd object
  *
  *  \return: pt_RGB->u8Value and pt_RGB->bDefined set when red, green, or blue value is defined
  */
-void v_AppScreen_RGB_SetValue(LiquidCrystal_I2C j_Lcd,                  // [I, ] Lcd    object
-                              Keypad            j_Keypad,               // [I, ] Keypad object
-                              T_RGB           * pt_RGB,                 // [I,O] Red, green, or blue value
-                              uint8             u8DisplayPosition_x)    // [I, ] x Position where value should be displayed on LCD screen
+static void _v_AppScreen_RGB_SetValue  (LiquidCrystal_I2C j_Lcd,                // [I, ] Lcd    object
+                                        Keypad            j_Keypad,             // [I, ] Keypad object
+                                        T_RGB           * pt_RGB,               // [I,O] Red, green, or blue value
+                                        uint8			  u8MaxValue,		    // [I, ] Maximum allowed value
+                                        uint8             u8DisplayPosition_x,  // [I, ] x Position where value should be displayed on LCD screen
+                                        uint8             u8DisplayPosition_y)  // [I, ] y Position where value should be displayed on LCD screen
 {
             uint8   u8CurrentPress  = KEYPRESS_NONE;
     static  uint8   su8PrevPress    = KEYPRESS_NONE;
     static  uint8   su8PressCount   = 0;
+			uint8	u8MaxDigits		= MAX_DIGITS_RGB;
 
     u8CurrentPress = u8_AppTools_GetKeypress(j_Keypad);
 
@@ -952,20 +959,31 @@ void v_AppScreen_RGB_SetValue(LiquidCrystal_I2C j_Lcd,                  // [I, ]
         pt_RGB->au8Digit[su8PressCount] = gc_au8DigitConv[su8PrevPress];
 
         // Print digit
-        j_Lcd.setCursor(u8DisplayPosition_x + su8PressCount, DISPLAY_POS_RGB_Y);
+        j_Lcd.setCursor(u8DisplayPosition_x + su8PressCount, u8DisplayPosition_y);
         j_Lcd.print(String(gc_acKeyNumberRep[su8PrevPress]));
 
         // Increment Press Count
         su8PressCount++;
-    }   
+    }
 
     su8PrevPress = u8CurrentPress; // Store current key press
 
     if (MAX_DIGITS_RGB <= su8PressCount)
     { // All digits have been specified - convert array to 16-bit integer
-        pt_RGB->u8Value     = (uint8) u32_AppTools_DigitArray_to_uint32(&pt_RGB->au8Digit[0], MAX_DIGITS_RGB);
-        pt_RGB->bDefined    = true; // Set RGB value to defined so this function is no longer called
-        su8PressCount       = 0;    // Reset press count
+        uint32 u32Value = u32_AppTools_DigitArray_to_uint32(&pt_RGB->au8Digit[0], MAX_DIGITS_RGB);
+		
+		if ((uint32) u8MaxValue >= u32Value)
+		{ // Value entered is no larger than max value
+			pt_RGB->u8Value     = (uint8) u32Value; // Cast to u8
+			pt_RGB->bDefined	= true; // Set RGB value to defined so this function is no longer called
+		}
+        else
+        { // Value entered is too large; reprint spaces
+            j_Lcd.setCursor(u8DisplayPosition_x, u8DisplayPosition_y);
+            j_Lcd.print(F("___"));
+        }
+		
+        su8PressCount = 0; // Reset press count
     }
 }
 
@@ -974,36 +992,59 @@ void v_AppScreen_RGB_SetValue(LiquidCrystal_I2C j_Lcd,                  // [I, ]
  * \brief  This function stores a color selection for an LED strip section from a red, green, and blue value entered in the keypad
  * \return pt_Section->(t_Red, t_Green, t_Blue).u8Value, pt_Section->(t_Red, t_Green, t_Blue).bDefined, and pt_Section->bDefined are set
  */
-void v_AppScreen_RGB_TLU(LiquidCrystal_I2C    j_Lcd,      // [I, ] Lcd    object
-                         Keypad               j_Keypad,   // [I, ] Keypad object
-                         T_Color            * pt_Section) // [I,O] Section color data
+void v_AppScreen_RGB_TLU(LiquidCrystal_I2C    j_Lcd,      		// [I, ] Lcd    object
+                         Keypad               j_Keypad,   		// [I, ] Keypad object
+                         T_Color            * pt_Section, 		// [ ,O] Section color data
+						 uint8				* pu8NumLeds, 		// [ ,O] Section number of LEDs
+						 uint8				  u8MaxNumLeds,		// [I, ] Maximum number of LEDs that can be specified
+						 bool				  bSelectNumLeds)	// [I, ] TRUE = select the number of LEDs for this section
 {
     /// \todo - define default struct if needed
-    static  T_RGB   st_Red      = {.bDefined = false,},
-                    st_Green    = {.bDefined = false,},
-                    st_Blue     = {.bDefined = false,};
+    static  	T_RGB   st_Red      		= {.bDefined = false,},
+						st_Green    		= {.bDefined = false,},
+						st_Blue     		= {.bDefined = false,},
+						st_NumLeds			= {.bDefined = false,};
+	
+	// Determine display position for RGB menu
+				uint8	u8DisplayPosition_y = DISPLAY_POS_4TH_LINE_Y;
+	if (bSelectNumLeds)	u8DisplayPosition_y	= DISPLAY_POS_3RD_LINE_Y;
 
     if      (!st_Red.bDefined)
     { // Enter red
-        v_AppScreen_RGB_SetValue(j_Lcd, 
-                                 j_Keypad, 
-                                 &st_Red, 
-                                 DISPLAY_POS_RED_X);
+        _v_AppScreen_RGB_SetValue(j_Lcd, 
+                                  j_Keypad, 
+                                  &st_Red,
+								  0xFF,								 
+                                  DISPLAY_POS_RED_X,
+								  u8DisplayPosition_y);
     }
     else if (!st_Green.bDefined)
     { // Enter green
-        v_AppScreen_RGB_SetValue(j_Lcd,
-                                 j_Keypad,
-                                 &st_Green,
-                                 DISPLAY_POS_GREEN_X);
+        _v_AppScreen_RGB_SetValue(j_Lcd,
+                                  j_Keypad,
+                                  &st_Green,
+								  0xFF,								 
+								  DISPLAY_POS_GREEN_X,
+								  u8DisplayPosition_y);
     }
     else if (!st_Blue.bDefined)
     { // Enter blue
-        v_AppScreen_RGB_SetValue(j_Lcd,
-                                 j_Keypad,
-                                 &st_Blue,
-                                 DISPLAY_POS_BLUE_X);
+        _v_AppScreen_RGB_SetValue(j_Lcd,
+                                  j_Keypad,
+                                  &st_Blue,
+								  0xFF,								 
+                                  DISPLAY_POS_BLUE_X,
+								  u8DisplayPosition_y);
     }
+	else if (!st_NumLeds.bDefined && bSelectNumLeds)
+	{ // Enter number of LEDs if this option is enabled
+        _v_AppScreen_RGB_SetValue(j_Lcd,
+                                  j_Keypad,
+                                  &st_NumLeds,
+								  u8MaxNumLeds,								 
+                                  DISPLAY_POS_LED_X,
+								  DISPLAY_POS_4TH_LINE_Y);
+	}
     else
     { // Red, green, and blue defined; therefore section is defined
         pt_Section->bDefined = true;
@@ -1012,11 +1053,15 @@ void v_AppScreen_RGB_TLU(LiquidCrystal_I2C    j_Lcd,      // [I, ] Lcd    object
         pt_Section->u8Red   = st_Red  .u8Value;
         pt_Section->u8Green = st_Green.u8Value;
         pt_Section->u8Blue  = st_Blue .u8Value;
+		
+		// Pass number of LEDs to pointer if selection is enabled
+		if (bSelectNumLeds)	*pu8NumLeds = st_NumLeds.u8Value;
 
         // Clear bDefined flags for next loop
-        st_Red  .bDefined = false;
-        st_Green.bDefined = false;
-        st_Blue .bDefined = false;
+        st_Red    .bDefined = false;
+        st_Green  .bDefined = false;
+        st_Blue   .bDefined = false;
+		st_NumLeds.bDefined	= false;
     }
 }
 

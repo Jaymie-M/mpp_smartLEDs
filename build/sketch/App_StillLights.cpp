@@ -222,6 +222,7 @@ static void _v_AppStillLights_StillSections(LiquidCrystal_I2C j_Lcd,
 			st_ScreenPatternOrder	.bValuesDefined = false;
 			
 			// Other Initializations
+            st_SectsMethodMenu      .u8Selection    = SELECTION_NONE;
 			su8NumPatternedSections					= 0;
 			su8NumUniqueSections					= 0;
 			su8NumLeds								= 0;
@@ -241,7 +242,7 @@ static void _v_AppStillLights_StillSections(LiquidCrystal_I2C j_Lcd,
 				case e_StillHalfAndHalf:
 					su8NumPatternedSections	= 2; 			                    // Hard code number of sections to 2
 					su8NumLeds				= NUM_LEDS / 2;                     // Hard code number of LEDs to half of total number LEDs
-					e_StillSectionsStep 	= e_StillSectionsClearLedStrip;    // Go straight to clearing LED strip
+					e_StillSectionsStep 	= e_StillSectionsClearLedStrip;     // Go straight to clearing LED strip
 					break;
 					
 				case e_StillUnequalSections:                                    
@@ -294,13 +295,15 @@ static void _v_AppStillLights_StillSections(LiquidCrystal_I2C j_Lcd,
 		
 			if (st_ScreenSectsLeds.bReprintScreen)
 			{
+                // Code-shortening
+                charn c_Title      [MAX_LENGTH_TITLE      ];
+                charn c_Description[MAX_LENGTH_DESCRIPTION];
+                charn c_Minimum    [MAX_DIGITS_PER_UINT8  ];
+                charn c_Maximum    [MAX_DIGITS_PER_UINT8  ];
+
 				switch(st_SectsMethodMenu.u8Selection)
 				{
 					case e_SectsMethodByNumSects:   // Print screen to request number of sections
-
-                        // Code-shortening
-                        charn c_Title      [MAX_LENGTH_TITLE      ];
-                        charn c_Description[MAX_LENGTH_DESCRIPTION];
 
 						switch (pt_LedStrip->e_Style)
 						{
@@ -323,14 +326,17 @@ static void _v_AppStillLights_StillSections(LiquidCrystal_I2C j_Lcd,
 #endif
                         }
 
+                        /* Min Value */
+						v_AppScreen_GetValues_SetMinValue   (&st_ScreenSectsLeds,    0);
+
+						/* Max Value */
+						v_AppScreen_GetValues_SetMaxValue   (&st_ScreenSectsLeds,    MAX_PATTERNED_SECTIONS);
+
 						/* Title */
 						v_AppScreen_GetValues_SetTitle      (&st_ScreenSectsLeds,    &c_Title      [0]);
 
 						/* Description */
 						v_AppScreen_GetValues_SetDescription(&st_ScreenSectsLeds,    &c_Description[0]);
-
-						/* Max Value */
-						v_AppScreen_GetValues_SetMaxValue   (&st_ScreenSectsLeds,    MAX_PATTERNED_SECTIONS);
 
 						/* Values Array */
 						v_AppScreen_GetValues_SetValuesArray(&st_ScreenSectsLeds,    &su8NumPatternedSections);
@@ -342,11 +348,24 @@ static void _v_AppStillLights_StillSections(LiquidCrystal_I2C j_Lcd,
 						v_AppScreen_GetValues_SetTitle      (&st_ScreenSectsLeds,    "# LEDs:");
 
 						/* Description */
-						v_AppScreen_GetValues_SetDescription(&st_ScreenSectsLeds,    CONCAT(CONCAT(  "MAX ", INT_TO_STR(MIN(NUM_LEDS, 0xFF)              )), 
-																							CONCAT(", MIN ", INT_TO_STR(NUM_LEDS / MAX_PATTERNED_SECTIONS))));
-						
+                        // Convert minimum and maximum to string
+                        itoa(NUM_LEDS / MAX_PATTERNED_SECTIONS, &c_Minimum[0], 10);
+                        itoa(MIN(NUM_LEDS, 0xFF),               &c_Maximum[0], 10);
+
+                        // Concatenate min/max plus labels for description
+                        strncpy(&c_Description[0],  "MIN: ",        MAX_LENGTH_DESCRIPTION);
+                        strncat(&c_Description[0],  &c_Minimum[0],  CONCAT_LENGTH(c_Description));
+                        strncat(&c_Description[0],  ", MAX: ",      CONCAT_LENGTH(c_Description));
+                        strncat(&c_Description[0],  &c_Maximum[0],  CONCAT_LENGTH(c_Description));
+
+                        /* Description */
+                        v_AppScreen_GetValues_SetDescription(&st_ScreenSectsLeds,    &c_Description[0]);
+
+						/* Min Value */
+						v_AppScreen_GetValues_SetMinValue   (&st_ScreenSectsLeds,    (uint8) (NUM_LEDS / MAX_PATTERNED_SECTIONS));
+
 						/* Max Value */
-						v_AppScreen_GetValues_SetMaxValue   (&st_ScreenSectsLeds,    MIN(NUM_LEDS, 0xFF));
+						v_AppScreen_GetValues_SetMaxValue   (&st_ScreenSectsLeds,    (uint8) MIN(NUM_LEDS, 0xFF));
 
 						/* Values Array */
 						v_AppScreen_GetValues_SetValuesArray(&st_ScreenSectsLeds,    &su8NumLeds);
@@ -368,29 +387,26 @@ static void _v_AppStillLights_StillSections(LiquidCrystal_I2C j_Lcd,
 			// Run task loop update until values are defined
 			v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenSectsLeds);
 
-			if (1 == st_ScreenSectsLeds.t_Index.u8ValuesPrinted)
-			{ // First (and in this case, only) value has been printed
-				switch(st_SectsMethodMenu.u8Selection)
-				{
-					case e_SectsMethodByNumSects:
-						// Calculate number of LEDs
-						u32TempCalc             = (uint32) NUM_LEDS / (uint32) su8NumPatternedSections;
-						su8NumLeds              = (uint8 ) u32TempCalc;
-						break;
+            switch(st_SectsMethodMenu.u8Selection)
+            {
+                case e_SectsMethodByNumSects:
+                    // Calculate number of LEDs
+                    u32TempCalc             = (uint32) NUM_LEDS / (uint32) su8NumPatternedSections;
+                    su8NumLeds              = (uint8 ) u32TempCalc;
+                    break;
 
-					case e_SectsMethodByNumLeds:
-						// Calculate number of LEDs
-						u32TempCalc             = (uint32) NUM_LEDS / (uint32) su8NumLeds;
-						su8NumPatternedSections = (uint8 ) u32TempCalc;
-						break;
+                case e_SectsMethodByNumLeds:
+                    // Calculate number of LEDs
+                    u32TempCalc             = (uint32) NUM_LEDS / (uint32) su8NumLeds;
+                    su8NumPatternedSections = (uint8 ) u32TempCalc;
+                    break;
 
 #ifdef PRINT_ERROR_STATEMENTS
-                    default: 
-						Serial.println("ONLY SITH DEAL IN ABSOLUTES!"); // Error print statement
-						break;
+                default: 
+                    Serial.println("ONLY SITH DEAL IN ABSOLUTES!"); // Error print statement
+                    break;
 #endif
-				}
-			}
+            }
 			
 			// Continue to next step when values are defined
 			if (st_ScreenSectsLeds.bValuesDefined)
@@ -474,12 +490,21 @@ static void _v_AppStillLights_StillSections(LiquidCrystal_I2C j_Lcd,
 			// Continue to next step when values are defined
 			if (st_ScreenUniqueSects.bValuesDefined) 
             {
-                if (e_StylePatternedSections == pt_LedStrip->e_Style)
-                    e_StillSectionsStep = e_StillSectionsPatternOrderInfoScreen;
+                switch (pt_LedStrip->e_Style)
+                {
+                    case e_StylePatternedSections: // Go to next step
+                        e_StillSectionsStep = e_StillSectionsPatternOrderInfoScreen;
+                        break;
+
+                    case e_StyleUnequalSections: // Next, clear the LED strip to set colors
+                        e_StillSectionsStep = e_StillSectionsClearLedStrip;
+                        break;
 #ifdef PRINT_ERROR_STATEMENTS
-                else
-                    Serial.println("ANOTHER HAPPY LANDING!");
+                    default: // Invalid case - print error message
+                        Serial.println("ANOTHER HAPPY LANDING!");
+                        break;
 #endif
+                }
             }
 			break;
 			
@@ -526,6 +551,7 @@ static void _v_AppStillLights_StillSections(LiquidCrystal_I2C j_Lcd,
 
             // Continue to next step when values are defined
 			if (st_ScreenPatternOrder.bValuesDefined)  e_StillSectionsStep = e_StillSectionsClearLedStrip;
+			break;
 
         /* Clear LED strip before proceeding */
 		case e_StillSectionsClearLedStrip:
@@ -565,6 +591,21 @@ static void _v_AppStillLights_StillSections(LiquidCrystal_I2C j_Lcd,
 
             if (NULL != pt_Section)
             { // Section exists
+
+                // Code-shortening
+                bool    bUnequalSectionsSelected    = (e_StillUnequalSections == u8Selection);
+                uint16  u16SumLeds                  =  0; // Total number LEDs used thus far
+
+                // Find sum of LEDs used thus far
+                if (bUnequalSectionsSelected)
+                { // Total number of LEDs used thus far
+                    
+                    for (size_t i = 0; i < su8SectionNumber; i++)
+                    { // Add next section to sum
+                        u16SumLeds += (uint16) pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[i];
+                    }
+                }
+
                 if (!pt_Section->bDefined)
                 { // Section color not yet defined
                     if (st_ScreenPatternColor.bReprintScreen)
@@ -611,22 +652,38 @@ static void _v_AppStillLights_StillSections(LiquidCrystal_I2C j_Lcd,
                         v_AppScreen_RGB_SetTitle      (&st_ScreenPatternColor, &c_Title      [0]);
 
                         // Set RGB screen description
-                        /// \todo - change to current section number - may require strncpy
                         v_AppScreen_RGB_SetDescription(&st_ScreenPatternColor, &c_Description[0]);
 
                         // Print first screen
-                        v_AppScreen_RGB_Init(j_Lcd,    &st_ScreenPatternColor);
+                        v_AppScreen_RGB_Init(j_Lcd,    &st_ScreenPatternColor, (e_StillUnequalSections == u8Selection));
 
                         st_ScreenPatternColor.bReprintScreen = false; // Only print screen once until color is defined
                     }
                     
-                    // Set the first (and only) section color
-                    v_AppScreen_RGB_TLU(j_Lcd, j_Keypad, pt_Section);
+                    // Set the section color
+                    v_AppScreen_RGB_TLU(j_Lcd, 
+										j_Keypad, 
+										pt_Section, 
+										&su8NumLeds, 
+										MIN(0xFF, NUM_LEDS - u16SumLeds),
+										bUnequalSectionsSelected);
+										
+					if (bUnequalSectionsSelected) // Store number of LEDs to array if unequal sections selected
+						pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[su8SectionNumber] = su8NumLeds;
                 }
                 else
                 {
                     // Color defined, allow reprint of solid color screen for next color when we return
                     st_ScreenPatternColor.bReprintScreen = true;
+
+                    uint8 u8StartLeds = su8NumLeds *  su8SectionNumber;      // Default - for equal sect, starting point is num LEDs * section number
+                    uint8 u8EndLeds   = su8NumLeds * (su8SectionNumber + 1); // Default - for equal sect, starting point is num LEDs * (section number + 1)
+
+                    if (e_StyleUnequalSections == pt_LedStrip->e_Style && (0 != su8SectionNumber))
+                    { // Previous number of LEDs defined by last section
+                        u8StartLeds = u16SumLeds;              // Sum thus far
+                        u8EndLeds   = u16SumLeds + su8NumLeds; // Sum thus far + num in current section
+                    }
                     
                     bool    bDisplayNewSection  = ((su8SectionNumber + 1)     < su8NumUniqueSections)       //       Next section number is less than number of unique sections
                                                && ((e_StyleUnequalSections   == pt_LedStrip->e_Style)  ||   // -AND- Unequal   sections style is selected
@@ -636,13 +693,8 @@ static void _v_AppStillLights_StillSections(LiquidCrystal_I2C j_Lcd,
 
                     if (bDisplayNewSection)
                     { 
-                        if (e_StyleUnequalSections == pt_LedStrip->e_Style) 
-                        { // If unequal sections is selected, select number of LEDs based on section number
-                            su8NumLeds = pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[su8SectionNumber];
-                        }
-
                         // Display section for reference
-                        for (size_t i = su8NumLeds * su8SectionNumber; i < su8NumLeds * (su8SectionNumber + 1); i++)
+                        for (size_t i = u8StartLeds; i < u8EndLeds; i++)
                         { // Set RGB values to struct
                             pat_Leds[i].setRGB(pt_Section->u8Red,
                                                pt_Section->u8Green,
@@ -666,6 +718,10 @@ static void _v_AppStillLights_StillSections(LiquidCrystal_I2C j_Lcd,
                             for (size_t i = 0; i < u8NumberSections; i++)
                             { // Current section (i)
 
+                                // Defaults for equal sections
+                                u8StartLeds = su8NumLeds * i;
+                                u8EndLeds   = su8NumLeds * (i + 1);
+
                                 switch (pt_LedStrip->e_Style)
                                 {
                                     case e_StylePatternedSections:
@@ -687,8 +743,18 @@ static void _v_AppStillLights_StillSections(LiquidCrystal_I2C j_Lcd,
                                         break;
 
                                     case e_StyleUnequalSections: // Set pt_Section to next section in array order
-                                        pt_Section = &pt_LedStrip->u_Style.t_Unequal.t_Section      [i];
-                                        su8NumLeds =  pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[i];
+                                        pt_Section      = &pt_LedStrip->u_Style.t_Unequal.t_Section      [i];
+
+                                        u16SumLeds = 0; // Default to zero
+
+                                        for (size_t k = 0; k < i; k++)
+                                        { // Calculate LED sum
+                                            u16SumLeds += pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[k];                                    
+                                        }
+                                        
+                                        u8StartLeds = u16SumLeds;
+                                        u8EndLeds   = u16SumLeds + pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[i];
+
                                         break;
 #ifdef PRINT_ERROR_STATEMENTS
                                     default: // Invalid case
@@ -697,7 +763,7 @@ static void _v_AppStillLights_StillSections(LiquidCrystal_I2C j_Lcd,
 #endif
                                 }
 
-                                for (size_t j = su8NumLeds * i; j < su8NumLeds * (i + 1); j++)
+                                for (size_t j = u8StartLeds; j < u8EndLeds; j++)
                                 { // Current LED (j) = Num LEDs per section * Current patterned section (i) + Offset from first LED in section
                                     if (NULL != pt_Section)
                                     { // Set section color
