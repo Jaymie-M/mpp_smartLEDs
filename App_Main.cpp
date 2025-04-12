@@ -203,15 +203,23 @@ void v_AppMain_TLU(void)
                                         if (NO_SELECTION(mt_GradientLightsMenu.u8Selection))
                                         {
                                             v_AppStillsLights_GradientMenu(mj_SmartDormLcd, 
-                                                           mj_SmartDormKeypad, 
-                                                           &mt_GradientLightsMenu);
+                                                                           mj_SmartDormKeypad, 
+                                                                           &mt_GradientLightsMenu);
                                         }
                                         else if(NOT_BACK_TO_MAIN_MENU(mt_GradientLightsMenu.u8Selection))
                                         {
-                                            v_AppStillsLights_Gradient_TLU(mj_SmartDormLcd,
-                                                                           mj_SmartDormKeypad,
-                                                                           &mat_SmartDormLeds[0],
-                                                                           mt_GradientLightsMenu.u8Selection);
+                                            if (mat_SmartDormLedStrip[e_InitialSetpoint].bDefined)
+                                            { // LED Strip defined, send back to main menu
+                                                mt_GradientLightsMenu.u8Selection = BACK_TO_MAIN_MENU;
+                                            }
+                                            else
+                                            {
+                                                v_AppStillsLights_Gradient_TLU(mj_SmartDormLcd,
+                                                                               mj_SmartDormKeypad,
+                                                                               &mat_SmartDormLeds[0],
+                                                                               &mat_SmartDormLedStrip[e_InitialSetpoint],
+                                                                               mt_GradientLightsMenu.u8Selection);
+                                            }
                                         }
                                     }
                                     else if (NOT_BACK_TO_MAIN_MENU(mt_StillLightsMenu.u8Selection))

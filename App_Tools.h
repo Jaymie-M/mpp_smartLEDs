@@ -25,26 +25,29 @@
 // Settings
 #define PRINT_ERROR_STATEMENTS
 
-#define NULL                ((void *) 0)
-#define NUM_ROWS                 4
-#define NUM_COLUMNS              3
+#define NULL              ((void *) 0)
+#define NUM_ROWS                     4
+#define NUM_COLUMNS                  3
 #define NUM_TOTAL           NUM_COLUMNS * NUM_ROWS
-#define KEYPRESS_NONE         0xFF
-#define KEYPRESS_ASTERISK        9
-#define KEYPRESS_POUND          11
+#define KEYPRESS_NONE             0xFF
+#define KEYPRESS_ASTERISK            9
+#define KEYPRESS_POUND              11
 #define KEY_UP_ARROW        KEYPRESS_ASTERISK
 #define KEY_DOWN_ARROW      KEYPRESS_POUND
 
-#define POS1_MINUS_NEG1   1 - (-1)
-#define POS1_MINUS_ZERO   1 - ( 0)
+#define POS1_MINUS_NEG1       1 - (-1)
+#define POS1_MINUS_ZERO       1 - ( 0)
 
-#define ASCII_NUM_OFFSET      0x30
+#define ASCII_NUM_OFFSET          0x30
 
-#define NUM_LEDS                50 // Change to number of LEDs that are being used
+#define NUM_LEDS                    50 // Change to number of LEDs that are being used
 
-#define MAX_DIGITS_RGB           3
-#define MAX_UNIQUE_SECTIONS     15 // Use to change the maximum number of LED unique sections allowed per strip setup
-#define MAX_PATTERNED_SECTIONS  30 // Use to change the maximum number of LED patterned sections allowed per strip setup
+#define MAX_DIGITS_RGB               3
+#define MAX_UNIQUE_SECTIONS         15 // Use to change the maximum number of LED unique sections allowed per strip setup
+#define MAX_PATTERNED_SECTIONS      30 // Use to change the maximum number of LED patterned sections allowed per strip setup
+
+#define CHECKPOINT_STYLE_OFFSET      3
+#define CHECKPOINT_OPTION_OFFSET    -2
 
 #define F(string_literal)       (reinterpret_cast<const __FlashStringHelper *>(PSTR(string_literal)))
 
@@ -80,17 +83,6 @@ typedef char            charn;
 /***************************
  *         Structs         *
  ***************************/
-/**
- * \brief - Data to define one red, green, or blue value of a given color
- */
-typedef struct
-{
-    bool    bDefined;
-    uint8   u8Value;
-    uint8   au8Digit[MAX_DIGITS_RGB];
-
-} T_RGB;
-
 
 /**
  * \brief - Data to define the color of one section of LEDs
@@ -106,7 +98,7 @@ typedef enum
 } E_LedStripSetpoints;
 
 
-/**
+ /**
  * \brief - Data to define the color of one section of LEDs
  */
 typedef enum
@@ -115,6 +107,9 @@ typedef enum
     e_StylePatternedSections	= 1,
     e_StyleEqualSections        = 2,
     e_StyleUnequalSections   	= 3,
+    e_StylePatternedCheckpoints	= e_StylePatternedSections  + CHECKPOINT_STYLE_OFFSET,
+    e_StyleEqualCheckpoints     = e_StyleEqualSections      + CHECKPOINT_STYLE_OFFSET,
+    e_StyleUnequalCheckpoints   = e_StyleUnequalSections    + CHECKPOINT_STYLE_OFFSET,
     e_NumSectionStyles,
 
 } E_SectionStyle;

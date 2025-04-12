@@ -133,6 +133,17 @@ typedef struct
 
 
 /**
+ * \brief - Data to define one red, green, or blue value of a given color
+ */
+typedef struct
+{
+    bool    bDefined;
+    uint8   u8Value;
+    uint8   au8Digit[MAX_DIGITS_RGB];
+
+} T_RGB;
+
+/**
  * \brief - Struct with RGB Screen Data
  */
 typedef struct

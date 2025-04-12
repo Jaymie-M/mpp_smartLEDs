@@ -222,10 +222,10 @@ typedef enum
 typedef enum
 {
     e_GradientLightsMenuUnd             = 0,
-    e_GradientHalfAndHalf               = 1,
-    e_GradientUnequalCheckpts           = 2,
-    e_GradientEqualCheckpts             = 3,
-    e_GradientPatternedEqualCheckpts    = 4,
+    e_GradientHalfAndHalf               = e_StillHalfAndHalf            + CHECKPOINT_OPTION_OFFSET,
+    e_GradientUnequalCheckpts           = e_StillUnequalSections        + CHECKPOINT_OPTION_OFFSET,
+    e_GradientEqualCheckpts             = e_StillEqualSections          + CHECKPOINT_OPTION_OFFSET,
+    e_GradientPatternedEqualCheckpts    = e_StillPatternedEqualSections + CHECKPOINT_OPTION_OFFSET,
     e_MaxGradientLightsMenuPlus1,
     e_MaxGradientLightsMenu             = e_MaxGradientLightsMenuPlus1
                                         - POS1_MINUS_ZERO,
@@ -237,16 +237,28 @@ typedef enum
 /***************************
  *         Structs         *
  ***************************/
+/**
+ * \brief - Data for an LED strip section
+ */
+typedef struct
+{
+    uint8 u8NumLeds;
+    uint8 u8NumPatternedSections;
+    uint8 u8NumUniqueSections;
+    uint8 u8SectionNumber;
+
+} T_StillSectionsData;
 
 /***************************
  *    Exported Functions   *
  ***************************/
 void v_AppStillLights_LedStrip_Reset   (T_LedStrip        * pt_LedStrip);
-void v_AppStillsLights_MainMenu        (LiquidCrystal_I2C   j_Lcd,          Keypad  j_Keypad,       T_MenuSelection   * pt_Menu);
-void v_AppStillsLights_GradientMenu    (LiquidCrystal_I2C   j_Lcd,          Keypad  j_Keypad,       T_MenuSelection   * pt_Menu);
+void v_AppStillsLights_MainMenu        (LiquidCrystal_I2C   j_Lcd,          Keypad  j_Keypad,       T_MenuSelection   * pt_Menu  );
+void v_AppStillsLights_GradientMenu    (LiquidCrystal_I2C   j_Lcd,          Keypad  j_Keypad,       T_MenuSelection   * pt_Menu  );
 void v_AppStillsLights_Main_TLU        (LiquidCrystal_I2C   j_Lcd,          Keypad  j_Keypad,       CRGB              * pat_Leds,
-                                        T_LedStrip        * pt_LedStrip,    uint8   u8Selection);
-void v_AppStillsLights_Gradient_TLU    (LiquidCrystal_I2C   j_Lcd,          Keypad  j_Keypad,
-                                        CRGB              * pat_Leds,       uint8   u8Selection);
+                                        T_LedStrip        * pt_LedStrip,    uint8   u8Selection                                  );
+void v_AppStillsLights_Gradient_TLU    (LiquidCrystal_I2C   j_Lcd,          Keypad  j_Keypad,       CRGB              * pat_Leds,
+                                        T_LedStrip        * pt_LedStrip,    uint8   u8Selection                                  );
+        
 
 #endif /* APP_STILLLIGHTS_H */
