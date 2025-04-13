@@ -26,21 +26,6 @@
  ***************************/
 
 /**
- * \brief Default definition for sections method menu
- */
-#define T_SECTSMETHODMENU_DEFAULT(...)                                          \
-{                                                                               \
-    .bReprintMenu           = true,                                             \
-    .bBackToMainMenuEnabled = false,                                            \
-    .bPrintArrows           = false,                                            \
-    .u8Selection            = SELECTION_NONE,                                   \
-    .u8OptionOffset         = 0,                                                \
-    .u8MaxOptionOffset      = 0,                                                \
-    .u8MaxOptions           = e_MaxSectsMethodMenu,                             \
-}
-
-
-/**
  * \brief Default definition for sections/LEDs 'Get Values' screen
  */
 #define T_SECTSLEDSSCREEN_DEFAULT(...)                                          \
@@ -128,6 +113,65 @@
 
 
 /**
+ * \brief Default definition for unique sections 'Get Values' screen
+ */
+#define T_RAINBOWLENGTHSCREEN_DEFAULT(...)                                      \
+{                                                                               \
+    .bReprintScreen             = true,                                         \
+    .bDescription               = true,                                         \
+    .bPatternFill               = false,                                        \
+    .bValuesDefined             = false,                                        \
+    .eAlignment                 = e_Algn_LCenter,                               \
+    .u8KeypressHex              = KEYPRESS_NONE,                                \
+    .u8KeypressFinished         = KEYPRESS_NONE,                                \
+    .u8MinValue                 = 1,                                            \
+    .u8MaxValue                 = MIN(0xFF, NUM_LEDS),                          \
+    .u8NumberValuesTotalDefined = 1,                                            \
+    .au8Digit                   = {0, 0, 0},                                    \
+    .t_Index                    = {                                             \
+                                    .u8Row              = 0,                    \
+                                    .u8ValueOfRow       = 0,                    \
+                                    .u8DigitOfValue     = 0,                    \
+                                    .u8ValuesPrinted    = 0,                    \
+                                  },                                            \
+    .t_Cursor                   = {                                             \
+                                    .u8x = 0,                                   \
+                                    .u8y = 0,                                   \
+                                  },                                            \
+}
+
+
+/**
+ * \brief Default definition for sections method menu
+ */
+#define T_SECTSMETHODMENU_DEFAULT(...)                                          \
+{                                                                               \
+    .bReprintMenu           = true,                                             \
+    .bBackToMainMenuEnabled = false,                                            \
+    .bPrintArrows           = false,                                            \
+    .u8Selection            = SELECTION_NONE,                                   \
+    .u8OptionOffset         = 0,                                                \
+    .u8MaxOptionOffset      = 0,                                                \
+    .u8MaxOptions           = e_MaxSectsMethodMenu,                             \
+}
+
+
+/**
+ * \brief Default definition for rainbow direction menu
+ */
+#define T_RAINBOWDIRECTIONMENU_DEFAULT(...)                                     \
+{                                                                               \
+    .bReprintMenu           = true,                                             \
+    .bBackToMainMenuEnabled = false,                                            \
+    .bPrintArrows           = false,                                            \
+    .u8Selection            = SELECTION_NONE,                                   \
+    .u8OptionOffset         = 0,                                                \
+    .u8MaxOptionOffset      = 0,                                                \
+    .u8MaxOptions           = e_MaxRainbowDirectionMenu,                        \
+}
+
+
+/**
  * \brief Default definition for still lights menu
  */
 #define T_STILLLIGHTSMENU_DEFAULT(...)                                          \
@@ -160,21 +204,36 @@
  *          Enums          *
  ***************************/
 /**
- * \brief - List of sections method menu options
+ * \brief - List of steps in defining LED strip with sections or checkpoints
  */
- typedef enum
- {
-     e_StillSectionsInit 					= 0,
-     e_StillSectionsMethodMenu 		        = 1,
-     e_StillSectionsOrLedsScreen		    = 2,
-     e_StillSectionsUniqueSectsScreen		= 3,
-     e_StillSectionsPatternOrderInfoScreen	= 4,
-     e_StillSectionsSetPatternOrderScreen	= 5,
-     e_StillSectionsClearLedStrip           = 6,
-     e_StillSectionsDefineLedStrip          = 7,
-     e_StillSectionsNumberofSteps,
-     
- } E_StillSectionsStep;
+typedef enum
+{
+    e_StillSectionsInit 					= 0,
+    e_StillSectionsMethodMenu 		        = 1,
+    e_StillSectionsOrLedsScreen		        = 2,
+    e_StillSectionsUniqueSectsScreen		= 3,
+    e_StillSectionsPatternOrderInfoScreen	= 4,
+    e_StillSectionsSetPatternOrderScreen	= 5,
+    e_StillSectionsClearLedStrip            = 6,
+    e_StillSectionsDefineLedStrip           = 7,
+    e_StillSectionsNumberofSteps,
+    
+} E_StillSectionsStep;
+
+
+/**
+ * \brief - List of steps in defining LED strip with rainbow
+ */
+typedef enum
+{
+    e_StillRainbowInit 					    = 0,
+    e_StillRainbowDirectionMenu 		    = 1,
+    e_StillRainbowLengthLedsScreen		    = 2,
+    e_StillRainbowClearLedStrip             = 3,
+    e_StillRainbowDefineLedStrip            = 4,
+    e_StillRainbowNumberofSteps,
+    
+} E_StillRainbowStep;
 
 
 /**
@@ -191,6 +250,22 @@ typedef enum
     e_MaxSectsMethodMenuMin1        = e_MaxSectsMethodMenuPlus1 
                                     - POS1_MINUS_NEG1,
 } E_SectsMethodMenuOptions;
+
+
+/**
+ * \brief - List of rainbow direction menu options
+ */
+typedef enum
+{
+    e_Direction_None    = 0,
+    e_Direction_ROYGBIV = 1,
+    e_Direction_VIBGYOR = 2,
+    e_MaxRainbowDirectionMenuPlus1,
+    e_MaxRainbowDirectionMenu       = e_MaxRainbowDirectionMenuPlus1
+                                    - POS1_MINUS_ZERO,
+    e_MaxRainbowDirectionMenuMin1   = e_MaxRainbowDirectionMenuPlus1
+                                    - POS1_MINUS_NEG1,
+} E_RainbowDirectionMenuOptions;
 
 
 /**

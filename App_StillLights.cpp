@@ -37,7 +37,7 @@
  *   Function Prototypes   *
  ***************************/
 static void _v_AppStillLights_StillSectsChkpts      (LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, CRGB  * pat_Leds, T_LedStrip * pt_LedStrip, uint8 u8Selection);
-static bool _b_AppStillLights_StillRainbow          (LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, CRGB  * pat_Leds                                  	        );
+static void _v_AppStillLights_StillRainbow          (LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, CRGB  * pat_Leds, T_LedStrip * pt_LedStrip                   );
 
 /***************************
  *         Objects         *
@@ -201,34 +201,34 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
             st_ScreenPatternColor.bReprintScreen = true;
 
             // Default - for equal sect, starting point is num LEDs * section number
-            uint8 u8StartLeds = pt_Sections->u8NumLeds *  
-                                pt_Sections->u8SectionNumber;      
+            uint16 u16StartLeds = (uint16) pt_Sections->u8NumLeds *  
+                                  (uint16) pt_Sections->u8SectionNumber;      
 
             // Default - for equal sect, starting point is num LEDs * (section number + 1)
-            uint8 u8EndLeds   = pt_Sections->u8NumLeds * 
-                               (pt_Sections->u8SectionNumber + 1);
+            uint16 u16EndLeds   = (uint16) pt_Sections->u8NumLeds * 
+                                  (uint16)(pt_Sections->u8SectionNumber + 1);
 
             if (bCheckpointStyle)
             { // Calculate starting and ending positions for checkpoint style
                 if (0 == pt_Sections->u8SectionNumber)
                 { // Just display starting color on first LED
-                    u8StartLeds = 0;
-                    u8EndLeds   = 1;
+                    u16StartLeds = 0;
+                    u16EndLeds   = 1;
                 }
                 else
                 { // Subtract 1 from section number in calculation
-                    u8StartLeds = pt_Sections->u8NumLeds *  
-                                 (pt_Sections->u8SectionNumber - 1);
-                    u8EndLeds   = pt_Sections->u8NumLeds *  
-                                  pt_Sections->u8SectionNumber;  
+                    u16StartLeds = (uint16)  pt_Sections->u8NumLeds *
+                                   (uint16) (pt_Sections->u8SectionNumber - 1);
+                    u16EndLeds   = (uint16)  pt_Sections->u8NumLeds *  
+                                   (uint16)  pt_Sections->u8SectionNumber;
                 }
             }
 
             if (((e_StyleUnequalSections    == pt_LedStrip->e_Style) || 
                  (e_StyleUnequalCheckpoints == pt_LedStrip->e_Style) ) && (0 != pt_Sections->u8SectionNumber))
             { // Previous number of LEDs defined by last section
-                u8StartLeds = u16SumLeds;              // Sum thus far
-                u8EndLeds   = u16SumLeds + pt_Sections->u8NumLeds; // Sum thus far + num in current section
+                u16StartLeds = u16SumLeds;                                   // Sum thus far
+                u16EndLeds   = u16SumLeds + (uint16) pt_Sections->u8NumLeds; // Sum thus far + num in current section
             }
             
             bool    bDisplayNewSection  = ((pt_Sections->u8SectionNumber + 1) 
@@ -246,11 +246,11 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
             {
                 if (bGradientDisplay)
                 { // Display gradient for reference
-                    for (size_t i = u8StartLeds; i < u8EndLeds; i++)
+                    for (size_t i = u16StartLeds; i < u16EndLeds; i++)
                     { // Set RGB values to struct
                         // Calculate distance between start and end point
-                        float32 f32Dist_100Percent = (float32) (i         - u8StartLeds)
-                                                   / (float32) (u8EndLeds - u8StartLeds);
+                        float32 f32Dist_100Percent = (float32) (i          - u16StartLeds)
+                                                   / (float32) (u16EndLeds - u16StartLeds);
 
                                             /* Red   */
                         pat_Leds[i].setRGB ((uint8)   (f32Dist_100Percent *
@@ -269,7 +269,7 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                 }
                 else
                 { // Display section for reference
-                    for (size_t i = u8StartLeds; i < u8EndLeds; i++)
+                    for (size_t i = u16StartLeds; i < u16EndLeds; i++)
                     { // Set RGB values to struct
                         pat_Leds[i].setRGB(pt_Section->u8Red,
                                            pt_Section->u8Green,
@@ -296,16 +296,16 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                     { // Current section (i)
 
                         // Defaults for equal sections
-                        u8StartLeds = pt_Sections->u8NumLeds *  i;
-                        u8EndLeds   = pt_Sections->u8NumLeds * (i + 1);
+                        u16StartLeds = pt_Sections->u8NumLeds *  i;
+                        u16EndLeds   = pt_Sections->u8NumLeds * (i + 1);
 
                         // Re-define bGradient display based on 'i' as section number
                         bGradientDisplay = bCheckpointStyle && (0 != i);
 
                         if (bGradientDisplay)
                         { // Subtract 1 from section number in calculation
-                            u8StartLeds = pt_Sections->u8NumLeds * (i - 1);
-                            u8EndLeds   = pt_Sections->u8NumLeds *  i;
+                            u16StartLeds = pt_Sections->u8NumLeds * (i - 1);
+                            u16EndLeds   = pt_Sections->u8NumLeds *  i;
                         }
 
                         switch (pt_LedStrip->e_Style)
@@ -353,8 +353,8 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                                     u16SumLeds += pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[k];                                    
                                 }
                                 
-                                u8StartLeds = u16SumLeds;
-                                u8EndLeds   = u16SumLeds + pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[i];
+                                u16StartLeds = u16SumLeds;
+                                u16EndLeds   = u16SumLeds + pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[i];
 
                                 break;
 #ifdef PRINT_ERROR_STATEMENTS
@@ -370,11 +370,11 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                             { // Display gradient
                                 if (NULL != pt_PrevSection)
                                 {
-                                    for (size_t j = u8StartLeds; j < u8EndLeds; j++)
+                                    for (size_t j = u16StartLeds; j < u16EndLeds; j++)
                                     { // Set RGB values to struct
                                         // Calculate distance between start and end point
-                                        float32 f32Dist_100Percent = (float32) (j         - u8StartLeds)
-                                                                   / (float32) (u8EndLeds - u8StartLeds);
+                                        float32 f32Dist_100Percent = (float32) (j          - u16StartLeds)
+                                                                   / (float32) (u16EndLeds - u16StartLeds);
                 
                                                             /* Red   */
                                         pat_Leds[j].setRGB ((uint8)   (f32Dist_100Percent *
@@ -394,7 +394,7 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                             }
                             else if (!bCheckpointStyle)
                             { // Display sections
-                                for (size_t j = u8StartLeds; j < u8EndLeds; j++)
+                                for (size_t j = u16StartLeds; j < u16EndLeds; j++)
                                 { // Current LED (j) = Num LEDs per section * Current patterned section (i) + Offset from first LED in section
                                     { // Set section color
                                         pat_Leds[j].setRGB(pt_Section->u8Red,
@@ -414,18 +414,13 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                     pt_LedStrip->bDisplayed = true; 
                 }
 
-                /// \todo - Still need to test that we get back to main menu when LED strip is defined (0 pressed) and repeat setup when any other key is pressed 
                 u8CurrentPress = u8_AppTools_GetKeypress(j_Keypad);
-
-                static uint32 su32Counter = 0;
 
                 if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE))  // Falling edge of keypress
                 { // LED strip is now defined if zero key is pressed
                     if (0 == gc_au8DigitConv[su8PrevPress])
                     { // 0 key was pressed - set LED strip to defined
                         pt_LedStrip->bDefined = true;
-                        
-                        su32Counter++;
                     }
 
                     bReturn = true; // Return true to indicate that this step is complete
@@ -916,15 +911,262 @@ static void _v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
 }
 
 
-/** \brief This function ...
+/** \brief This function defines an LED strip with a rainbow pattern with a specified direction and length
  *
- *  \return: TRUE if the light colors have been selected and the program will return to the main menu
+ *  \return N/A
  */
-static bool _b_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,      
+static void _v_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,      
                                            Keypad               j_Keypad,   
-                                           CRGB               * pat_Leds)               
+                                           CRGB               * pat_Leds,
+                                           T_LedStrip         * pt_LedStrip)
+               
 {
+    /// \todo - finish developing this function - create default structs for rainbow direction menu/length screen
+    static  T_MenuSelection     st_RainbowDirectionMenu = T_RAINBOWDIRECTIONMENU_DEFAULT();
+    static  T_ScreenGetValues   st_RainbowLengthScreen  = T_RAINBOWLENGTHSCREEN_DEFAULT();
+    static  E_StillRainbowStep  e_StillRainbowStep      = e_StillRainbowInit;
+            uint8               u8CurrentPress          = KEYPRESS_NONE;
+    static  uint8               su8PrevPress            = KEYPRESS_NONE;
 
+    typedef struct 
+    {
+        T_Color t_Color;
+        T_Color t_PrevColor;
+        
+    } T_RainbowColors;
+
+    static  T_RainbowColors st_RainbowColors    = {
+                                                    .t_Color     = T_COLOR_CLEAR(),
+                                                    .t_PrevColor = T_COLOR_CLEAR(),
+                                                  };
+    const   T_RainbowColors ct_RedToGreen       = {
+                                                    .t_Color     = T_COLOR_GREEN(),
+                                                    .t_PrevColor = T_COLOR_RED(),
+                                                  },
+                            ct_GreenToBlue      = {
+                                                    .t_Color     = T_COLOR_BLUE(),
+                                                    .t_PrevColor = T_COLOR_GREEN(),
+                                                  },
+                            ct_BlueToRed        = {
+                                                    .t_Color     = T_COLOR_RED(),
+                                                    .t_PrevColor = T_COLOR_BLUE(),
+                                                  },
+                            ct_RedToBlue        = {
+                                                    .t_Color     = T_COLOR_BLUE(),
+                                                    .t_PrevColor = T_COLOR_RED(),
+                                                  },
+                            ct_BlueToGreen      = {
+                                                    .t_Color     = T_COLOR_GREEN(),
+                                                    .t_PrevColor = T_COLOR_BLUE(),
+                                                  },
+                            ct_GreenToRed       = {
+                                                    .t_Color     = T_COLOR_RED(),
+                                                    .t_PrevColor = T_COLOR_GREEN(),
+                                                  };
+    
+    switch (e_StillRainbowStep)
+    {
+        case e_StillRainbowInit:
+
+            // Initialize all menus and screens to be reprinted
+			st_RainbowDirectionMenu	.bReprintMenu 	= true;
+			st_RainbowLengthScreen	.bReprintScreen	= true;
+			
+			// Initialize all 'values defined' flags to false
+			st_RainbowLengthScreen	.bValuesDefined = false;
+			
+            // Reset rainbow direction selection
+            st_RainbowDirectionMenu .u8Selection    = SELECTION_NONE;
+
+            // Reset LED strip
+            v_AppStillLights_LedStrip_Reset(pt_LedStrip);
+
+            e_StillRainbowStep = e_StillRainbowDirectionMenu; // Next step
+            break;
+
+        case e_StillRainbowDirectionMenu:
+
+            if (st_RainbowDirectionMenu.bReprintMenu)
+            {
+                /* Title */
+                v_AppScreen_MenuSelection_SetTitle (&st_RainbowDirectionMenu,   "RBW DIRECT:");
+
+                /* Options */
+                v_AppScreen_MenuSelection_SetOption(&st_RainbowDirectionMenu,   "ROYGBIV",  e_Direction_ROYGBIV);
+                v_AppScreen_MenuSelection_SetOption(&st_RainbowDirectionMenu,   "VIBGYOR",  e_Direction_VIBGYOR);
+
+                // Print first menu
+                v_AppScreen_MenuSelection_Init(j_Lcd, &st_RainbowDirectionMenu);
+
+                st_RainbowDirectionMenu.bReprintMenu = false; // Clear, so reprint only occurs once
+            }
+
+            // Receive selection commands and scroll menu options (if required)
+            v_AppScreen_MenuSelection_TLU(j_Lcd, j_Keypad, &st_RainbowDirectionMenu);
+
+            if (!NO_SELECTION(st_RainbowDirectionMenu.u8Selection))
+            { // Rainbow direction selected - set to LED strip variable
+                pt_LedStrip->u_Style.t_Rainbow.u8Direction = st_RainbowDirectionMenu.u8Selection;
+
+                e_StillRainbowStep = e_StillRainbowLengthLedsScreen; // Next step
+            }
+            break;
+
+        case e_StillRainbowLengthLedsScreen:
+
+            if (st_RainbowLengthScreen.bReprintScreen)
+            {
+                /* Title */
+                v_AppScreen_GetValues_SetTitle          (&st_RainbowLengthScreen,    "RBW LENGTH:");
+
+                /* Description */
+                char    c_Description[MAX_LENGTH_DESCRIPTION]   = "MAX ";
+                char    c_Maximum    [MAX_DIGITS_PER_UINT8  ];
+                uint8   u8Maximum                               = (uint8) MIN(NUM_LEDS, 0xFF);
+
+                // Convertmaximum to string
+                itoa(u8Maximum, &c_Maximum[0], 10);
+
+                // Concatenate min/max plus labels for description
+                strncat(&c_Description[0],  &c_Maximum[0],  CONCAT_LENGTH(c_Description));
+                strncat(&c_Description[0],  " LEDs!",       CONCAT_LENGTH(c_Description));
+
+                v_AppScreen_GetValues_SetDescription    (&st_RainbowLengthScreen,    &c_Description[0]);
+
+                /* Values Array */
+                v_AppScreen_GetValues_SetValuesArray    (&st_RainbowLengthScreen,    &pt_LedStrip->u_Style.t_Rainbow.u8Length_LEDs);
+
+                // Print first menu
+                v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, &st_RainbowLengthScreen);
+
+                st_RainbowLengthScreen.bReprintScreen = false; // Clear, so reprint only occurs once
+            }
+
+            // Run task loop update until values are defined
+            v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_RainbowLengthScreen);
+
+            // Move to next step if rainbow length is defined
+            if (st_RainbowLengthScreen.bValuesDefined)  e_StillRainbowStep = e_StillRainbowClearLedStrip; // Next step
+            break;
+
+        case e_StillRainbowClearLedStrip:
+            /// \todo - this should also clear flag that runs animations
+            FastLED.clear(); // Clear and update LEDs
+            FastLED.show();
+
+            e_StillRainbowStep = e_StillRainbowDefineLedStrip; // Next step
+            break;
+
+        case e_StillRainbowDefineLedStrip:
+
+            if (!pt_LedStrip->bDisplayed)
+            {
+                uint16  u16StartLeds    = 0;
+                uint16  u16EndLeds      = (uint16) pt_LedStrip->u_Style.t_Rainbow.u8Length_LEDs;
+    
+                while (u16EndLeds <= NUM_LEDS)
+                {
+                    for (size_t i = u16StartLeds; i < u16EndLeds; i++)
+                    { // Set RGB values to struct
+                        // Calculate distance between start and end point
+                        float32 f32Dist_100Percent      = (float32) (i          - u16StartLeds)
+                                                        / (float32) (u16EndLeds - u16StartLeds);
+                        float32 f32DistThird_100Percent = 0.0f; // Distance between a third of the start and end point
+                        
+                        switch (pt_LedStrip->u_Style.t_Rainbow.u8Direction)
+                        { // Determine colors based on direction and percentage
+                            case e_Direction_ROYGBIV: // Red -> Violet
+                                if      (0.3333333333333333f > f32Dist_100Percent)
+                                { // Red -> Green
+                                    st_RainbowColors        = ct_RedToGreen;
+                                    f32DistThird_100Percent = 3.0f * f32Dist_100Percent;
+                                }
+                                else if (0.6666666666666667f > f32Dist_100Percent)
+                                { // Green -> Blue
+                                    st_RainbowColors        = ct_GreenToBlue;
+                                    f32DistThird_100Percent = 3.0f * (f32Dist_100Percent - 0.3333333333333333f);
+                                }
+                                else
+                                { // Blue -> Red
+                                    st_RainbowColors = ct_BlueToRed;
+                                    f32DistThird_100Percent = 3.0f * (f32Dist_100Percent - 0.6666666666666667f);
+                                }
+                                break;
+                            case e_Direction_VIBGYOR: // Violet -> Red
+                                if      (0.3333333333333333f > f32Dist_100Percent)
+                                { // Red -> Blue
+                                    st_RainbowColors = ct_RedToBlue;
+                                    f32DistThird_100Percent = 3.0f * f32Dist_100Percent;
+                                }
+                                else if (0.6666666666666667f > f32Dist_100Percent)
+                                { // Blue -> Green
+                                    st_RainbowColors = ct_BlueToGreen;
+                                    f32DistThird_100Percent = 3.0f * (f32Dist_100Percent - 0.3333333333333333f);
+                                }
+                                else
+                                { // Green -> Red
+                                    st_RainbowColors = ct_GreenToRed;
+                                    f32DistThird_100Percent = 3.0f * (f32Dist_100Percent - 0.6666666666666667f);
+                                }
+                                break;
+    #ifdef PRINT_ERROR_STATEMENTS
+                            default:
+                                Serial.println("I'M AS FREE AS A BIRD NOW!");
+                                break;
+    #endif
+                        }
+                        
+                        /// \todo - make helper function to calculate color from current, prev, and percentage
+                        /* Set colors */    /* Red   */
+                        pat_Leds[i].setRGB ((uint8)   (f32DistThird_100Percent *
+                                            (float32) (st_RainbowColors.t_Color    .u8Red    - st_RainbowColors.t_PrevColor.u8Red  )) +
+                                                       st_RainbowColors.t_PrevColor.u8Red,
+                                            /* Green */           
+                                            (uint8)   (f32DistThird_100Percent *
+                                            (float32) (st_RainbowColors.t_Color    .u8Green  - st_RainbowColors.t_PrevColor.u8Green)) +
+                                                       st_RainbowColors.t_PrevColor.u8Green,
+                                            /* Blue  */
+                                            (uint8)   (f32DistThird_100Percent *
+                                            (float32) (st_RainbowColors.t_Color    .u8Blue   - st_RainbowColors.t_PrevColor.u8Blue )) +
+                                                       st_RainbowColors.t_PrevColor.u8Blue
+                                           );
+                    }
+
+                    // Set start LEDs to end LEDs for next loop
+                    u16StartLeds    = u16EndLeds;
+
+                    // Add LED length to end LEDs for next loop
+                    u16EndLeds     += (uint16) pt_LedStrip->u_Style.t_Rainbow.u8Length_LEDs;
+                }
+
+                FastLED.show(); // Show LEDs
+
+                v_AppScreen_PressZeroIfDone(j_Lcd); // Request operator input to continue
+
+                // Set displayed flag true to avoid coming back in here
+                pt_LedStrip->bDisplayed = true;
+            }
+
+            u8CurrentPress = u8_AppTools_GetKeypress(j_Keypad);
+
+            if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE))  // Falling edge of keypress
+            { // LED strip is now defined if zero key is pressed
+                if (0 == gc_au8DigitConv[su8PrevPress])
+                { // 0 key was pressed - set LED strip to defined
+                    pt_LedStrip->bDefined = true;
+                }
+
+                e_StillRainbowStep = e_StillRainbowInit; // Reset to init step
+            }
+
+            su8PrevPress = u8CurrentPress; // Store current keypress
+            break;
+#ifdef PRINT_ERROR_STATEMENTS
+        default:
+            Serial.println("GREAT SCOTT!");
+            break;
+#endif
+    }
 }
 
 
@@ -985,6 +1227,12 @@ void v_AppStillLights_LedStrip_Reset(T_LedStrip * pt_LedStrip) // [I,O] LED stri
 				pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[j] = 0;
 			}
 			break;
+        
+        case e_StyleRainbow:
+            // Reset direction and length of rainbow
+            pt_LedStrip->u_Style.t_Rainbow.u8Direction      = e_Direction_None;
+            pt_LedStrip->u_Style.t_Rainbow.u8Length_LEDs    = 0;
+            break;
 			
 		default: // Valid case when called just after system unlocked - do not initialize the union
 			break;
@@ -1145,8 +1393,11 @@ void v_AppStillsLights_Main_TLU(LiquidCrystal_I2C    j_Lcd,          // [I, ] LC
             break;
 
         case e_StillRainbow:
-            bSelectionComplete = _b_AppStillLights_StillRainbow
-                                    (j_Lcd, j_Keypad, pat_Leds);
+            pt_LedStrip->e_Style = e_StyleRainbow; // Set style
+
+            /* Call function to setup rainbow */
+            _v_AppStillLights_StillRainbow     (j_Lcd,      j_Keypad, 
+                                                pat_Leds,   pt_LedStrip);
             break;
 
         case e_StillGradient:

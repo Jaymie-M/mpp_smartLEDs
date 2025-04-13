@@ -63,6 +63,37 @@
 #define CONCAT(a, b)            a b
 #define CONCAT_LENGTH(a)        LENGTHOF(a) - strnlen(a, LENGTHOF(a)) - 1
 
+#define T_COLOR_CLEAR(...)  \
+{                           \
+    .u8Red   = 0,           \
+    .u8Green = 0,           \
+    .u8Blue  = 0,           \
+}
+
+
+#define T_COLOR_RED(...)    \
+{                           \
+    .u8Red   = 0xFF,        \
+    .u8Green = 0,           \
+    .u8Blue  = 0,           \
+}
+
+
+#define T_COLOR_GREEN(...)  \
+{                           \
+    .u8Red   = 0,           \
+    .u8Green = 0xFF,        \
+    .u8Blue  = 0,           \
+}
+
+
+#define T_COLOR_BLUE(...)   \
+{                           \
+    .u8Red   = 0,           \
+    .u8Green = 0,           \
+    .u8Blue  = 0xFF,        \
+}
+
 // Types:
 typedef signed      int sint8   __attribute__ ((__mode__ (__QI__)));
 typedef unsigned    int uint8   __attribute__ ((__mode__ (__QI__)));
@@ -93,13 +124,15 @@ typedef enum
     e_SetpointA = 0,
     e_SetpointB	= 1,
     e_SetpointC = 2,
+    // e_SetpointD = 3,
+    // e_SetpointE = 4,
     e_NumLedStripSetpoints,
     e_InitialSetpoint = e_SetpointA,
 
 } E_LedStripSetpoints;
 
 
- /**
+/**
  * \brief - Data to define the color of one section of LEDs
  */
 typedef enum
@@ -111,6 +144,7 @@ typedef enum
     e_StylePatternedCheckpoints	= e_StylePatternedSections  + CHECKPOINT_STYLE_OFFSET,
     e_StyleEqualCheckpoints     = e_StyleEqualSections      + CHECKPOINT_STYLE_OFFSET,
     e_StyleUnequalCheckpoints   = e_StyleUnequalSections    + CHECKPOINT_STYLE_OFFSET,
+    e_StyleRainbow              = 7,
     e_NumSectionStyles,
 
 } E_SectionStyle;
@@ -121,10 +155,10 @@ typedef enum
  */
 typedef struct
 {
-    bool   	bDefined;
     uint8   u8Red;
     uint8   u8Green;
     uint8   u8Blue;
+    bool   	bDefined;
 
 } T_Color;
 
@@ -165,6 +199,18 @@ typedef struct
 
 
 /**
+ * \brief - Data to define rainbow style
+ *          (Approx 2 bytes)
+ */
+typedef struct
+{
+    uint8   u8Direction;
+    uint8   u8Length_LEDs;
+
+} T_RainbowStyle;
+
+
+/**
  * \brief - Data to define the LED selections depending on selection style
  *          (Approx 120 bytes)
  */
@@ -173,6 +219,7 @@ typedef union
     T_PatternedSections	t_Pattern;
     T_EqualSections     t_Equal;
     T_UnequalSections   t_Unequal;
+    T_RainbowStyle      t_Rainbow;
 
 } U_SectionStyle;
 
