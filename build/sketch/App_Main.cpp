@@ -18,6 +18,7 @@
 #include "App_Main.h"
 #include "App_Screen.h"
 #include "App_StillLights.h"
+#include "App_AnimatedLights.h"
 #include "App_Tools.h"
 
 // Library
@@ -59,9 +60,6 @@ const byte gc_mau8ColumnPins[NUM_COLUMNS] = {PIN_DIN_KEYPAD_COL1,
 static bool   mbInitialized               = false;
 static bool   mbUnlocked                  = false;
 
-// Lights menus
-static uint8  mu8AnimationsMenuSelect     = 0;
-
 // Animations menus
 static uint8  mu8StartingPointMenuSelect  = 0;
 
@@ -77,6 +75,7 @@ static T_MenuSelection  mt_MainMenu             = T_MAINMENU_DEFAULT();
 static T_MenuSelection  mt_LightsMenu           = T_LIGHTSMENU_DEFAULT();
 static T_MenuSelection  mt_StillLightsMenu      = T_STILLLIGHTSMENU_DEFAULT();
 static T_MenuSelection  mt_GradientLightsMenu   = T_GRADIENTLIGHTSMENU_DEFAULT();
+static T_MenuSelection  mt_AnimatedLightsMenu   = T_ANIMATEDLIGHTSMENU_DEFAULT();
 static T_MenuSelection  mt_ClockMenu            = T_CLOCKMENU_DEFAULT();
 
 /***************************
@@ -153,7 +152,8 @@ void v_AppMain_TLU(void)
                                                             mt_StillLightsMenu      .u8MaxOptions);                
                 bReturnToMainMenu |= RETURN_TO_MAIN_MENU(   mt_GradientLightsMenu   .u8Selection,
                                                             mt_GradientLightsMenu   .u8MaxOptions);
-                bReturnToMainMenu |= RETURN_TO_MAIN_MENU(mu8AnimationsMenuSelect,                 8);
+                bReturnToMainMenu |= RETURN_TO_MAIN_MENU(   mt_AnimatedLightsMenu   .u8Selection,
+                                                            mt_AnimatedLightsMenu   .u8MaxOptions);
                 bReturnToMainMenu |= RETURN_TO_MAIN_MENU(mu8StartingPointMenuSelect,              7);
                 bReturnToMainMenu |= RETURN_TO_MAIN_MENU(mt_ClockMenu .u8Selection, mt_ClockMenu .u8MaxOptions);
 
@@ -194,8 +194,8 @@ void v_AppMain_TLU(void)
                                 if (NO_SELECTION(mt_StillLightsMenu.u8Selection))
                                 {
                                     v_AppStillsLights_MainMenu(mj_SmartDormLcd, 
-                                                 mj_SmartDormKeypad, 
-                                                 &mt_StillLightsMenu);
+                                                               mj_SmartDormKeypad, 
+                                                               &mt_StillLightsMenu);
                                 }
                                 else
                                 {
@@ -243,40 +243,83 @@ void v_AppMain_TLU(void)
                                 
                             case e_Animations:
                                 // Animations menu
-                                while((mu8AnimationsMenuSelect > 8) && 
-                                      NOT_BACK_TO_MAIN_MENU(mu8AnimationsMenuSelect)
-                                    )
+                                if (NO_SELECTION(mt_AnimatedLightsMenu.u8Selection))
                                 {
-                                    mu8AnimationsMenuSelect = u8_AnimationsMenu();
+                                    v_AppAnimatedLights_MainMenu(mj_SmartDormLcd, 
+                                                                 mj_SmartDormKeypad, 
+                                                                 &mt_AnimatedLightsMenu);
                                 }
-                    
-                                if(mu8AnimationsMenuSelect == 1)
+                                else
                                 {
-                                    // Choose from presets
-                                }
-                                else if(mu8AnimationsMenuSelect == 8)
-                                {
-                                    // Choose from themed c_pacOptions
-                                }
-                                else if(NOT_BACK_TO_MAIN_MENU(mu8AnimationsMenuSelect))
-                                {
-                                    while((mu8StartingPointMenuSelect > 7) && 
-                                          NOT_BACK_TO_MAIN_MENU(mu8StartingPointMenuSelect)
-                                        )
+                                    if (NO_SELECTION(mt_SetpointLightsMenu.u8Selection))
                                     {
-                                        mu8StartingPointMenuSelect = u8_StartingPointMenu();
+                                        v_AppStillsLights_GradientMenu(mj_SmartDormLcd, 
+                                                                       mj_SmartDormKeypad, 
+                                                                       &mt_SetpointLightsMenu);
                                     }
-                    
-                                    if(mu8StartingPointMenuSelect == 7)
+                                    else if(NOT_BACK_TO_MAIN_MENU(mt_SetpointLightsMenu.u8Selection))
                                     {
-                                        if (NO_SELECTION(mt_GradientLightsMenu.u8Selection))
+                                        if (!mat_SmartDormLedStrip[e_InitialSetpoint].bDefined)
+                                        { /// \todo - need to support multiple setpoints being defined
+                                            v_AppStillsLights_Main_TLU(mj_SmartDormLcd,
+                                                                       mj_SmartDormKeypad,
+                                                                       &mat_SmartDormLeds[0],
+                                                                       &mat_SmartDormLedStrip[e_InitialSetpoint],
+                                                                       mt_SetpointLightsMenu.u8Selection - SOME_OFFSET);
+                                        }
+                                        else if (NOT_BACK_TO_MAIN_MENU(mt_AnimatedLightsMenu.u8Selection))
                                         {
-                                            v_AppStillsLights_GradientMenu(mj_SmartDormLcd, 
-                                                                           mj_SmartDormKeypad, 
-                                                                           &mt_GradientLightsMenu);
+                                            if (false /*mat_SmartDormLedStrip[e_InitialSetpoint].bDefined*/)
+                                            { /// \todo - need some way to indicate that animations are defined
+                                                mt_AnimatedLightsMenu.u8Selection = BACK_TO_MAIN_MENU;
+                                            }
+                                            else
+                                            {
+                                                v_AppAnimatedLights_Main_TLU(mj_SmartDormLcd,
+                                                                             mj_SmartDormKeypad,
+                                                                             &mat_SmartDormLeds[0],
+                                                                             &mat_SmartDormLedStrip[e_InitialSetpoint],
+                                                                             mt_StillLightsMenu.u8Selection);
+                                            }
                                         }
                                     }
                                 }
+
+                                
+                                // while((mu8AnimationsMenuSelect > 8) && 
+                                //       NOT_BACK_TO_MAIN_MENU(mu8AnimationsMenuSelect)
+                                //     )
+                                // {
+                                //     mu8AnimationsMenuSelect = u8_AnimationsMenu();
+                                // }
+                    
+                                // if(mu8AnimationsMenuSelect == 1)
+                                // {
+                                //     // Choose from presets
+                                // }
+                                // else if(mu8AnimationsMenuSelect == 8)
+                                // {
+                                //     // Choose from themed c_pacOptions
+                                // }
+                                // else if(NOT_BACK_TO_MAIN_MENU(mu8AnimationsMenuSelect))
+                                // {
+                                //     while((mu8StartingPointMenuSelect > 7) && 
+                                //           NOT_BACK_TO_MAIN_MENU(mu8StartingPointMenuSelect)
+                                //         )
+                                //     {
+                                //         mu8StartingPointMenuSelect = u8_StartingPointMenu();
+                                //     }
+                    
+                                //     if(mu8StartingPointMenuSelect == 7)
+                                //     {
+                                //         if (NO_SELECTION(mt_GradientLightsMenu.u8Selection))
+                                //         {
+                                //             v_AppStillsLights_GradientMenu(mj_SmartDormLcd, 
+                                //                                            mj_SmartDormKeypad, 
+                                //                                            &mt_GradientLightsMenu);
+                                //         }
+                                //     }
+                                // }
                                 break;
                                 
                             default:
@@ -454,13 +497,13 @@ static uint32 u32_RequestPassword(void)
 
         // Set up first screen
         mj_SmartDormLcd.clear();
-        mj_SmartDormLcd.setCursor(0,0);
+        mj_SmartDormLcd.setCursor(0, 0);
         mj_SmartDormLcd.print(F("********************"));
-        mj_SmartDormLcd.setCursor(2,1);
+        mj_SmartDormLcd.setCursor(2, 1);
         mj_SmartDormLcd.print(F("Enter Password:"));
-        mj_SmartDormLcd.setCursor(7,2);
+        mj_SmartDormLcd.setCursor(7, 2);
         mj_SmartDormLcd.print(F("______"));
-        mj_SmartDormLcd.setCursor(0,3);
+        mj_SmartDormLcd.setCursor(0, 3);
         mj_SmartDormLcd.print(F("********************"));
 
         // Clear so first screen is only set up once per password attempt
