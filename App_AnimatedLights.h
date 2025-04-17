@@ -15,6 +15,7 @@
 #include <Arduino.h>
 
 // Application
+#include "App_Screen.h"
 #include "App_Tools.h"
 
 // Library
@@ -84,9 +85,9 @@ typedef enum
  */
 typedef enum
 {
-    e_StyleUndefined            = 0,
-    e_StyleFade                 = 1,
-    e_StyleShift                = 2,
+    e_AnimationStyleUndefined   = 0,
+    e_AnimationStyleFade        = 1,
+    e_AnimationStyleShift       = 2,
     e_NumAnimationStyles,
 
 } E_AnimationStyle;
@@ -111,6 +112,10 @@ typedef struct
 /***************************
  *    Exported Functions   *
  ***************************/
-void v_AppAnimatedLights_MainMenu(LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, T_MenuSelection  * pt_Menu);
+void v_AppAnimatedLights_Main_TLU               (LiquidCrystal_I2C  j_Lcd,      Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds,
+                                                 CRGB             * pat_Leds,   T_LedStrip    * pat_LedStrip,   size_t              t_SizeLedStrip,
+                                                 uint8              u8Selection                                                                    );
+void v_AppAnimatedLights_ChooseNumberOfSetpoints(                                                               T_AnimatedLeds    * pt_AnimatedLeds);
+void v_AppAnimatedLights_MainMenu               (LiquidCrystal_I2C  j_Lcd,      Keypad          j_Keypad,       T_MenuSelection   * pt_Menu        );
 
 #endif /* APP_ANIMATEDLIGHTS_H */

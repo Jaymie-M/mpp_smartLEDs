@@ -284,9 +284,6 @@ void v_AppMain_TLU(void)
                                                     if (mat_SmartDormLedStrip[mt_AnimatedLeds.u8CurrentSetpoint].bDefined)
                                                     { // LED Strip defined, send back to main menu
                                                         mt_AnimatedLeds.u8CurrentSetpoint++; // Increment current setpoint
-
-                                                        // Set all setpoints defined once total number of setpoints are defined
-                                                        mt_AnimatedLeds.bSetpointsDefined = (mt_AnimatedLeds.u8NumberSetpoints == mt_AnimatedLeds.u8CurrentSetpoint);
                                                     }
                                                     else
                                                     {
@@ -302,7 +299,7 @@ void v_AppMain_TLU(void)
                                             {
                                                 if (mat_SmartDormLedStrip[mt_AnimatedLeds.u8CurrentSetpoint].bDefined)
                                                 { // LED Strip defined, send back to main menu
-                                                    mt_StillLightsMenu.u8Selection = BACK_TO_MAIN_MENU;
+                                                    mt_AnimatedLeds.u8CurrentSetpoint++; // Increment current setpoint
                                                 }
                                                 else
                                                 {
@@ -316,10 +313,12 @@ void v_AppMain_TLU(void)
                                         }
                                         /// \todo - replace above with function
 
+                                        // Set all setpoints defined once total number of setpoints are defined
+                                        mt_AnimatedLeds.bSetpointsDefined = (mt_AnimatedLeds.u8NumberSetpoints == mt_AnimatedLeds.u8CurrentSetpoint);
                                     }
                                     else
                                     { // Setpoints are defined
-                                        mt_AnimatedLeds.u8NumberSetpoints = NO_SELECTION; // Reset number of setpoints to no selection
+                                        mt_AnimatedLeds.u8NumberSetpoints = SELECTION_NONE; // Reset number of setpoints to no selection
 
                                         if (mt_AnimatedLeds.bDefined)
                                         { // Animations are defined
@@ -484,8 +483,8 @@ static void v_ResetMenuSelections(void)
     v_AppScreen_MenuSelection_SelectionsReset(&mt_LightsMenu        );  //          Lights  Menu
     v_AppScreen_MenuSelection_SelectionsReset(&mt_StillLightsMenu   );  // Still    Lights  Menu
     v_AppScreen_MenuSelection_SelectionsReset(&mt_GradientLightsMenu);  // Gradient Lights  Menu
+    v_AppScreen_MenuSelection_SelectionsReset(&mt_AnimatedLightsMenu);  // Animated Lights  Menu
     
-    mu8AnimationsMenuSelect         = SELECTION_NONE;
     mu8StartingPointMenuSelect      = SELECTION_NONE;
     
     // Other menus

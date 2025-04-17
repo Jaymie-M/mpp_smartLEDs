@@ -60,6 +60,8 @@ const byte gc_mau8ColumnPins[NUM_COLUMNS] = {PIN_DIN_KEYPAD_COL1,
 static bool   mbInitialized               = false;
 static bool   mbUnlocked                  = false;
 
+static uint8  mu8NumberSetpoints          = 0;
+
 // Animations menus
 static uint8  mu8StartingPointMenuSelect  = 0;
 
@@ -68,7 +70,8 @@ static uint8  mu8MusicMenuSelect          = 0;
 static uint8  mu8SettingsMenuSelect       = 0;
 
 // Structs
-static T_LedStrip       mat_SmartDormLedStrip[e_NumLedStripSetpoints]; /// \todo - define default struct
+static T_AnimatedLeds   mt_AnimatedLeds;
+static T_LedStrip       mat_SmartDormLedStrip[e_NumLedStripDefinitions]; /// \todo - define default struct
 static CRGB             mat_SmartDormLeds    [NUM_LEDS];
 
 static T_MenuSelection  mt_MainMenu             = T_MAINMENU_DEFAULT();
@@ -81,7 +84,6 @@ static T_MenuSelection  mt_ClockMenu            = T_CLOCKMENU_DEFAULT();
 /***************************
  *         Objects         *
  ***************************/
-/// \todo - SNAKEBITE - Come back and rename objects
 // Create objects
 Keypad            mj_SmartDormKeypad = Keypad( makeKeymap(gc_macKeypadMap), gc_mau8RowPins, gc_mau8ColumnPins, NUM_ROWS, NUM_COLUMNS);
 LiquidCrystal_I2C mj_SmartDormLcd(DEFAULT_ADDRESS_LCD, 20, 4); // 0x27 is the default address for smart dorm lcd
@@ -98,10 +100,12 @@ static uint32   u32_RequestPassword   (void);
 
 // Lights Menus
 static void     v_LightsMenu          (LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, T_MenuSelection * pt_Menu);
+#ifdef OLD_ANIMATIONS_MENUS
 static uint8    u8_AnimationsMenu     (void);
 
 // Animations Menus
 static uint8    u8_StartingPointMenu  (void);
+#endif
 
 // Misc
 static uint8    u8_MusicMenu          (void);
@@ -119,12 +123,7 @@ static uint8    u8_SettingsMenu       (void);
 void v_AppMain_Init(void)
 {
     // Initialize FastLED object and clear LEDs to start
-
-    /* OLD TikTok style lights */
-    // FastLED.addLeds<WS2812B, PIN_DOUT_LED_DATA, GRB>(mat_SmartDormLeds, NUM_LEDS);
-
-    /* New Christmas style lights */
-    FastLED.addLeds<WS2811, PIN_DOUT_LED_DATA, RGB>(mat_SmartDormLeds, NUM_LEDS);
+    FastLED.addLeds<LED_STRIP_DRIVER_CHIP, PIN_DOUT_LED_DATA, LED_STRIP_RGB_SEQUENCE>(mat_SmartDormLeds, NUM_LEDS);
     FastLED.clear();
 
     // Start serial monitor
@@ -149,7 +148,7 @@ void v_AppMain_TLU(void)
                 bReturnToMainMenu |= RETURN_TO_MAIN_MENU(   mt_LightsMenu           .u8Selection, 
                                                             mt_LightsMenu           .u8MaxOptions);
                 bReturnToMainMenu |= RETURN_TO_MAIN_MENU(   mt_StillLightsMenu      .u8Selection,
-                                                            mt_StillLightsMenu      .u8MaxOptions);                
+                                                            mt_StillLightsMenu      .u8MaxOptions);
                 bReturnToMainMenu |= RETURN_TO_MAIN_MENU(   mt_GradientLightsMenu   .u8Selection,
                                                             mt_GradientLightsMenu   .u8MaxOptions);
                 bReturnToMainMenu |= RETURN_TO_MAIN_MENU(   mt_AnimatedLightsMenu   .u8Selection,
@@ -251,75 +250,87 @@ void v_AppMain_TLU(void)
                                 }
                                 else
                                 {
-                                    if (NO_SELECTION(mt_SetpointLightsMenu.u8Selection))
+                                    if (NO_SELECTION(mt_AnimatedLeds.u8NumberSetpoints))
                                     {
-                                        v_AppStillsLights_GradientMenu(mj_SmartDormLcd, 
-                                                                       mj_SmartDormKeypad, 
-                                                                       &mt_SetpointLightsMenu);
-                                    }
-                                    else if(NOT_BACK_TO_MAIN_MENU(mt_SetpointLightsMenu.u8Selection))
-                                    {
-                                        if (!mat_SmartDormLedStrip[e_InitialSetpoint].bDefined)
-                                        { /// \todo - need to support multiple setpoints being defined
-                                            v_AppStillsLights_Main_TLU(mj_SmartDormLcd,
-                                                                       mj_SmartDormKeypad,
-                                                                       &mat_SmartDormLeds[0],
-                                                                       &mat_SmartDormLedStrip[e_InitialSetpoint],
-                                                                       mt_SetpointLightsMenu.u8Selection - SOME_OFFSET);
+                                        if (e_AnimatedFadeSetpoint == mt_AnimatedLightsMenu.u8Selection)
+                                        { // Choose number of setpoints
+                                            v_AppAnimatedLights_ChooseNumberOfSetpoints(&mt_AnimatedLeds);
                                         }
-                                        else if (NOT_BACK_TO_MAIN_MENU(mt_AnimatedLightsMenu.u8Selection))
+                                        else
+                                        { // Otherwise choose one setpoint
+                                            mt_AnimatedLeds.u8NumberSetpoints = 1;
+                                        }
+                                    }
+                                    else if (!mt_AnimatedLeds.bSetpointsDefined)
+                                    {
+                                        /// \todo - replace below with function
+                                        if (NO_SELECTION(mt_StillLightsMenu.u8Selection))
                                         {
-                                            if (false /*mat_SmartDormLedStrip[e_InitialSetpoint].bDefined*/)
-                                            { /// \todo - need some way to indicate that animations are defined
-                                                mt_AnimatedLightsMenu.u8Selection = BACK_TO_MAIN_MENU;
-                                            }
-                                            else
+                                            v_AppStillsLights_MainMenu(mj_SmartDormLcd,
+                                                                       mj_SmartDormKeypad,
+                                                                       &mt_StillLightsMenu);
+                                        }
+                                        else
+                                        {
+                                            if (e_StillGradient == mt_StillLightsMenu.u8Selection)
                                             {
-                                                v_AppAnimatedLights_Main_TLU(mj_SmartDormLcd,
-                                                                             mj_SmartDormKeypad,
-                                                                             &mat_SmartDormLeds[0],
-                                                                             &mat_SmartDormLedStrip[e_InitialSetpoint],
-                                                                             mt_StillLightsMenu.u8Selection);
+                                                if (NO_SELECTION(mt_GradientLightsMenu.u8Selection))
+                                                {
+                                                    v_AppStillsLights_GradientMenu(mj_SmartDormLcd,
+                                                                                   mj_SmartDormKeypad,
+                                                                                   &mt_GradientLightsMenu);
+                                                }
+                                                else if(NOT_BACK_TO_MAIN_MENU(mt_GradientLightsMenu.u8Selection))
+                                                {
+                                                    if (mat_SmartDormLedStrip[mt_AnimatedLeds.u8CurrentSetpoint].bDefined)
+                                                    { // LED Strip defined, send back to main menu
+                                                        mt_AnimatedLeds.u8CurrentSetpoint++; // Increment current setpoint
+                                                    }
+                                                    else
+                                                    {
+                                                        v_AppStillsLights_Gradient_TLU(mj_SmartDormLcd,
+                                                                                       mj_SmartDormKeypad,
+                                                                                       &mat_SmartDormLeds[0],
+                                                                                       &mat_SmartDormLedStrip[mt_AnimatedLeds.u8CurrentSetpoint],
+                                                                                       mt_GradientLightsMenu.u8Selection);
+                                                    }
+                                                }
                                             }
+                                            else if (NOT_BACK_TO_MAIN_MENU(mt_StillLightsMenu.u8Selection))
+                                            {
+                                                if (mat_SmartDormLedStrip[mt_AnimatedLeds.u8CurrentSetpoint].bDefined)
+                                                { // LED Strip defined, send back to main menu
+                                                    mt_AnimatedLeds.u8CurrentSetpoint++; // Increment current setpoint
+                                                }
+                                                else
+                                                {
+                                                    v_AppStillsLights_Main_TLU(mj_SmartDormLcd,
+                                                                               mj_SmartDormKeypad,
+                                                                               &mat_SmartDormLeds[0],
+                                                                               &mat_SmartDormLedStrip[mt_AnimatedLeds.u8CurrentSetpoint],
+                                                                               mt_StillLightsMenu.u8Selection);
+                                                }
+                                            }
+                                        }
+                                        /// \todo - replace above with function
+
+                                        // Set all setpoints defined once total number of setpoints are defined
+                                        mt_AnimatedLeds.bSetpointsDefined = (mt_AnimatedLeds.u8NumberSetpoints == mt_AnimatedLeds.u8CurrentSetpoint);
+                                    }
+                                    else
+                                    { // Setpoints are defined
+                                        mt_AnimatedLeds.u8NumberSetpoints = SELECTION_NONE; // Reset number of setpoints to no selection
+
+                                        if (mt_AnimatedLeds.bDefined)
+                                        { // Animations are defined
+                                            mt_AnimatedLightsMenu.u8Selection = BACK_TO_MAIN_MENU;
+                                        }
+                                        else
+                                        {
+                                            v_AppStillsLights_EnableAnimations();
                                         }
                                     }
                                 }
-
-                                
-                                // while((mu8AnimationsMenuSelect > 8) && 
-                                //       NOT_BACK_TO_MAIN_MENU(mu8AnimationsMenuSelect)
-                                //     )
-                                // {
-                                //     mu8AnimationsMenuSelect = u8_AnimationsMenu();
-                                // }
-                    
-                                // if(mu8AnimationsMenuSelect == 1)
-                                // {
-                                //     // Choose from presets
-                                // }
-                                // else if(mu8AnimationsMenuSelect == 8)
-                                // {
-                                //     // Choose from themed c_pacOptions
-                                // }
-                                // else if(NOT_BACK_TO_MAIN_MENU(mu8AnimationsMenuSelect))
-                                // {
-                                //     while((mu8StartingPointMenuSelect > 7) && 
-                                //           NOT_BACK_TO_MAIN_MENU(mu8StartingPointMenuSelect)
-                                //         )
-                                //     {
-                                //         mu8StartingPointMenuSelect = u8_StartingPointMenu();
-                                //     }
-                    
-                                //     if(mu8StartingPointMenuSelect == 7)
-                                //     {
-                                //         if (NO_SELECTION(mt_GradientLightsMenu.u8Selection))
-                                //         {
-                                //             v_AppStillsLights_GradientMenu(mj_SmartDormLcd, 
-                                //                                            mj_SmartDormKeypad, 
-                                //                                            &mt_GradientLightsMenu);
-                                //         }
-                                //     }
-                                // }
                                 break;
                                 
                             default:
@@ -333,8 +344,8 @@ void v_AppMain_TLU(void)
                     // Clock menu
                     if (NO_SELECTION(mt_ClockMenu.u8Selection))
                     {
-                        v_AppClockMenu(mj_SmartDormLcd, 
-                                       mj_SmartDormKeypad, 
+                        v_AppClockMenu(mj_SmartDormLcd,
+                                       mj_SmartDormKeypad,
                                        &mt_ClockMenu);
                     }
                     break;
@@ -361,6 +372,18 @@ void v_AppMain_TLU(void)
                     // Do nothing - Invalid selection
                     break;
             }
+        }
+
+        /* Updates done outside of main menu selection */
+        if (b_AppStillsLights_AnimationsEnabled() )
+        { //
+            v_AppAnimatedLights_Main_TLU(mj_SmartDormLcd,
+                                         mj_SmartDormKeypad,
+                                         &mt_AnimatedLeds,
+                                         &mat_SmartDormLeds[0],
+                                         &mat_SmartDormLedStrip[0],
+                                         sizeof(&mat_SmartDormLedStrip[0]),
+                                         mt_AnimatedLightsMenu.u8Selection - SHIFT_OPTION_OFFSET);
         }
 
         /// \todo - do other loops here - e.g., clock update, animations update, music update
@@ -461,8 +484,8 @@ static void v_ResetMenuSelections(void)
     v_AppScreen_MenuSelection_SelectionsReset(&mt_LightsMenu        );  //          Lights  Menu
     v_AppScreen_MenuSelection_SelectionsReset(&mt_StillLightsMenu   );  // Still    Lights  Menu
     v_AppScreen_MenuSelection_SelectionsReset(&mt_GradientLightsMenu);  // Gradient Lights  Menu
+    v_AppScreen_MenuSelection_SelectionsReset(&mt_AnimatedLightsMenu);  // Animated Lights  Menu
     
-    mu8AnimationsMenuSelect         = SELECTION_NONE;
     mu8StartingPointMenuSelect      = SELECTION_NONE;
     
     // Other menus
@@ -578,7 +601,7 @@ static void v_LightsMenu(LiquidCrystal_I2C  j_Lcd,      // [I, ] LCD    Object
 
 
 /// \todo SNAKEBITE - JRM - Get all below out of Main ASAP!
-
+#ifdef OLD_ANIMATIONS_MENUS
 static uint8 u8_AnimationsMenu(void){
   // This function brings the user to the animation lights menu and returns a u8Selection
   // Inputs: none
@@ -764,7 +787,7 @@ static uint8 u8_StartingPointMenu(void){
 
   return u8Selection;
 }
-
+#endif
 
 
 /**

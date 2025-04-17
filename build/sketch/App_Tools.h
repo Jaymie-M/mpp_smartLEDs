@@ -25,6 +25,15 @@
  ***************************/
 // Settings
 #define PRINT_ERROR_STATEMENTS
+//#define OLD_ANIMATIONS_MENUS
+
+/* TikTok Style */
+//#define LED_STRIP_DRIVER_CHIP   WS2812B
+//#define LED_STRIP_RGB_SEQUENCE  GRB
+
+/* Christmas Lights Style */
+#define LED_STRIP_DRIVER_CHIP   WS2811
+#define LED_STRIP_RGB_SEQUENCE  RGB
 
 #define NULL              ((void *) 0)
 #define NUM_ROWS                     4
@@ -48,7 +57,10 @@
 #define MAX_PATTERNED_SECTIONS      30 // Use to change the maximum number of LED patterned sections allowed per strip setup
 
 #define CHECKPOINT_STYLE_OFFSET      3
+#define SHIFT_STYLE_OFFSET           6
 #define CHECKPOINT_OPTION_OFFSET    -2
+#define SHIFT_OPTION_OFFSET         -1
+
 
 #define F(string_literal)       (reinterpret_cast<const __FlashStringHelper *>(PSTR(string_literal)))
 
@@ -117,23 +129,24 @@ typedef char            charn;
  ***************************/
 
 /**
- * \brief - Data to define the color of one section of LEDs
+ * \brief - Setpoint Options
  */
 typedef enum
 {
-    e_SetpointA = 0,
-    e_SetpointB	= 1,
-    e_SetpointC = 2,
-    // e_SetpointD = 3,
-    // e_SetpointE = 4,
-    e_NumLedStripSetpoints,
-    e_InitialSetpoint = e_SetpointA,
+    e_SetpointA                 = 0,
+    e_SetpointB	    			= 1,
+    e_SetpointC     			= 2,
+    e_Shift          			= 3,
+    e_NumLedStripDefinitions,
+    e_NumLedStripSetpoints      = e_NumLedStripDefinitions
+                                - POS1_MINUS_ZERO,
+    e_InitialSetpoint           = e_SetpointA,
 
 } E_LedStripSetpoints;
 
 
 /**
- * \brief - Data to define the color of one section of LEDs
+ * \brief - Section Style Options
  */
 typedef enum
 {
@@ -141,10 +154,13 @@ typedef enum
     e_StylePatternedSections	= 1,
     e_StyleEqualSections        = 2,
     e_StyleUnequalSections   	= 3,
-    e_StylePatternedCheckpoints	= e_StylePatternedSections  + CHECKPOINT_STYLE_OFFSET,
+    e_StylePatternedCheckpoints = e_StylePatternedSections  + CHECKPOINT_STYLE_OFFSET,
     e_StyleEqualCheckpoints     = e_StyleEqualSections      + CHECKPOINT_STYLE_OFFSET,
     e_StyleUnequalCheckpoints   = e_StyleUnequalSections    + CHECKPOINT_STYLE_OFFSET,
-    e_StyleRainbow              = 7,
+    e_StylePatternedShift       = e_StylePatternedSections  +      SHIFT_STYLE_OFFSET,
+    e_StyleEqualShift           = e_StyleEqualSections      +      SHIFT_STYLE_OFFSET,
+    e_StyleUnequalShift         = e_StyleUnequalSections    +      SHIFT_STYLE_OFFSET,
+    e_StyleRainbow              = 10,
     e_NumSectionStyles,
 
 } E_SectionStyle;
@@ -164,13 +180,37 @@ typedef struct
 
 
 /**
+ * \brief - Data to define the shift properties of one section of LEDs
+ */
+typedef struct
+{
+    uint16  u16Period_ms;
+    uint8   u8Direction;
+    bool    bDefined;
+
+} T_Shift;
+
+
+/**
+ * \brief - Data to define a LED section based on style
+ *          Sections and checkpoints use t_Color while shifts use t_Shift
+ */
+typedef union
+{
+    T_Color t_Color; // Section with section/checkpoint style
+    T_Shift t_Shift; // Section with shift style
+
+} U_Section;
+
+
+/**
  * \brief - Data to define the patterned LED sections
  *          (Approx 90 bytes)
  */
 typedef struct
 {
-    T_Color	t_Section[MAX_UNIQUE_SECTIONS   ]; // Specifying order of actual sections
-    uint8	au8Order [MAX_PATTERNED_SECTIONS]; // Unique sections
+    U_Section   u_Section[MAX_UNIQUE_SECTIONS   ]; // Specifying order of actual sections
+    uint8	    au8Order [MAX_PATTERNED_SECTIONS]; // Unique sections
 
 } T_PatternedSections;
 
@@ -181,7 +221,7 @@ typedef struct
  */
 typedef struct
 {
-    T_Color	t_Section[MAX_PATTERNED_SECTIONS];
+    U_Section   u_Section[MAX_PATTERNED_SECTIONS];
 
 } T_EqualSections;
 
@@ -192,8 +232,8 @@ typedef struct
  */
 typedef struct
 {
-    T_Color	t_Section      [MAX_UNIQUE_SECTIONS];
-    uint8   au8NumberOfLeds[MAX_UNIQUE_SECTIONS];
+    U_Section   u_Section      [MAX_UNIQUE_SECTIONS];
+    uint8       au8NumberOfLeds[MAX_UNIQUE_SECTIONS];
 
 } T_UnequalSections;
 

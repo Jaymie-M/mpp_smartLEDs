@@ -48,6 +48,34 @@
 /***************************
  *   Function Definitions  *
  ***************************/
+/** \brief This function requests the number of LED strip setpoints for 'Fade Setpoint' animation selection
+ *
+ *  \return: pt_AnimatedLeds->u8NumberSetpoints is set 
+ */
+void v_AppAnimatedLights_ChooseNumberOfSetpoints(T_AnimatedLeds * pt_AnimatedLeds)
+{
+
+}
+
+
+/** \brief This function receives the animated lights selection, prompts the user 
+ *         to choose time period between fade loop/setpoints or section shifts in ms 
+ *         as well as shift direction for each section.
+ *
+ *  \return: none
+ */
+void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,
+                                    Keypad              j_Keypad,
+                                    T_AnimatedLeds    * pt_AnimatedLeds,
+                                    CRGB              * pat_Leds,
+                                    T_LedStrip        * pat_LedStrip,
+                                    size_t              t_SizeLedStrip,
+                                    uint8               u8Selection)
+{
+    
+}
+
+
 /** \brief This function brings the user to the animated lights menu and returns a selection
  *
  *  \return: pt_Menu->u8OptionOffset and pt_Menu->u8Selection are set 

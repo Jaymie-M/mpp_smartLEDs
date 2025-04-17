@@ -60,8 +60,8 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
 {
     // Code-shortening
     static  T_ScreenRGB st_ScreenPatternColor  = {.bReprintScreen = true,};
-            T_Color   * pt_Color,
-                      * pt_PrevColor;
+            U_Section * pu_Section,
+                      * pu_PrevSection;
             uint8       u8PrevSection          = 0;
             uint8       u8CurrentPress         = KEYPRESS_NONE;
     static  uint8       su8PrevPress           = KEYPRESS_NONE;
@@ -79,20 +79,20 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
     { // Get pointer to current and previous section
         case e_StylePatternedSections:
         case e_StylePatternedCheckpoints:
-                                    pt_Color      = &pt_LedStrip->u_Style.t_Pattern.u_Section.t_Color[pt_Sections->u8SectionNumber];
-            if (bGradientDisplay)   pt_PrevColor  = &pt_LedStrip->u_Style.t_Pattern.u_Section.t_Color[u8PrevSection               ];
+                                    pu_Section      = &pt_LedStrip->u_Style.t_Pattern.u_Section[pt_Sections->u8SectionNumber];
+            if (bGradientDisplay)   pu_PrevSection  = &pt_LedStrip->u_Style.t_Pattern.u_Section[u8PrevSection               ];
             break;
 
         case e_StyleUnequalSections:
         case e_StyleUnequalCheckpoints:
-                                    pt_Color      = &pt_LedStrip->u_Style.t_Unequal.u_Section.t_Color[pt_Sections->u8SectionNumber];
-            if (bGradientDisplay)   pt_PrevColor  = &pt_LedStrip->u_Style.t_Unequal.u_Section.t_Color[u8PrevSection               ];
+                                    pu_Section      = &pt_LedStrip->u_Style.t_Unequal.u_Section[pt_Sections->u8SectionNumber];
+            if (bGradientDisplay)   pu_PrevSection  = &pt_LedStrip->u_Style.t_Unequal.u_Section[u8PrevSection               ];
             break;
 
         case e_StyleEqualSections:
         case e_StyleEqualCheckpoints:
-                                    pt_Color      = &pt_LedStrip->u_Style.t_Equal  .u_Section.t_Color[pt_Sections->u8SectionNumber];
-            if (bGradientDisplay)   pt_PrevColor  = &pt_LedStrip->u_Style.t_Equal  .u_Section.t_Color[u8PrevSection               ];
+                                    pu_Section      = &pt_LedStrip->u_Style.t_Equal  .u_Section[pt_Sections->u8SectionNumber];
+            if (bGradientDisplay)   pu_PrevSection  = &pt_LedStrip->u_Style.t_Equal  .u_Section[u8PrevSection               ];
             break;
 #ifdef PRINT_ERROR_STATEMENTS
         default: // Invalid case
@@ -101,7 +101,7 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
 #endif
     }
 
-    if (NULL != pt_Color)
+    if (NULL != pu_Section)
     { // Section exists
 
         // Code-shortening
@@ -121,7 +121,7 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
             }
         }
 
-        if (!pt_Color->bDefined)
+        if (!pu_Section->t_Color.bDefined)
         { // Section color not yet defined
             if (st_ScreenPatternColor.bReprintScreen)
             { // Menu not yet printed
@@ -187,7 +187,7 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
             // Set the section color
             v_AppScreen_RGB_TLU(j_Lcd, 
                                 j_Keypad, 
-                                pt_Color,
+                                &pu_Section->t_Color,
                                 &pt_Sections->u8NumLeds, 
                                 MIN(0xFF, NUM_LEDS - u16SumLeds),
                                 bUnequalSectsChkptsSelected);
@@ -254,16 +254,16 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
 
                                             /* Red   */
                         pat_Leds[i].setRGB ((uint8)   (f32Dist_100Percent *
-                                            (float32) (pt_Color    ->u8Red     - pt_PrevColor->u8Red  )) +
-                                                       pt_PrevColor->u8Red,
+                                            (float32) (pu_Section    ->t_Color.u8Red     - pu_PrevSection->t_Color.u8Red  )) +
+                                                       pu_PrevSection->t_Color.u8Red,
                                             /* Green */           
                                             (uint8)   (f32Dist_100Percent *
-                                            (float32) (pt_Color    ->u8Green   - pt_PrevColor->u8Green)) +
-                                                       pt_PrevColor->u8Green,
+                                            (float32) (pu_Section    ->t_Color.u8Green   - pu_PrevSection->t_Color.u8Green)) +
+                                                       pu_PrevSection->t_Color.u8Green,
                                             /* Blue  */
                                             (uint8)   (f32Dist_100Percent *
-                                            (float32) (pt_Color    ->u8Blue    - pt_PrevColor->u8Blue )) +
-                                                       pt_PrevColor->u8Blue
+                                            (float32) (pu_Section    ->t_Color.u8Blue    - pu_PrevSection->t_Color.u8Blue )) +
+                                                       pu_PrevSection->t_Color.u8Blue
                                            );
                     }
                 }
@@ -271,9 +271,9 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                 { // Display section for reference
                     for (size_t i = u16StartLeds; i < u16EndLeds; i++)
                     { // Set RGB values to struct
-                        pat_Leds[i].setRGB(pt_Color->u8Red,
-                                           pt_Color->u8Green,
-                                           pt_Color->u8Blue);
+                        pat_Leds[i].setRGB(pu_Section->t_Color.u8Red,
+                                           pu_Section->t_Color.u8Green,
+                                           pu_Section->t_Color.u8Blue);
                     }
                 }
                 
@@ -314,13 +314,13 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                             case e_StylePatternedCheckpoints:
 
                                 if (0 < pt_LedStrip->u_Style.t_Pattern.au8Order[i])
-                                { // Set pt_Color to next section in pattern order
-                                                            pt_Color      =  &pt_LedStrip->u_Style.t_Pattern.u_Section.t_Color[
-                                                                              pt_LedStrip->u_Style.t_Pattern.au8Order[i] - 1];
+                                { // Set pu_Section to next section in pattern order
+                                                            pu_Section      =  &pt_LedStrip->u_Style.t_Pattern.u_Section[
+                                                                                pt_LedStrip->u_Style.t_Pattern.au8Order[i] - 1];
 
                                     // Set pt_PrevColor to prior section in pattern order (if not the first one)
-                                    if (bGradientDisplay)   pt_PrevColor  =  &pt_LedStrip->u_Style.t_Pattern.u_Section.t_Color[
-                                                                              pt_LedStrip->u_Style.t_Pattern.au8Order[i - 1] - 1];
+                                    if (bGradientDisplay)   pu_PrevSection  =  &pt_LedStrip->u_Style.t_Pattern.u_Section[
+                                                                                pt_LedStrip->u_Style.t_Pattern.au8Order[i - 1] - 1];
                                 }
 #ifdef PRINT_ERROR_STATEMENTS
                                 else
@@ -332,18 +332,18 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
 
                             case e_StyleEqualSections:
                             case e_StyleEqualCheckpoints: // Set pt_Color to next section in array order
-                                pt_Color      = &pt_LedStrip->u_Style.t_Equal  .u_Section.t_Color[i];
+                                                        pu_Section      = &pt_LedStrip->u_Style.t_Equal  .u_Section[i];
 
                                 // Set pt_PrevColor to prior section in pattern order (if not the first one)
-                                if (bGradientDisplay)   pt_PrevColor  = &pt_LedStrip->u_Style.t_Equal  .u_Section.t_Color[i - 1];
+                                if (bGradientDisplay)   pu_PrevSection  = &pt_LedStrip->u_Style.t_Equal  .u_Section[i - 1];
                                 break;
 
                             case e_StyleUnequalSections:
                             case e_StyleUnequalCheckpoints: // Set pt_Color to next section in array order
-                                pt_Color      = &pt_LedStrip->u_Style.t_Unequal.u_Section.t_Color[i];
+                                                        pu_Section      = &pt_LedStrip->u_Style.t_Unequal.u_Section[i];
 
                                     // Set pt_PrevColor to prior section in pattern order (if not the first one)
-                                if (bGradientDisplay)   pt_PrevColor  = &pt_LedStrip->u_Style.t_Unequal.u_Section.t_Color[i - 1];
+                                if (bGradientDisplay)   pu_PrevSection  = &pt_LedStrip->u_Style.t_Unequal.u_Section[i - 1];
 
 
                                 u16SumLeds = 0; // Default to zero
@@ -364,11 +364,11 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
 #endif
                         }
 
-                        if (NULL != pt_Color)
+                        if (NULL != pu_Section)
                         {
                             if (bGradientDisplay)
                             { // Display gradient
-                                if (NULL != pt_PrevColor)
+                                if (NULL != pu_PrevSection)
                                 {
                                     for (size_t j = u16StartLeds; j < u16EndLeds; j++)
                                     { // Set RGB values to struct
@@ -378,16 +378,16 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                 
                                                             /* Red   */
                                         pat_Leds[j].setRGB ((uint8)   (f32Dist_100Percent *
-                                                            (float32) (pt_Color    ->u8Red     - pt_PrevColor->u8Red  )) +
-                                                                       pt_PrevColor->u8Red,
+                                                            (float32) (pu_Section    ->t_Color.u8Red     - pu_PrevSection->t_Color.u8Red  )) +
+                                                                       pu_PrevSection->t_Color.u8Red,
                                                             /* Green */
                                                             (uint8)   (f32Dist_100Percent *
-                                                            (float32) (pt_Color    ->u8Green   - pt_PrevColor->u8Green)) +
-                                                                       pt_PrevColor->u8Green,
+                                                            (float32) (pu_Section    ->t_Color.u8Green   - pu_PrevSection->t_Color.u8Green)) +
+                                                                       pu_PrevSection->t_Color.u8Green,
                                                             /* Blue  */
                                                             (uint8)   (f32Dist_100Percent *
-                                                            (float32) (pt_Color    ->u8Blue    - pt_PrevColor->u8Blue )) +
-                                                                       pt_PrevColor->u8Blue
+                                                            (float32) (pu_Section    ->t_Color.u8Blue    - pu_PrevSection->t_Color.u8Blue )) +
+                                                                       pu_PrevSection->t_Color.u8Blue
                                                         );
                                     }
                                 }
@@ -397,9 +397,9 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                                 for (size_t j = u16StartLeds; j < u16EndLeds; j++)
                                 { // Current LED (j) = Num LEDs per section * Current patterned section (i) + Offset from first LED in section
                                     { // Set section color
-                                        pat_Leds[j].setRGB(pt_Color->u8Red,
-                                                        pt_Color->u8Green,
-                                                        pt_Color->u8Blue);
+                                        pat_Leds[j].setRGB(pu_Section->t_Color.u8Red,
+                                                           pu_Section->t_Color.u8Green,
+                                                           pu_Section->t_Color.u8Blue);
                                     }
                                 }
                             }
@@ -1182,10 +1182,10 @@ void v_AppStillLights_LedStrip_Reset(T_LedStrip * pt_LedStrip) // [I,O] LED stri
             /// \todo - refactor to at_Section
             for (size_t i = 0; i < MAX_UNIQUE_SECTIONS; i++)
             { // Reset section data
-                pt_LedStrip->u_Style.t_Pattern.u_Section.t_Color[i].bDefined = false;
-                pt_LedStrip->u_Style.t_Pattern.u_Section.t_Color[i].u8Red    = 0;
-                pt_LedStrip->u_Style.t_Pattern.u_Section.t_Color[i].u8Green  = 0;
-                pt_LedStrip->u_Style.t_Pattern.u_Section.t_Color[i].u8Blue   = 0;
+                pt_LedStrip->u_Style.t_Pattern.u_Section[i].t_Color.bDefined = false;
+                pt_LedStrip->u_Style.t_Pattern.u_Section[i].t_Color.u8Red    = 0;
+                pt_LedStrip->u_Style.t_Pattern.u_Section[i].t_Color.u8Green  = 0;
+                pt_LedStrip->u_Style.t_Pattern.u_Section[i].t_Color.u8Blue   = 0;
             }
 
             for (size_t j = 0; j < MAX_PATTERNED_SECTIONS; j++)
@@ -1199,10 +1199,10 @@ void v_AppStillLights_LedStrip_Reset(T_LedStrip * pt_LedStrip) // [I,O] LED stri
 
             for (size_t i = 0; i < MAX_PATTERNED_SECTIONS; i++)
             { // Reset section data
-                pt_LedStrip->u_Style.t_Equal.u_Section.t_Color[i].bDefined = false;
-                pt_LedStrip->u_Style.t_Equal.u_Section.t_Color[i].u8Red    = 0;
-                pt_LedStrip->u_Style.t_Equal.u_Section.t_Color[i].u8Green  = 0;
-                pt_LedStrip->u_Style.t_Equal.u_Section.t_Color[i].u8Blue   = 0;
+                pt_LedStrip->u_Style.t_Equal.u_Section[i].t_Color.bDefined = false;
+                pt_LedStrip->u_Style.t_Equal.u_Section[i].t_Color.u8Red    = 0;
+                pt_LedStrip->u_Style.t_Equal.u_Section[i].t_Color.u8Green  = 0;
+                pt_LedStrip->u_Style.t_Equal.u_Section[i].t_Color.u8Blue   = 0;
             }
             break;
 
@@ -1211,10 +1211,10 @@ void v_AppStillLights_LedStrip_Reset(T_LedStrip * pt_LedStrip) // [I,O] LED stri
 
             for (size_t i = 0; i < MAX_UNIQUE_SECTIONS; i++)
             { // Reset section data
-                pt_LedStrip->u_Style.t_Unequal.u_Section.t_Color[i].bDefined = false;
-                pt_LedStrip->u_Style.t_Unequal.u_Section.t_Color[i].u8Red    = 0;
-                pt_LedStrip->u_Style.t_Unequal.u_Section.t_Color[i].u8Green  = 0;
-                pt_LedStrip->u_Style.t_Unequal.u_Section.t_Color[i].u8Blue   = 0;
+                pt_LedStrip->u_Style.t_Unequal.u_Section[i].t_Color.bDefined = false;
+                pt_LedStrip->u_Style.t_Unequal.u_Section[i].t_Color.u8Red    = 0;
+                pt_LedStrip->u_Style.t_Unequal.u_Section[i].t_Color.u8Green  = 0;
+                pt_LedStrip->u_Style.t_Unequal.u_Section[i].t_Color.u8Blue   = 0;
             }
 
             for (size_t j = 0; j < MAX_UNIQUE_SECTIONS; j++)
@@ -1401,7 +1401,7 @@ void v_AppStillsLights_Gradient_TLU(LiquidCrystal_I2C   j_Lcd,          // [I, ]
  *
  *  \return: State of mbEnableAnimations
  */
-inline bool b_AppStillsLights_AnimationsEnabled(void)
+bool b_AppStillsLights_AnimationsEnabled(void)
 {
     return mbEnableAnimations;
 }
@@ -1411,7 +1411,7 @@ inline bool b_AppStillsLights_AnimationsEnabled(void)
  *
  *  \return: Sets mbEnableAnimations TRUE
  */
-inline void v_AppStillsLights_EnableAnimations(void)
+void v_AppStillsLights_EnableAnimations(void)
 {
     mbEnableAnimations = true;
 }
