@@ -31,7 +31,7 @@
 /***************************
  * Module Global Variables *
  ***************************/
-
+static bool mbEnableAnimations = false;
 
 /***************************
  *   Function Prototypes   *
@@ -51,8 +51,8 @@ static void _v_AppStillLights_StillRainbow          (LiquidCrystal_I2C j_Lcd, Ke
  *
  *  \return N/A
  */
-static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lcd,      
-                                                     Keypad                 j_Keypad,   
+static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lcd,
+                                                     Keypad                 j_Keypad,
                                                      CRGB                 * pat_Leds,
                                                      T_LedStrip           * pt_LedStrip,
                                                      T_StillSectionsData  * pt_Sections, /// \todo - name is too similar to pt_Section
@@ -60,8 +60,8 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
 {
     // Code-shortening
     static  T_ScreenRGB st_ScreenPatternColor  = {.bReprintScreen = true,};
-            T_Color   * pt_Section,
-                      * pt_PrevSection;
+            T_Color   * pt_Color,
+                      * pt_PrevColor;
             uint8       u8PrevSection          = 0;
             uint8       u8CurrentPress         = KEYPRESS_NONE;
     static  uint8       su8PrevPress           = KEYPRESS_NONE;
@@ -79,20 +79,20 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
     { // Get pointer to current and previous section
         case e_StylePatternedSections:
         case e_StylePatternedCheckpoints:
-                                    pt_Section      = &pt_LedStrip->u_Style.t_Pattern.t_Section[pt_Sections->u8SectionNumber];
-            if (bGradientDisplay)   pt_PrevSection  = &pt_LedStrip->u_Style.t_Pattern.t_Section[u8PrevSection               ];
+                                    pt_Color      = &pt_LedStrip->u_Style.t_Pattern.u_Section.t_Color[pt_Sections->u8SectionNumber];
+            if (bGradientDisplay)   pt_PrevColor  = &pt_LedStrip->u_Style.t_Pattern.u_Section.t_Color[u8PrevSection               ];
             break;
 
         case e_StyleUnequalSections:
         case e_StyleUnequalCheckpoints:
-                                    pt_Section      = &pt_LedStrip->u_Style.t_Unequal.t_Section[pt_Sections->u8SectionNumber];
-            if (bGradientDisplay)   pt_PrevSection  = &pt_LedStrip->u_Style.t_Unequal.t_Section[u8PrevSection               ];
+                                    pt_Color      = &pt_LedStrip->u_Style.t_Unequal.u_Section.t_Color[pt_Sections->u8SectionNumber];
+            if (bGradientDisplay)   pt_PrevColor  = &pt_LedStrip->u_Style.t_Unequal.u_Section.t_Color[u8PrevSection               ];
             break;
 
         case e_StyleEqualSections:
         case e_StyleEqualCheckpoints:
-                                    pt_Section      = &pt_LedStrip->u_Style.t_Equal  .t_Section[pt_Sections->u8SectionNumber];
-            if (bGradientDisplay)   pt_PrevSection  = &pt_LedStrip->u_Style.t_Equal  .t_Section[u8PrevSection               ];
+                                    pt_Color      = &pt_LedStrip->u_Style.t_Equal  .u_Section.t_Color[pt_Sections->u8SectionNumber];
+            if (bGradientDisplay)   pt_PrevColor  = &pt_LedStrip->u_Style.t_Equal  .u_Section.t_Color[u8PrevSection               ];
             break;
 #ifdef PRINT_ERROR_STATEMENTS
         default: // Invalid case
@@ -101,7 +101,7 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
 #endif
     }
 
-    if (NULL != pt_Section)
+    if (NULL != pt_Color)
     { // Section exists
 
         // Code-shortening
@@ -121,7 +121,7 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
             }
         }
 
-        if (!pt_Section->bDefined)
+        if (!pt_Color->bDefined)
         { // Section color not yet defined
             if (st_ScreenPatternColor.bReprintScreen)
             { // Menu not yet printed
@@ -187,7 +187,7 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
             // Set the section color
             v_AppScreen_RGB_TLU(j_Lcd, 
                                 j_Keypad, 
-                                pt_Section, 
+                                pt_Color,
                                 &pt_Sections->u8NumLeds, 
                                 MIN(0xFF, NUM_LEDS - u16SumLeds),
                                 bUnequalSectsChkptsSelected);
@@ -254,16 +254,16 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
 
                                             /* Red   */
                         pat_Leds[i].setRGB ((uint8)   (f32Dist_100Percent *
-                                            (float32) (pt_Section    ->u8Red     - pt_PrevSection->u8Red  )) +
-                                                       pt_PrevSection->u8Red,
+                                            (float32) (pt_Color    ->u8Red     - pt_PrevColor->u8Red  )) +
+                                                       pt_PrevColor->u8Red,
                                             /* Green */           
                                             (uint8)   (f32Dist_100Percent *
-                                            (float32) (pt_Section    ->u8Green   - pt_PrevSection->u8Green)) +
-                                                       pt_PrevSection->u8Green,
+                                            (float32) (pt_Color    ->u8Green   - pt_PrevColor->u8Green)) +
+                                                       pt_PrevColor->u8Green,
                                             /* Blue  */
                                             (uint8)   (f32Dist_100Percent *
-                                            (float32) (pt_Section    ->u8Blue    - pt_PrevSection->u8Blue )) +
-                                                       pt_PrevSection->u8Blue 
+                                            (float32) (pt_Color    ->u8Blue    - pt_PrevColor->u8Blue )) +
+                                                       pt_PrevColor->u8Blue
                                            );
                     }
                 }
@@ -271,9 +271,9 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                 { // Display section for reference
                     for (size_t i = u16StartLeds; i < u16EndLeds; i++)
                     { // Set RGB values to struct
-                        pat_Leds[i].setRGB(pt_Section->u8Red,
-                                           pt_Section->u8Green,
-                                           pt_Section->u8Blue);
+                        pat_Leds[i].setRGB(pt_Color->u8Red,
+                                           pt_Color->u8Green,
+                                           pt_Color->u8Blue);
                     }
                 }
                 
@@ -314,13 +314,13 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                             case e_StylePatternedCheckpoints:
 
                                 if (0 < pt_LedStrip->u_Style.t_Pattern.au8Order[i])
-                                { // Set pt_Section to next section in pattern order
-                                                            pt_Section      =  &pt_LedStrip->u_Style.t_Pattern.t_Section[
-                                                                                pt_LedStrip->u_Style.t_Pattern.au8Order[i] - 1];
+                                { // Set pt_Color to next section in pattern order
+                                                            pt_Color      =  &pt_LedStrip->u_Style.t_Pattern.u_Section.t_Color[
+                                                                              pt_LedStrip->u_Style.t_Pattern.au8Order[i] - 1];
 
-                                    // Set pt_PrevSection to prior section in pattern order (if not the first one)
-                                    if (bGradientDisplay)   pt_PrevSection  =  &pt_LedStrip->u_Style.t_Pattern.t_Section[
-                                                                                pt_LedStrip->u_Style.t_Pattern.au8Order[i - 1] - 1];
+                                    // Set pt_PrevColor to prior section in pattern order (if not the first one)
+                                    if (bGradientDisplay)   pt_PrevColor  =  &pt_LedStrip->u_Style.t_Pattern.u_Section.t_Color[
+                                                                              pt_LedStrip->u_Style.t_Pattern.au8Order[i - 1] - 1];
                                 }
 #ifdef PRINT_ERROR_STATEMENTS
                                 else
@@ -331,26 +331,26 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                                 break;
 
                             case e_StyleEqualSections:
-                            case e_StyleEqualCheckpoints: // Set pt_Section to next section in array order
-                                pt_Section      = &pt_LedStrip->u_Style.t_Equal  .t_Section[i];
+                            case e_StyleEqualCheckpoints: // Set pt_Color to next section in array order
+                                pt_Color      = &pt_LedStrip->u_Style.t_Equal  .u_Section.t_Color[i];
 
-                                // Set pt_PrevSection to prior section in pattern order (if not the first one)
-                                if (bGradientDisplay)   pt_PrevSection  = &pt_LedStrip->u_Style.t_Equal  .t_Section[i - 1];
+                                // Set pt_PrevColor to prior section in pattern order (if not the first one)
+                                if (bGradientDisplay)   pt_PrevColor  = &pt_LedStrip->u_Style.t_Equal  .u_Section.t_Color[i - 1];
                                 break;
 
                             case e_StyleUnequalSections:
-                            case e_StyleUnequalCheckpoints: // Set pt_Section to next section in array order
-                                pt_Section      = &pt_LedStrip->u_Style.t_Unequal.t_Section[i];
+                            case e_StyleUnequalCheckpoints: // Set pt_Color to next section in array order
+                                pt_Color      = &pt_LedStrip->u_Style.t_Unequal.u_Section.t_Color[i];
 
-                                    // Set pt_PrevSection to prior section in pattern order (if not the first one)
-                                if (bGradientDisplay)   pt_PrevSection  = &pt_LedStrip->u_Style.t_Unequal.t_Section[i - 1];
+                                    // Set pt_PrevColor to prior section in pattern order (if not the first one)
+                                if (bGradientDisplay)   pt_PrevColor  = &pt_LedStrip->u_Style.t_Unequal.u_Section.t_Color[i - 1];
 
 
                                 u16SumLeds = 0; // Default to zero
 
                                 for (size_t k = 0; k < i; k++)
                                 { // Calculate LED sum
-                                    u16SumLeds += pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[k];                                    
+                                    u16SumLeds += pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[k];
                                 }
                                 
                                 u16StartLeds = u16SumLeds;
@@ -364,11 +364,11 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
 #endif
                         }
 
-                        if (NULL != pt_Section)
+                        if (NULL != pt_Color)
                         {
                             if (bGradientDisplay)
                             { // Display gradient
-                                if (NULL != pt_PrevSection)
+                                if (NULL != pt_PrevColor)
                                 {
                                     for (size_t j = u16StartLeds; j < u16EndLeds; j++)
                                     { // Set RGB values to struct
@@ -378,16 +378,16 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                 
                                                             /* Red   */
                                         pat_Leds[j].setRGB ((uint8)   (f32Dist_100Percent *
-                                                            (float32) (pt_Section    ->u8Red     - pt_PrevSection->u8Red  )) +
-                                                                       pt_PrevSection->u8Red,
-                                                            /* Green */           
+                                                            (float32) (pt_Color    ->u8Red     - pt_PrevColor->u8Red  )) +
+                                                                       pt_PrevColor->u8Red,
+                                                            /* Green */
                                                             (uint8)   (f32Dist_100Percent *
-                                                            (float32) (pt_Section    ->u8Green   - pt_PrevSection->u8Green)) +
-                                                                       pt_PrevSection->u8Green,
+                                                            (float32) (pt_Color    ->u8Green   - pt_PrevColor->u8Green)) +
+                                                                       pt_PrevColor->u8Green,
                                                             /* Blue  */
                                                             (uint8)   (f32Dist_100Percent *
-                                                            (float32) (pt_Section    ->u8Blue    - pt_PrevSection->u8Blue )) +
-                                                                       pt_PrevSection->u8Blue 
+                                                            (float32) (pt_Color    ->u8Blue    - pt_PrevColor->u8Blue )) +
+                                                                       pt_PrevColor->u8Blue
                                                         );
                                     }
                                 }
@@ -397,9 +397,9 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                                 for (size_t j = u16StartLeds; j < u16EndLeds; j++)
                                 { // Current LED (j) = Num LEDs per section * Current patterned section (i) + Offset from first LED in section
                                     { // Set section color
-                                        pat_Leds[j].setRGB(pt_Section->u8Red,
-                                                        pt_Section->u8Green,
-                                                        pt_Section->u8Blue);
+                                        pat_Leds[j].setRGB(pt_Color->u8Red,
+                                                        pt_Color->u8Green,
+                                                        pt_Color->u8Blue);
                                     }
                                 }
                             }
@@ -439,7 +439,7 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
 
     return bReturn;
 }
-                 
+
 
 /** \brief This function handles defining an LED strip with sections or checkpoints
  *
@@ -449,7 +449,7 @@ static void _v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
                                                Keypad            j_Keypad,   
                                                CRGB            * pat_Leds,
                                                T_LedStrip      * pt_LedStrip,
-											   uint8			 u8Selection)
+                                               uint8			 u8Selection)
 {
     // Local Variables
     static  T_MenuSelection     st_SectsMethodMenu      = T_SECTSMETHODMENU_DEFAULT();
@@ -463,7 +463,7 @@ static void _v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
                                                             .u8SectionNumber        = 0,
                                                           };
     static  T_TimeDelay         Td_PatternOrder         = T_TIMEDELAY_DEFAULT();
-	static  E_StillSectionsStep	e_StillSectionsStep		= e_StillSectionsInit;
+    static  E_StillSectionsStep	e_StillSectionsStep		= e_StillSectionsInit;
     static  bool                sbReprintPressPound     = true;
             bool                bCheckpointStyle        = (e_StyleEqualCheckpoints      == pt_LedStrip->e_Style)
                                                        || (e_StyleUnequalCheckpoints    == pt_LedStrip->e_Style)
@@ -472,138 +472,138 @@ static void _v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
             uint8               u8CurrentPress          = KEYPRESS_NONE;
     static  uint8               su8PrevPress            = KEYPRESS_NONE;
 
-	
-	switch (e_StillSectionsStep)
-	{
-		/* Initializations */
-		case e_StillSectionsInit:
-			// Init time delay for pattern order screen
-			v_AppClock_TimeDelay_Init(&Td_PatternOrder, 2000);
-			
-			// Initialize all menus and screens to be reprinted
-			st_SectsMethodMenu		.bReprintMenu 	= true;
-			st_ScreenSectsLeds		.bReprintScreen	= true;
-			st_ScreenUniqueSects	.bReprintScreen = true;
-			st_ScreenPatternOrder	.bReprintScreen = true;
-			sbReprintPressPound 					= true;
-			
-			// Initialize all 'values defined' flags to false
-			st_ScreenSectsLeds		.bValuesDefined = false;
-			st_ScreenUniqueSects	.bValuesDefined = false;
-			st_ScreenPatternOrder	.bValuesDefined = false;
-			
-			// Other Initializations
+
+    switch (e_StillSectionsStep)
+    {
+        /* Initializations */
+        case e_StillSectionsInit:
+            // Init time delay for pattern order screen
+            v_AppClock_TimeDelay_Init(&Td_PatternOrder, 2000);
+
+            // Initialize all menus and screens to be reprinted
+            st_SectsMethodMenu		.bReprintMenu 	= true;
+            st_ScreenSectsLeds		.bReprintScreen	= true;
+            st_ScreenUniqueSects	.bReprintScreen = true;
+            st_ScreenPatternOrder	.bReprintScreen = true;
+            sbReprintPressPound 					= true;
+
+            // Initialize all 'values defined' flags to false
+            st_ScreenSectsLeds		.bValuesDefined = false;
+            st_ScreenUniqueSects	.bValuesDefined = false;
+            st_ScreenPatternOrder	.bValuesDefined = false;
+
+            // Other Initializations
             st_SectsMethodMenu      .u8Selection    = SELECTION_NONE;
-			st_Sections                             = 
+            st_Sections                             =
             {
                 .u8NumLeds              = 0,
                 .u8NumPatternedSections = 0,
                 .u8NumUniqueSections    = 0,
-                .u8SectionNumber        = 0,          
-            };           
-			
-			// Reset the LED strip per the selected style
-			v_AppStillLights_LedStrip_Reset(pt_LedStrip);
-			
-			switch (u8Selection)
-			{
-				case e_StillSolidColor:
+                .u8SectionNumber        = 0,
+            };
+
+            // Reset the LED strip per the selected style
+            v_AppStillLights_LedStrip_Reset(pt_LedStrip);
+
+            switch (u8Selection)
+            {
+                case e_StillSolidColor:
                     st_Sections.u8NumPatternedSections  = 1; 		                        // Hard code number of sections to 1
                     st_Sections.u8NumLeds				= NUM_LEDS;                         // Hard code number of LEDs to total number LEDs
-					e_StillSectionsStep 	            = e_StillSectionsClearLedStrip;     // Go straight to clearing LED strip
-					break;
-					
-				case e_StillHalfAndHalf:
+                    e_StillSectionsStep 	            = e_StillSectionsClearLedStrip;     // Go straight to clearing LED strip
+                    break;
+
+                case e_StillHalfAndHalf:
                     st_Sections.u8NumPatternedSections	= 2; 			                    // Hard code number of sections to 2
                     st_Sections.u8NumLeds				= NUM_LEDS / 2;                     // Hard code number of LEDs to half of total number LEDs
 
                     if (e_StyleEqualCheckpoints == pt_LedStrip->e_Style)
                         st_Sections.u8NumLeds           = NUM_LEDS;                         // For checkpoints style; total LED strip used between checkpoints
 
-					e_StillSectionsStep 	            = e_StillSectionsClearLedStrip;     // Go straight to clearing LED strip
-					break;
-					
-				case e_StillUnequalSections:                                    
+                    e_StillSectionsStep 	            = e_StillSectionsClearLedStrip;     // Go straight to clearing LED strip
+                    break;
+
+                case e_StillUnequalSections:
                     e_StillSectionsStep                 = e_StillSectionsUniqueSectsScreen; // Go straight to unique sections selection
-					break;
+                    break;
 
                 case e_StillEqualSections:
-				case e_StillPatternedEqualSections: 
-					e_StillSectionsStep                 = e_StillSectionsMethodMenu;        // Go to next step
-					break;
-				
+                case e_StillPatternedEqualSections:
+                    e_StillSectionsStep                 = e_StillSectionsMethodMenu;        // Go to next step
+                    break;
+
 #ifdef PRINT_ERROR_STATEMENTS
                 default: // Invalid case
-					Serial.println("I HATE SAND!"); // Error message
-					break;
+                    Serial.println("I HATE SAND!"); // Error message
+                    break;
 #endif
-			}
-			break;
-			
-		/* Select method of defining sections - by number of sections or number of LEDs */
-		case e_StillSectionsMethodMenu:
-		
-			if (st_SectsMethodMenu.bReprintMenu)
-			{
-				/* Title */
-				v_AppScreen_MenuSelection_SetTitle (&st_SectsMethodMenu,    "METHOD:");
+            }
+            break;
 
-				/* Options */
+        /* Select method of defining sections - by number of sections or number of LEDs */
+        case e_StillSectionsMethodMenu:
+
+            if (st_SectsMethodMenu.bReprintMenu)
+            {
+                /* Title */
+                v_AppScreen_MenuSelection_SetTitle (&st_SectsMethodMenu,    "METHOD:");
+
+                /* Options */
                 charn c_Option[MAX_LENGTH_OPTION];
 
                 if (bCheckpointStyle)   strncpy(&c_Option[0], "By Number Checkpts", MAX_LENGTH_OPTION);
                 else                    strncpy(&c_Option[0], "By Number Sections", MAX_LENGTH_OPTION);
 
-				v_AppScreen_MenuSelection_SetOption(&st_SectsMethodMenu,    &c_Option[0],       e_SectsMethodByNumSects);
-				v_AppScreen_MenuSelection_SetOption(&st_SectsMethodMenu,    "By Number LEDs",   e_SectsMethodByNumLeds );
+                v_AppScreen_MenuSelection_SetOption(&st_SectsMethodMenu,    &c_Option[0],       e_SectsMethodByNumSects);
+                v_AppScreen_MenuSelection_SetOption(&st_SectsMethodMenu,    "By Number LEDs",   e_SectsMethodByNumLeds );
 
-				// Print first menu
-				v_AppScreen_MenuSelection_Init(j_Lcd, &st_SectsMethodMenu);
+                // Print first menu
+                v_AppScreen_MenuSelection_Init(j_Lcd, &st_SectsMethodMenu);
 
-				st_SectsMethodMenu.bReprintMenu = false; // Clear, so reprint only occurs once
-			}
+                st_SectsMethodMenu.bReprintMenu = false; // Clear, so reprint only occurs once
+            }
 
-			// Receive selection commands and scroll menu options (if required)
-			v_AppScreen_MenuSelection_TLU(j_Lcd, j_Keypad, &st_SectsMethodMenu);
-			
-			// Continue to next step once a selection is made
-			if (!NO_SELECTION(st_SectsMethodMenu.u8Selection)) 
+            // Receive selection commands and scroll menu options (if required)
+            v_AppScreen_MenuSelection_TLU(j_Lcd, j_Keypad, &st_SectsMethodMenu);
+
+            // Continue to next step once a selection is made
+            if (!NO_SELECTION(st_SectsMethodMenu.u8Selection))
             {
                 e_StillSectionsStep = e_StillSectionsOrLedsScreen;
             }
-			break;
-		
-		/* Screen Sections/LEDs */
-		case e_StillSectionsOrLedsScreen:
-		
-			if (st_ScreenSectsLeds.bReprintScreen)
-			{
+            break;
+
+        /* Screen Sections/LEDs */
+        case e_StillSectionsOrLedsScreen:
+
+            if (st_ScreenSectsLeds.bReprintScreen)
+            {
                 // Code-shortening
                 charn c_Title      [MAX_LENGTH_TITLE      ];
                 charn c_Description[MAX_LENGTH_DESCRIPTION];
                 charn c_Minimum    [MAX_DIGITS_PER_UINT8  ];
                 charn c_Maximum    [MAX_DIGITS_PER_UINT8  ];
 
-				switch(st_SectsMethodMenu.u8Selection)
-				{
-					case e_SectsMethodByNumSects:   // Print screen to request number of sections
+                switch(st_SectsMethodMenu.u8Selection)
+                {
+                    case e_SectsMethodByNumSects:   // Print screen to request number of sections
 
-						switch (pt_LedStrip->e_Style)
-						{
-							case e_StyleEqualSections:      
-							case e_StyleEqualCheckpoints: // Select title and description for equal     sections
+                        switch (pt_LedStrip->e_Style)
+                        {
+                            case e_StyleEqualSections:
+                            case e_StyleEqualCheckpoints: // Select title and description for equal     sections
 
                                 strncpy(&c_Title      [0],  "# EQ ",    MAX_LENGTH_TITLE);
                                 strncpy(&c_Description[0],  CONCAT(CONCAT("MAX ", INT_TO_STR(MAX_PATTERNED_SECTIONS)), 
                                                             " EQ "),    MAX_LENGTH_DESCRIPTION);
                                 break;
 
-							case e_StylePatternedSections: 
+                            case e_StylePatternedSections:
                             case e_StylePatternedCheckpoints: // Select title and description for patterned checkpoints
                                 strncpy(&c_Title      [0],  "# PAT ",   MAX_LENGTH_TITLE);
                                 strncpy(&c_Description[0],  CONCAT(CONCAT("MAX ", INT_TO_STR(MAX_PATTERNED_SECTIONS)), 
                                                             " PAT "),   MAX_LENGTH_DESCRIPTION);
-								break;
+                                break;
 #ifdef PRINT_ERROR_STATEMENTS
                             case e_StyleUnequalSections:
                             case e_StyleUnequalCheckpoints: // Invalid cases
@@ -625,27 +625,27 @@ static void _v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
                         }             
 
                         /* Min Value */
-						v_AppScreen_GetValues_SetMinValue   (&st_ScreenSectsLeds,    0);
+                        v_AppScreen_GetValues_SetMinValue   (&st_ScreenSectsLeds,    0);
 
-						/* Max Value */
-						v_AppScreen_GetValues_SetMaxValue   (&st_ScreenSectsLeds,    MAX_PATTERNED_SECTIONS);
+                        /* Max Value */
+                        v_AppScreen_GetValues_SetMaxValue   (&st_ScreenSectsLeds,    MAX_PATTERNED_SECTIONS);
 
-						/* Title */
-						v_AppScreen_GetValues_SetTitle      (&st_ScreenSectsLeds,    &c_Title      [0]);
+                        /* Title */
+                        v_AppScreen_GetValues_SetTitle      (&st_ScreenSectsLeds,    &c_Title      [0]);
 
-						/* Description */
-						v_AppScreen_GetValues_SetDescription(&st_ScreenSectsLeds,    &c_Description[0]);
+                        /* Description */
+                        v_AppScreen_GetValues_SetDescription(&st_ScreenSectsLeds,    &c_Description[0]);
 
-						/* Values Array */
-						v_AppScreen_GetValues_SetValuesArray(&st_ScreenSectsLeds,    &st_Sections.u8NumPatternedSections);
-						break;
+                        /* Values Array */
+                        v_AppScreen_GetValues_SetValuesArray(&st_ScreenSectsLeds,    &st_Sections.u8NumPatternedSections);
+                        break;
 
-					case e_SectsMethodByNumLeds:    // Print screen to request number of LEDs
+                    case e_SectsMethodByNumLeds:    // Print screen to request number of LEDs
 
-						/* Title */
-						v_AppScreen_GetValues_SetTitle      (&st_ScreenSectsLeds,    "# LEDs:");
+                        /* Title */
+                        v_AppScreen_GetValues_SetTitle      (&st_ScreenSectsLeds,    "# LEDs:");
 
-						/* Description */
+                        /* Description */
                         // Calculate min and max based on style
                         uint8 u8Minimum = (uint8) (NUM_LEDS / MAX_PATTERNED_SECTIONS);
                         uint8 u8Maximum = (uint8) MIN(NUM_LEDS, 0xFF);
@@ -666,31 +666,31 @@ static void _v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
                         /* Description */
                         v_AppScreen_GetValues_SetDescription(&st_ScreenSectsLeds,    &c_Description[0]);
 
-						/* Min Value */
-						v_AppScreen_GetValues_SetMinValue   (&st_ScreenSectsLeds,    u8Minimum);
+                        /* Min Value */
+                        v_AppScreen_GetValues_SetMinValue   (&st_ScreenSectsLeds,    u8Minimum);
 
-						/* Max Value */
-						v_AppScreen_GetValues_SetMaxValue   (&st_ScreenSectsLeds,    u8Maximum);
+                        /* Max Value */
+                        v_AppScreen_GetValues_SetMaxValue   (&st_ScreenSectsLeds,    u8Maximum);
 
-						/* Values Array */
-						v_AppScreen_GetValues_SetValuesArray(&st_ScreenSectsLeds,    &st_Sections.u8NumLeds);
-						break;
+                        /* Values Array */
+                        v_AppScreen_GetValues_SetValuesArray(&st_ScreenSectsLeds,    &st_Sections.u8NumLeds);
+                        break;
 
 #ifdef PRINT_ERROR_STATEMENTS
                     default: // Do nothing - selection is not valid
-						Serial.println("YOU WERE SUPPOSED TO BE THE CHOSEN ONE!"); // Error print statement
-						break;
+                        Serial.println("YOU WERE SUPPOSED TO BE THE CHOSEN ONE!"); // Error print statement
+                        break;
 #endif
-				}
+                }
 
-				// Print first menu
-				v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, &st_ScreenSectsLeds);
+                // Print first menu
+                v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, &st_ScreenSectsLeds);
 
-				st_ScreenSectsLeds.bReprintScreen = false; // Clear, so reprint only occurs once
-			}
+                st_ScreenSectsLeds.bReprintScreen = false; // Clear, so reprint only occurs once
+            }
 
-			// Run task loop update until values are defined
-			v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenSectsLeds);
+            // Run task loop update until values are defined
+            v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenSectsLeds);
 
             switch(st_SectsMethodMenu.u8Selection)
             {
@@ -716,9 +716,9 @@ static void _v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
                     break;
 #endif
             }
-			
-			// Continue to next step when values are defined
-			if (st_ScreenSectsLeds.bValuesDefined)
+
+            // Continue to next step when values are defined
+            if (st_ScreenSectsLeds.bValuesDefined)
             {
                 switch (pt_LedStrip->e_Style)
                 {
@@ -739,13 +739,13 @@ static void _v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
 #endif
                 }
             }
-			break;
-		
-		/* Screen Unique Sections */
-		case e_StillSectionsUniqueSectsScreen:
+            break;
 
-			if (st_ScreenUniqueSects.bReprintScreen)
-			{
+        /* Screen Unique Sections */
+        case e_StillSectionsUniqueSectsScreen:
+
+            if (st_ScreenUniqueSects.bReprintScreen)
+            {
                 // Code shortening
                 charn c_Title      [MAX_LENGTH_TITLE      ];
                 charn c_Description[MAX_LENGTH_DESCRIPTION] = "MAX ";
@@ -792,29 +792,29 @@ static void _v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
                     strncat(&c_Description[0],  "SECTS!",   CONCAT_LENGTH(c_Description));
                 }  
 
-				/* Title */
-				v_AppScreen_GetValues_SetTitle      (&st_ScreenUniqueSects,    &c_Title      [0]);
+                /* Title */
+                v_AppScreen_GetValues_SetTitle      (&st_ScreenUniqueSects,    &c_Title      [0]);
 
-				/* Description */
-				v_AppScreen_GetValues_SetDescription(&st_ScreenUniqueSects,    &c_Description[0]);
+                /* Description */
+                v_AppScreen_GetValues_SetDescription(&st_ScreenUniqueSects,    &c_Description[0]);
 
-				/* Max Value */
-				v_AppScreen_GetValues_SetMaxValue   (&st_ScreenUniqueSects,    u8MaxValue);
+                /* Max Value */
+                v_AppScreen_GetValues_SetMaxValue   (&st_ScreenUniqueSects,    u8MaxValue);
 
-				/* Values Array */
-				v_AppScreen_GetValues_SetValuesArray(&st_ScreenUniqueSects,    &st_Sections.u8NumUniqueSections);
+                /* Values Array */
+                v_AppScreen_GetValues_SetValuesArray(&st_ScreenUniqueSects,    &st_Sections.u8NumUniqueSections);
 
-				// Print first menu
-				v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, &st_ScreenUniqueSects);
+                // Print first menu
+                v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, &st_ScreenUniqueSects);
 
-				st_ScreenUniqueSects.bReprintScreen = false; // Clear, so reprint only occurs once
-			}
+                st_ScreenUniqueSects.bReprintScreen = false; // Clear, so reprint only occurs once
+            }
 
-			// Run task loop update until values are defined
-			v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenUniqueSects);
+            // Run task loop update until values are defined
+            v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenUniqueSects);
 
-			// Continue to next step when values are defined
-			if (st_ScreenUniqueSects.bValuesDefined) 
+            // Continue to next step when values are defined
+            if (st_ScreenUniqueSects.bValuesDefined)
             {
                 switch (pt_LedStrip->e_Style)
                 {
@@ -834,65 +834,66 @@ static void _v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
 #endif
                 }
             }
-			break;
-			
-		/* Info Screen: Pattern Order */
-		case e_StillSectionsPatternOrderInfoScreen:
-		
-			if (sbReprintPressPound)
-			{ // Display starting screen for pattern order for 2 seconds
-				v_AppScreen_PressPoundWhenDone(j_Lcd, "PAT ORDER:"); /// \todo - just use v_AppScreen_TitleAndText
+            break;
 
-				sbReprintPressPound = false; 					// Clear, so reprint only occurs once
-				v_AppClock_TimeDelay_Reset(&Td_PatternOrder); 	// Reset pattern order timer
-			}
-			
-			// Continue to next step when timer has expired
-			if (b_AppClock_TimeDelay_TLU(&Td_PatternOrder, true)) e_StillSectionsStep = e_StillSectionsSetPatternOrderScreen;
-			break;
-		
-		/* Screen Pattern Order Setup */
-		case e_StillSectionsSetPatternOrderScreen:
+        /* Info Screen: Pattern Order */
+        case e_StillSectionsPatternOrderInfoScreen:
 
-			if (st_ScreenPatternOrder.bReprintScreen)
-			{
-				/* Title */
-				v_AppScreen_GetValues_SetTitle          (&st_ScreenPatternOrder,    "PAT ORDER:");
+            if (sbReprintPressPound)
+            { // Display starting screen for pattern order for 2 seconds
+                v_AppScreen_PressPoundWhenDone(j_Lcd, "PAT ORDER:"); /// \todo - just use v_AppScreen_TitleAndText
 
-				/* Max Value */
-				v_AppScreen_GetValues_SetMaxValue       (&st_ScreenPatternOrder,    st_Sections.u8NumUniqueSections);
+                sbReprintPressPound = false; 					// Clear, so reprint only occurs once
+                v_AppClock_TimeDelay_Reset(&Td_PatternOrder); 	// Reset pattern order timer
+            }
 
-				/* Values Array */
-				v_AppScreen_GetValues_SetValuesArray    (&st_ScreenPatternOrder,    &pt_LedStrip->u_Style.t_Pattern.au8Order[0]);
+            // Continue to next step when timer has expired
+            if (b_AppClock_TimeDelay_TLU(&Td_PatternOrder, true)) e_StillSectionsStep = e_StillSectionsSetPatternOrderScreen;
+            break;
 
-				/* Total number of values */
-				v_AppScreen_GetValues_SetNumValuesTotal (&st_ScreenPatternOrder,    st_Sections.u8NumPatternedSections);
+        /* Screen Pattern Order Setup */
+        case e_StillSectionsSetPatternOrderScreen:
 
-				// Print first menu
-				v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, &st_ScreenPatternOrder);
+            if (st_ScreenPatternOrder.bReprintScreen)
+            {
+                /* Title */
+                v_AppScreen_GetValues_SetTitle          (&st_ScreenPatternOrder,    "PAT ORDER:");
 
-				st_ScreenPatternOrder.bReprintScreen = false; // Clear, so reprint only occurs once
-			}
+                /* Max Value */
+                v_AppScreen_GetValues_SetMaxValue       (&st_ScreenPatternOrder,    st_Sections.u8NumUniqueSections);
 
-			// Run task loop update until values are defined
-			v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenPatternOrder);
+                /* Values Array */
+                v_AppScreen_GetValues_SetValuesArray    (&st_ScreenPatternOrder,    &pt_LedStrip->u_Style.t_Pattern.au8Order[0]);
+
+                /* Total number of values */
+                v_AppScreen_GetValues_SetNumValuesTotal (&st_ScreenPatternOrder,    st_Sections.u8NumPatternedSections);
+
+                // Print first menu
+                v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, &st_ScreenPatternOrder);
+
+                st_ScreenPatternOrder.bReprintScreen = false; // Clear, so reprint only occurs once
+            }
+
+            // Run task loop update until values are defined
+            v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenPatternOrder);
 
             // Continue to next step when values are defined
-			if (st_ScreenPatternOrder.bValuesDefined)  e_StillSectionsStep = e_StillSectionsClearLedStrip;
-			break;
+            if (st_ScreenPatternOrder.bValuesDefined)  e_StillSectionsStep = e_StillSectionsClearLedStrip;
+            break;
 
         /* Clear LED strip before proceeding */
-		case e_StillSectionsClearLedStrip:
-            /// \todo - this should also clear flag that runs animations
-            FastLED.clear(); // Clear and update LEDs
+        case e_StillSectionsClearLedStrip:
+
+            mbEnableAnimations = false; // Clear flag that enables animations
+            FastLED.clear();            // Clear and update LEDs
             FastLED.show();
 
             // Once LED strip is cleared, define new LED strip
             e_StillSectionsStep = e_StillSectionsDefineLedStrip;
             break;
-		
-		/* LED Strip Setup: RGB Screens */
-		case e_StillSectionsDefineLedStrip: 
+
+        /* LED Strip Setup: RGB Screens */
+        case e_StillSectionsDefineLedStrip:
             
             if (_b_AppStillLights_DefineLedStripSections   (j_Lcd,          j_Keypad, 
                                                             pat_Leds,       pt_LedStrip, 
@@ -900,7 +901,7 @@ static void _v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
             { // Return to init step once LED strip is defined or new definition requested
                 e_StillSectionsStep = e_StillSectionsInit;
             }
-			break;
+            break;
 
 #ifdef PRINT_ERROR_STATEMENTS
         default: // Do nothing - selection is not valid
@@ -927,13 +928,6 @@ static void _v_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,
     static  E_StillRainbowStep  e_StillRainbowStep      = e_StillRainbowInit;
             uint8               u8CurrentPress          = KEYPRESS_NONE;
     static  uint8               su8PrevPress            = KEYPRESS_NONE;
-
-    typedef struct 
-    {
-        T_Color t_Color;
-        T_Color t_PrevColor;
-        
-    } T_RainbowColors;
 
     static  T_RainbowColors st_RainbowColors    = {
                                                     .t_Color     = T_COLOR_CLEAR(),
@@ -969,12 +963,12 @@ static void _v_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,
         case e_StillRainbowInit:
 
             // Initialize all menus and screens to be reprinted
-			st_RainbowDirectionMenu	.bReprintMenu 	= true;
-			st_RainbowLengthScreen	.bReprintScreen	= true;
-			
-			// Initialize all 'values defined' flags to false
-			st_RainbowLengthScreen	.bValuesDefined = false;
-			
+            st_RainbowDirectionMenu	.bReprintMenu 	= true;
+            st_RainbowLengthScreen	.bReprintScreen	= true;
+
+            // Initialize all 'values defined' flags to false
+            st_RainbowLengthScreen	.bValuesDefined = false;
+
             // Reset rainbow direction selection
             st_RainbowDirectionMenu .u8Selection    = SELECTION_NONE;
 
@@ -1050,8 +1044,9 @@ static void _v_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,
             break;
 
         case e_StillRainbowClearLedStrip:
-            /// \todo - this should also clear flag that runs animations
-            FastLED.clear(); // Clear and update LEDs
+
+            mbEnableAnimations = false; // Clear flag that enables animations
+            FastLED.clear();            // Clear and update LEDs
             FastLED.show();
 
             e_StillRainbowStep = e_StillRainbowDefineLedStrip; // Next step
@@ -1179,64 +1174,64 @@ void v_AppStillLights_LedStrip_Reset(T_LedStrip * pt_LedStrip) // [I,O] LED stri
     pt_LedStrip->bDefined   = false;
     pt_LedStrip->bDisplayed = false;
 
-	switch (pt_LedStrip->e_Style)
-	{
-		case e_StylePatternedSections:
-		case e_StylePatternedCheckpoints:
-			
-			/// \todo - refactor to at_Section
-			for (size_t i = 0; i < MAX_UNIQUE_SECTIONS; i++)
-			{ // Reset section data
-				pt_LedStrip->u_Style.t_Pattern.t_Section[i].bDefined = false;
-				pt_LedStrip->u_Style.t_Pattern.t_Section[i].u8Red    = 0;
-				pt_LedStrip->u_Style.t_Pattern.t_Section[i].u8Green  = 0;
-				pt_LedStrip->u_Style.t_Pattern.t_Section[i].u8Blue   = 0;
-			}
-			
-			for (size_t j = 0; j < MAX_PATTERNED_SECTIONS; j++)
-			{ // Reset order
-				pt_LedStrip->u_Style.t_Pattern.au8Order[j] = 0;
-			}
-			break;
-			
+    switch (pt_LedStrip->e_Style)
+    {
+        case e_StylePatternedSections:
+        case e_StylePatternedCheckpoints:
+
+            /// \todo - refactor to at_Section
+            for (size_t i = 0; i < MAX_UNIQUE_SECTIONS; i++)
+            { // Reset section data
+                pt_LedStrip->u_Style.t_Pattern.u_Section.t_Color[i].bDefined = false;
+                pt_LedStrip->u_Style.t_Pattern.u_Section.t_Color[i].u8Red    = 0;
+                pt_LedStrip->u_Style.t_Pattern.u_Section.t_Color[i].u8Green  = 0;
+                pt_LedStrip->u_Style.t_Pattern.u_Section.t_Color[i].u8Blue   = 0;
+            }
+
+            for (size_t j = 0; j < MAX_PATTERNED_SECTIONS; j++)
+            { // Reset order
+                pt_LedStrip->u_Style.t_Pattern.au8Order[j] = 0;
+            }
+            break;
+
         case e_StyleEqualSections:
         case e_StyleEqualCheckpoints:
-		
-			for (size_t i = 0; i < MAX_PATTERNED_SECTIONS; i++)
-			{ // Reset section data
-				pt_LedStrip->u_Style.t_Equal.t_Section[i].bDefined = false;
-				pt_LedStrip->u_Style.t_Equal.t_Section[i].u8Red    = 0;
-				pt_LedStrip->u_Style.t_Equal.t_Section[i].u8Green  = 0;
-				pt_LedStrip->u_Style.t_Equal.t_Section[i].u8Blue   = 0;
-			}
-			break;
-			
+
+            for (size_t i = 0; i < MAX_PATTERNED_SECTIONS; i++)
+            { // Reset section data
+                pt_LedStrip->u_Style.t_Equal.u_Section.t_Color[i].bDefined = false;
+                pt_LedStrip->u_Style.t_Equal.u_Section.t_Color[i].u8Red    = 0;
+                pt_LedStrip->u_Style.t_Equal.u_Section.t_Color[i].u8Green  = 0;
+                pt_LedStrip->u_Style.t_Equal.u_Section.t_Color[i].u8Blue   = 0;
+            }
+            break;
+
         case e_StyleUnequalSections:
         case e_StyleUnequalCheckpoints:
 
-			for (size_t i = 0; i < MAX_UNIQUE_SECTIONS; i++)
-			{ // Reset section data
-				pt_LedStrip->u_Style.t_Unequal.t_Section[i].bDefined = false;
-				pt_LedStrip->u_Style.t_Unequal.t_Section[i].u8Red    = 0;
-				pt_LedStrip->u_Style.t_Unequal.t_Section[i].u8Green  = 0;
-				pt_LedStrip->u_Style.t_Unequal.t_Section[i].u8Blue   = 0;
-			}
-			
-			for (size_t j = 0; j < MAX_UNIQUE_SECTIONS; j++)
-			{ // Reset order
-				pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[j] = 0;
-			}
-			break;
+            for (size_t i = 0; i < MAX_UNIQUE_SECTIONS; i++)
+            { // Reset section data
+                pt_LedStrip->u_Style.t_Unequal.u_Section.t_Color[i].bDefined = false;
+                pt_LedStrip->u_Style.t_Unequal.u_Section.t_Color[i].u8Red    = 0;
+                pt_LedStrip->u_Style.t_Unequal.u_Section.t_Color[i].u8Green  = 0;
+                pt_LedStrip->u_Style.t_Unequal.u_Section.t_Color[i].u8Blue   = 0;
+            }
+
+            for (size_t j = 0; j < MAX_UNIQUE_SECTIONS; j++)
+            { // Reset order
+                pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[j] = 0;
+            }
+            break;
         
         case e_StyleRainbow:
             // Reset direction and length of rainbow
             pt_LedStrip->u_Style.t_Rainbow.u8Direction      = e_Direction_None;
             pt_LedStrip->u_Style.t_Rainbow.u8Length_LEDs    = 0;
             break;
-			
-		default: // Valid case when called just after system unlocked - do not initialize the union
-			break;
-	}
+
+        default: // Valid case when called just after system unlocked - do not initialize the union
+            break;
+    }
 }
 
 
@@ -1323,28 +1318,28 @@ void v_AppStillsLights_Main_TLU(LiquidCrystal_I2C    j_Lcd,          // [I, ] LC
         case e_StillThemed:
             /// \todo - create these menus - before release, at least create "this feature not supported screen"
             break;
-		
-		case e_StillSolidColor:
-		case e_StillHalfAndHalf:
-		case e_StillEqualSections:
-		case e_StillUnequalSections:
+
+        case e_StillSolidColor:
+        case e_StillHalfAndHalf:
+        case e_StillEqualSections:
+        case e_StillUnequalSections:
         case e_StillPatternedEqualSections:
 
-			/* Set LED strip style */
-			if 		(e_StillUnequalSections 	   == u8Selection)
-			{ // Unequal   style
-				pt_LedStrip->e_Style = e_StyleUnequalSections;
-			}
-			else if (e_StillPatternedEqualSections == u8Selection)
-			{ // Patterned style
-				pt_LedStrip->e_Style = e_StylePatternedSections;
-			}
-			else
-			{ // Equal     style
-				pt_LedStrip->e_Style = e_StyleEqualSections;
-			}
-			
-			/* Call function to setup sections/checkpoints */
+            /* Set LED strip style */
+            if 		(e_StillUnequalSections 	   == u8Selection)
+            { // Unequal   style
+                pt_LedStrip->e_Style = e_StyleUnequalSections;
+            }
+            else if (e_StillPatternedEqualSections == u8Selection)
+            { // Patterned style
+                pt_LedStrip->e_Style = e_StylePatternedSections;
+            }
+            else
+            { // Equal     style
+                pt_LedStrip->e_Style = e_StyleEqualSections;
+            }
+
+            /* Call function to setup sections/checkpoints */
             _v_AppStillLights_StillSectsChkpts (j_Lcd,      j_Keypad, 
                                                 pat_Leds,   pt_LedStrip, u8Selection);
             break;
@@ -1400,3 +1395,24 @@ void v_AppStillsLights_Gradient_TLU(LiquidCrystal_I2C   j_Lcd,          // [I, ]
         _v_AppStillLights_StillSectsChkpts(j_Lcd, j_Keypad, pat_Leds, pt_LedStrip, u8Selection - CHECKPOINT_OPTION_OFFSET);
     }
 }
+
+
+/** \brief  This function determines if animations are currently enabled
+ *
+ *  \return: State of mbEnableAnimations
+ */
+inline bool b_AppStillsLights_AnimationsEnabled(void)
+{
+    return mbEnableAnimations;
+}
+
+
+/** \brief  This function enables animations
+ *
+ *  \return: Sets mbEnableAnimations TRUE
+ */
+inline void v_AppStillsLights_EnableAnimations(void)
+{
+    mbEnableAnimations = true;
+}
+

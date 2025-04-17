@@ -38,6 +38,16 @@
 /***************************
  *   Function Prototypes   *
  ***************************/
+
+
+/***************************
+ *         Objects         *
+ ***************************/
+
+
+/***************************
+ *   Function Definitions  *
+ ***************************/
 /** \brief This function brings the user to the animated lights menu and returns a selection
  *
  *  \return: pt_Menu->u8OptionOffset and pt_Menu->u8Selection are set 
@@ -55,7 +65,7 @@ void v_AppAnimatedLights_MainMenu(LiquidCrystal_I2C  j_Lcd,     // [I, ] LCD    
         v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Presets",          e_AnimatedPresets             );
         v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Fade Loop",        e_AnimatedFadeLoop            );
         v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Fade Setpoint",    e_AnimatedFadeSetpoint        );
-        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Shift LR",         e_AnimatedShiftLeftRight      );
+        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Shift Whole",      e_AnimatedShiftWhole          );
         v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Shift H&H",        e_AnimatedShiftHalfAndHalf    );
         v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Shift Uneq Sect",  e_AnimatedShiftUnequalSections);
         v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Shift Eq Sect",    e_AnimatedShiftEqualSections  );
@@ -70,12 +80,3 @@ void v_AppAnimatedLights_MainMenu(LiquidCrystal_I2C  j_Lcd,     // [I, ] LCD    
     // Receive selection commands and scroll menu options (if required)
     v_AppScreen_MenuSelection_TLU(j_Lcd, j_Keypad, pt_Menu);
 }
-
-/***************************
- *         Objects         *
- ***************************/
- 
-
-/***************************
- *   Function Definitions  *
- ***************************/

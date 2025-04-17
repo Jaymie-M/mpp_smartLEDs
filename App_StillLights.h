@@ -323,16 +323,29 @@ typedef struct
 
 } T_StillSectionsData;
 
+
+/**
+ * \brief - Data for a rainbow LED strip section
+ */
+typedef struct
+{
+    T_Color t_Color;
+    T_Color t_PrevColor;
+
+} T_RainbowColors;
+
 /***************************
  *    Exported Functions   *
  ***************************/
-void v_AppStillLights_LedStrip_Reset   (T_LedStrip        * pt_LedStrip);
-void v_AppStillsLights_MainMenu        (LiquidCrystal_I2C   j_Lcd,          Keypad  j_Keypad,       T_MenuSelection   * pt_Menu  );
-void v_AppStillsLights_GradientMenu    (LiquidCrystal_I2C   j_Lcd,          Keypad  j_Keypad,       T_MenuSelection   * pt_Menu  );
-void v_AppStillsLights_Main_TLU        (LiquidCrystal_I2C   j_Lcd,          Keypad  j_Keypad,       CRGB              * pat_Leds,
-                                        T_LedStrip        * pt_LedStrip,    uint8   u8Selection                                  );
-void v_AppStillsLights_Gradient_TLU    (LiquidCrystal_I2C   j_Lcd,          Keypad  j_Keypad,       CRGB              * pat_Leds,
-                                        T_LedStrip        * pt_LedStrip,    uint8   u8Selection                                  );
-        
+        void v_AppStillLights_LedStrip_Reset       (T_LedStrip        * pt_LedStrip);
+        void v_AppStillsLights_MainMenu            (LiquidCrystal_I2C   j_Lcd,          Keypad  j_Keypad,       T_MenuSelection   * pt_Menu  );
+        void v_AppStillsLights_GradientMenu        (LiquidCrystal_I2C   j_Lcd,          Keypad  j_Keypad,       T_MenuSelection   * pt_Menu  );
+        void v_AppStillsLights_Main_TLU            (LiquidCrystal_I2C   j_Lcd,          Keypad  j_Keypad,       CRGB              * pat_Leds,
+                                                    T_LedStrip        * pt_LedStrip,    uint8   u8Selection                                  );
+        void v_AppStillsLights_Gradient_TLU        (LiquidCrystal_I2C   j_Lcd,          Keypad  j_Keypad,       CRGB              * pat_Leds,
+                                                    T_LedStrip        * pt_LedStrip,    uint8   u8Selection                                  );
+
+inline  bool b_AppStillsLights_AnimationsEnabled   (void);
+inline  void v_AppStillsLights_EnableAnimations    (void);
 
 #endif /* APP_STILLLIGHTS_H */

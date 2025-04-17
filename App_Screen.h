@@ -33,7 +33,7 @@
 #define MAX_USER_INPUT_VALUES       MAX_PATTERNED_SECTIONS
 #define MAX_VALUE_ONE_DIGIT          9
 #define MAX_VALUE_TWO_DIGITS        99
-#define MAX_VALUE_THREE_DIGITS
+#define MAX_VALUE_THREE_DIGITS     999
 #define MAX_VALUE_ONE_NIBBLE      0x0F
 #define MAX_VALUE_TWO_NIBBLES     0xFF
 #define MAX_DIGITS_PER_UINT8         3
@@ -227,7 +227,7 @@ void    v_AppScreen_GetValues_TLU                (LiquidCrystal_I2C     j_Lcd,  
 void    v_AppScreen_RGB_Init                     (LiquidCrystal_I2C     j_Lcd,      T_ScreenRGB   * pt_Screen,  	bool				bSelectNumLeds                   );
 void    v_AppScreen_RGB_SetTitle                 (T_ScreenRGB         * pt_Screen,  const charn   * pc_Title                                                             );
 void    v_AppScreen_RGB_SetDescription           (T_ScreenRGB         * pt_Screen,  const charn   * pc_Description                                                       );
-void    v_AppScreen_RGB_TLU                      (LiquidCrystal_I2C     j_Lcd,      Keypad          j_Keypad,   	T_Color           * pt_Section,
+void    v_AppScreen_RGB_TLU                      (LiquidCrystal_I2C     j_Lcd,      Keypad          j_Keypad,   	T_Color           * pt_Color,
                                                   uint8				  * pu8NumLeds, uint8			u8MaxNumLeds,	bool				bSelectNumLeds                   );
 
 // Selection menu
