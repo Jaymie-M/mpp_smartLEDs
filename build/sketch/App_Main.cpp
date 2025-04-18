@@ -250,21 +250,29 @@ void v_AppMain_TLU(void)
                                 }
                                 else
                                 {
-                                    if (NO_SELECTION(mt_AnimatedLeds.u8NumberSetpoints))
+                                    T_ScreenGetValues st_ScreenSetpoints = T_SETPOINTSSCREEN_DEFAULT();
+
+                                    if (!st_ScreenSetpoints.bValuesDefined)
                                     {
                                         if (e_AnimatedFadeSetpoint == mt_AnimatedLightsMenu.u8Selection)
                                         { // Choose number of setpoints
                                             v_AppAnimatedLights_ChooseNumberOfSetpoints(mj_SmartDormLcd,
                                                                                         mj_SmartDormKeypad,
-                                                                                        &mt_AnimatedLeds);
+                                                                                        &mt_AnimatedLeds,
+                                                                                        &st_ScreenSetpoints);
                                         }
                                         else
                                         { // Otherwise choose one setpoint
+                                            st_ScreenSetpoints.bValuesDefined = true;
                                             mt_AnimatedLeds.u8NumberSetpoints = 1;
                                         }
                                     }
                                     else if (!mt_AnimatedLeds.bSetpointsDefined)
                                     {
+                                        // Reset setpoint screens for next loop
+                                        st_ScreenSetpoints.bValuesDefined = false;
+                                        st_ScreenSetpoints.bReprintScreen = true;
+
                                         /// \todo - replace below with function
                                         if (NO_SELECTION(mt_StillLightsMenu.u8Selection))
                                         {

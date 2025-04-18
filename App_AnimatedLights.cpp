@@ -52,19 +52,12 @@
  *
  *  \return: pt_AnimatedLeds->u8NumberSetpoints is set 
  */
-void v_AppAnimatedLights_ChooseNumberOfSetpoints(LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, T_AnimatedLeds * pt_AnimatedLeds)
+void v_AppAnimatedLights_ChooseNumberOfSetpoints(LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, T_AnimatedLeds * pt_AnimatedLeds, T_ScreenGetValues * pt_ScreenSetpoints)
 {
-    T_ScreenGetValues st_ScreenSetpoints = T_SETPOINTSSCREEN_DEFAULT();
-
-    if (NO_SELECTION(pt_AnimatedLeds->u8NumberSetpoints))
-    {
-        st_ScreenSetpoints.bReprintScreen = true;
-        st_ScreenSetpoints.bValuesDefined = false;
-    }
-    else if (st_ScreenSetpoints.bReprintScreen)
+    if (pt_ScreenSetpoints->bReprintScreen)
     {
         /* Title */
-        v_AppScreen_GetValues_SetTitle      (&st_ScreenSetpoints,    "# SETPTS:");
+        v_AppScreen_GetValues_SetTitle      (pt_ScreenSetpoints,    "# SETPTS:");
 
         /* Description */
         charn c_Description[MAX_LENGTH_DESCRIPTION] = "MAX ";
@@ -76,19 +69,19 @@ void v_AppAnimatedLights_ChooseNumberOfSetpoints(LiquidCrystal_I2C j_Lcd, Keypad
         strncat(&c_Description[0], &c_Number[0], CONCAT_LENGTH(c_Description)); // Concat max value
         strncat(&c_Description[0], " SETPOINTS", CONCAT_LENGTH(c_Description)); // Concat " SETPOINTS"
 
-        v_AppScreen_GetValues_SetDescription(&st_ScreenSetpoints,    &c_Description[0]);
+        v_AppScreen_GetValues_SetDescription(pt_ScreenSetpoints,    &c_Description[0]);
 
         /* Values Array */
-        v_AppScreen_GetValues_SetValuesArray(&st_ScreenSetpoints,    &pt_AnimatedLeds->u8NumberSetpoints);
+        v_AppScreen_GetValues_SetValuesArray(pt_ScreenSetpoints,    &pt_AnimatedLeds->u8NumberSetpoints);
 
         // Print first menu
-        v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, &st_ScreenSetpoints);
+        v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, pt_ScreenSetpoints);
 
-        st_ScreenSetpoints.bReprintScreen = false; // Clear, so reprint only occurs once
+        pt_ScreenSetpoints->bReprintScreen = false; // Clear, so reprint only occurs once
     }
 
     // Run task loop update until values are defined
-    v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenSetpoints);
+    v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, pt_ScreenSetpoints);
 }
 
 
