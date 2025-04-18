@@ -254,7 +254,9 @@ void v_AppMain_TLU(void)
                                     {
                                         if (e_AnimatedFadeSetpoint == mt_AnimatedLightsMenu.u8Selection)
                                         { // Choose number of setpoints
-                                            v_AppAnimatedLights_ChooseNumberOfSetpoints(&mt_AnimatedLeds);
+                                            v_AppAnimatedLights_ChooseNumberOfSetpoints(mj_SmartDormLcd,
+                                                                                        mj_SmartDormKeypad,
+                                                                                        &mt_AnimatedLeds);
                                         }
                                         else
                                         { // Otherwise choose one setpoint
