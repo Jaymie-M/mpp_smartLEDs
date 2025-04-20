@@ -43,9 +43,9 @@
         "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
         "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
         "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-        "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\mpp_smartLEDs.ino.cpp",
+        "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_AnimatedLights.cpp",
         "-o",
-        "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\mpp_smartLEDs.ino.cpp.o"
+        "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_AnimatedLights.cpp.o"
       ],
       "defines": [
         "F_CPU=16000000L",

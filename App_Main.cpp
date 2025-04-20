@@ -391,8 +391,7 @@ void v_AppMain_TLU(void)
                                          &mt_AnimatedLeds,
                                          &mat_SmartDormLeds[0],
                                          &mat_SmartDormLedStrip[0],
-                                         sizeof(&mat_SmartDormLedStrip[0]),
-                                         mt_AnimatedLightsMenu.u8Selection - SHIFT_OPTION_OFFSET);
+                                         mt_AnimatedLightsMenu.u8Selection);
         }
 
         /// \todo - do other loops here - e.g., clock update, animations update, music update

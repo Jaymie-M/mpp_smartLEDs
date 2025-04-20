@@ -38,8 +38,11 @@
 /***************************
  *   Function Prototypes   *
  ***************************/
-
-
+static void _v_AppAnimatedLights_Fade      (LiquidCrystal_I2C j_Lcd,    Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds, 
+                                            CRGB            * pat_Leds, T_LedStrip    * pat_LedStrip,   uint8               u8Selection     );
+static void _v_AppAnimatedLights_ShiftSects(LiquidCrystal_I2C j_Lcd,    Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds, 
+                                            CRGB            * pat_Leds, T_LedStrip    * pt_Setpoint,    T_LedStrip        * pt_Shift,   
+                                            uint8             u8Selection                                                                   );
 /***************************
  *         Objects         *
  ***************************/
@@ -48,6 +51,38 @@
 /***************************
  *   Function Definitions  *
  ***************************/
+/** \brief This function defines the fade animation periods between LED strip setpoints and actively animates the LED strip
+ *
+ *  \return N/A 
+ */
+static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,    
+                                        Keypad              j_Keypad,       
+                                        T_AnimatedLeds    * pt_AnimatedLeds, 
+                                        CRGB              * pat_Leds, 
+                                        T_LedStrip        * pat_LedStrip,   
+                                        uint8               u8Selection)
+{
+
+}
+
+
+/** \brief This function defines the sections to be shifted on an LED strip, including the 
+ *         shift direction and period for each section. Once defined, this activately animates the LED strip.
+ *
+ *  \return N/A 
+ */
+static void _v_AppAnimatedLights_ShiftSects(LiquidCrystal_I2C   j_Lcd,    
+                                            Keypad              j_Keypad,       
+                                            T_AnimatedLeds    * pt_AnimatedLeds, 
+                                            CRGB              * pat_Leds,
+                                            T_LedStrip        * pt_Setpoint,    
+                                            T_LedStrip        * pt_Shift,   
+                                            uint8               u8Selection)
+{
+    
+}
+
+
 /** \brief This function requests the number of LED strip setpoints for 'Fade Setpoint' animation selection
  *
  *  \return: pt_AnimatedLeds->u8NumberSetpoints is set 
@@ -96,10 +131,56 @@ void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,
                                     T_AnimatedLeds    * pt_AnimatedLeds,
                                     CRGB              * pat_Leds,
                                     T_LedStrip        * pat_LedStrip,
-                                    size_t              t_SizeLedStrip,
                                     uint8               u8Selection)
 {
-    
+    switch (u8Selection)
+    {
+        case e_AnimatedPresets: 
+        case e_AnimatedThemed:
+            /// \todo - create 'this feature not supported' screen
+            break;
+        case e_AnimatedFadeLoop:
+        case e_AnimatedFadeSetpoint:
+            pt_AnimatedLeds->e_Style = e_AnimationStyleFade;
+            break;
+        case e_AnimatedShiftWhole:
+        case e_AnimatedShiftHalfAndHalf:
+        case e_AnimatedShiftUnequalSections:
+        case e_AnimatedShiftEqualSections:
+            pt_AnimatedLeds->e_Style = e_AnimationStyleShift;
+            break;
+#ifdef PRINT_ERROR_STATEMENTS
+        default:
+            Serial.println("OWEN IS AWESOME!");
+            break;
+#endif
+    }
+
+    switch (pt_AnimatedLeds->e_Style)
+    {
+        case e_AnimationStyleFade:
+            _v_AppAnimatedLights_Fade  (j_Lcd, 
+                                        j_Keypad, 
+                                        pt_AnimatedLeds, 
+                                        pat_Leds, 
+                                        pat_LedStrip, 
+                                        u8Selection);
+            break;
+        case e_AnimationStyleShift:
+            _v_AppAnimatedLights_ShiftSects(j_Lcd, 
+                                            j_Keypad, 
+                                            pt_AnimatedLeds,
+                                            pat_Leds, 
+                                            &pat_LedStrip[e_InitialSetpoint], 
+                                            &pat_LedStrip[e_Shift], 
+                                            u8Selection - SHIFT_OPTION_OFFSET);
+            break;
+#ifdef PRINT_ERROR_STATEMENTS
+        default:
+            Serial.println("NOT QUITE MY TEMPO!");
+            break;
+#endif
+    }
 }
 
 
