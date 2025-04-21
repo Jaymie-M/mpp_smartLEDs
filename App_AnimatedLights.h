@@ -24,7 +24,33 @@
 /***************************
  *         Defines         *
  ***************************/
-/**
+#define T_SETPOINTPERIODSCREEN_DEFAULT(...)                                     \
+{                                                                               \
+    .bReprintScreen             = true,                                         \
+    .bDescription               = true,                                         \
+    .bPatternFill               = false,                                        \
+    .bValuesDefined             = false,                                        \
+    .eAlignment                 = e_Algn_LCenter,                               \
+    .u8KeypressHex              = KEYPRESS_NONE,                                \
+    .u8KeypressFinished         = KEYPRESS_NONE,                                \
+    .u8MinValue                 = 0,                                            \
+    .u8MaxValue                 = 0xFF,                                         \
+    .u8NumberValuesTotalDefined = 1,                                            \
+    .au8Digit                   = {0, 0, 0},                                    \
+    .t_Index                    = {                                             \
+                                    .u8Row              = 0,                    \
+                                    .u8ValueOfRow       = 0,                    \
+                                    .u8DigitOfValue     = 0,                    \
+                                    .u8ValuesPrinted    = 0,                    \
+                                  },                                            \
+    .t_Cursor                   = {                                             \
+                                    .u8x                = 0,                    \
+                                    .u8y                = 0,                    \
+                                  },                                            \
+}
+
+
+ /**
 * \brief Default definition for unique sections 'Get Values' screen
 */
 #define T_SETPOINTSSCREEN_DEFAULT(...)                                         \
@@ -71,6 +97,19 @@
  *          Enums          *
  ***************************/
 /**
+ * \brief - List of steps in defining LED strip with sections or checkpoints
+ */
+typedef enum
+{
+    e_FadeAnimationInit 					= 0,
+    e_FadeAnimationSetpointPeriod 		    = 1,
+    e_FadeAnimationLoop		                = 2,
+    e_FadeAnimationNumberofSteps,
+    
+} E_FadeAnimationStep;
+
+
+ /**
  * \brief - List of still lights menu options
  */
 typedef enum
@@ -129,7 +168,7 @@ typedef enum
  */
 typedef struct
 {
-    uint16                  au16Period_ms[e_NumLedStripSetpoints];  // Fade time between setpoints
+    uint8                   au8Period_01s[e_NumLedStripSetpoints];  // Fade time between setpoints
     E_AnimationStyle        e_Style;                                // Animation style
     uint8                   u8NumberSetpoints;                      // Number of setpoints to be defined
     uint8                   u8CurrentSetpoint;                      // Current setpoint being defined
@@ -142,7 +181,8 @@ typedef struct
  *    Exported Functions   *
  ***************************/
 void v_AppAnimatedLights_Main_TLU               (LiquidCrystal_I2C  j_Lcd,      Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds,
-                                                 CRGB             * pat_Leds,   T_LedStrip    * pat_LedStrip,   uint8               u8Selection       );
+                                                 CRGB             * pat_Leds,   T_LedStrip    * pat_LedStrip,   uint32              u32CycleTime_ms, 
+                                                 uint8              u8Selection                                                                       );
 void v_AppAnimatedLights_ChooseNumberOfSetpoints(LiquidCrystal_I2C  j_Lcd,      Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds, 
                                                                                                                 T_ScreenGetValues * pt_ScreenSetpoints);
 void v_AppAnimatedLights_MainMenu               (LiquidCrystal_I2C  j_Lcd,      Keypad          j_Keypad,       T_MenuSelection   * pt_Menu           );

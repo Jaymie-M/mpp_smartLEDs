@@ -56,17 +56,18 @@ const byte gc_mau8ColumnPins[NUM_COLUMNS] = {PIN_DIN_KEYPAD_COL1,
                                             };
 
 // Define module variables
-static bool   mbInitialized               = false;
-static bool   mbUnlocked                  = false;
+static bool   mbInitialized                 = false;
+static bool   mbUnlocked                    = false;
 
-static uint8  mu8NumberSetpoints          = 0;
+static uint32 mu32SmartDormLedsCycleTime_ms = 0;
+static uint32 mu32PrevLoopTime_ms           = 0;
 
 // Animations menus
-static uint8  mu8StartingPointMenuSelect  = 0;
+static uint8  mu8StartingPointMenuSelect    = 0;
 
 // Stills and Animations menus
-static uint8  mu8MusicMenuSelect          = 0;
-static uint8  mu8SettingsMenuSelect       = 0;
+static uint8  mu8MusicMenuSelect            = 0;
+static uint8  mu8SettingsMenuSelect         = 0;
 
 // Structs
 static T_AnimatedLeds   mt_AnimatedLeds;
@@ -383,6 +384,9 @@ void v_AppMain_TLU(void)
             }
         }
 
+        mu32SmartDormLedsCycleTime_ms = millis() - mu32PrevLoopTime_ms; // Calculate cycle time
+        mu32PrevLoopTime_ms           = millis();                       // Store previous loop time
+
         /* Updates done outside of main menu selection */
         if (b_AppStillsLights_AnimationsEnabled() )
         { //
@@ -391,6 +395,7 @@ void v_AppMain_TLU(void)
                                          &mt_AnimatedLeds,
                                          &mat_SmartDormLeds[0],
                                          &mat_SmartDormLedStrip[0],
+                                         mu32SmartDormLedsCycleTime_ms,
                                          mt_AnimatedLightsMenu.u8Selection);
         }
 

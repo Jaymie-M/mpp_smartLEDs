@@ -38,11 +38,12 @@
 /***************************
  *   Function Prototypes   *
  ***************************/
-static void _v_AppAnimatedLights_Fade      (LiquidCrystal_I2C j_Lcd,    Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds, 
-                                            CRGB            * pat_Leds, T_LedStrip    * pat_LedStrip,   uint8               u8Selection     );
-static void _v_AppAnimatedLights_ShiftSects(LiquidCrystal_I2C j_Lcd,    Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds, 
-                                            CRGB            * pat_Leds, T_LedStrip    * pt_Setpoint,    T_LedStrip        * pt_Shift,   
-                                            uint8             u8Selection                                                                   );
+static void _v_AppAnimatedLights_Fade      (LiquidCrystal_I2C j_Lcd,            Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds, 
+                                            CRGB            * pat_Leds,         T_LedStrip    * pat_LedStrip,   uint32              u32CycleTime_ms,
+                                            uint8             u8Selection                                                                           );
+static void _v_AppAnimatedLights_ShiftSects(LiquidCrystal_I2C j_Lcd,            Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds, 
+                                            CRGB            * pat_Leds,         T_LedStrip    * pt_Setpoint,    T_LedStrip        * pt_Shift,   
+                                            uint32            u32CycleTime_ms,  uint8           u8Selection                                         );
 /***************************
  *         Objects         *
  ***************************/
@@ -59,10 +60,79 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
                                         Keypad              j_Keypad,       
                                         T_AnimatedLeds    * pt_AnimatedLeds, 
                                         CRGB              * pat_Leds, 
-                                        T_LedStrip        * pat_LedStrip,   
+                                        T_LedStrip        * pat_LedStrip,
+                                        uint32              u32CycleTime_ms,
                                         uint8               u8Selection)
 {
+    static T_ScreenGetValues    st_ScreenSetptPeriod    = T_SETPOINTPERIODSCREEN_DEFAULT();
+    static E_FadeAnimationStep  e_FadeAnimationStep     = e_FadeAnimationInit;
+    static float32              sf32_Period_100pct      = 0.0f; // Percentage of period completed thus far
+    
+    switch (e_FadeAnimationStep)
+    {
+        case e_FadeAnimationInit:
+            st_ScreenSetptPeriod.bValuesDefined = false;
+            st_ScreenSetptPeriod.bReprintScreen = true;
+            pt_AnimatedLeds->u8CurrentSetpoint  = 0;
+            sf32_Period_100pct                  = 0.0f;
+            break;
 
+        case e_FadeAnimationSetpointPeriod:
+            if (st_ScreenSetptPeriod.bReprintScreen)
+            {
+                /* Title */
+                v_AppScreen_GetValues_SetTitle          (&st_ScreenSetptPeriod, "PERIOD:");
+        
+                /* Description */
+                charn c_Description[MAX_LENGTH_DESCRIPTION] = "MAX 255 0.1s (";
+                charn c_Number     [MAX_DIGITS_PER_UINT8  ];
+        
+                // Convert number of LED strip setpoints into string
+                itoa(pt_AnimatedLeds->u8NumberSetpoints, &c_Number[0], 10);
+        
+                strncat(&c_Description[0], &c_Number[0], CONCAT_LENGTH(c_Description)); // Concat number of setpoints
+                strncat(&c_Description[0], " SPT)",      CONCAT_LENGTH(c_Description)); // Concat " SETPOINTS"
+        
+                v_AppScreen_GetValues_SetDescription    (&st_ScreenSetptPeriod, &c_Description[0]);
+        
+                /* Values Array */
+                v_AppScreen_GetValues_SetValuesArray    (&st_ScreenSetptPeriod, &pt_AnimatedLeds->au8Period_01s[0]);
+
+                /* Total number of values */
+                v_AppScreen_GetValues_SetNumValuesTotal (&st_ScreenSetptPeriod, pt_AnimatedLeds->u8NumberSetpoints);
+        
+                // Print first menu
+                v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, &st_ScreenSetptPeriod);
+        
+                st_ScreenSetptPeriod.bReprintScreen = false; // Clear, so reprint only occurs once
+            }
+        
+            // Run task loop update until values are defined
+            v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenSetptPeriod);
+
+            // Go to next step when values are defined
+            if (st_ScreenSetptPeriod.bValuesDefined)    e_FadeAnimationStep = e_FadeAnimationLoop;
+            break;
+
+        case e_FadeAnimationLoop:
+            // Calculate percentage of period elapsed - cycle time (ms) divided by period (ms)
+            sf32_Period_100pct = (float32) u32CycleTime_ms 
+                               / (100.0f * (float32) (pt_AnimatedLeds->au8Period_01s[pt_AnimatedLeds->u8CurrentSetpoint]));
+            
+            if (1.0f == sf32_Period_100pct)
+            { // Full period has elapsed
+                sf32_Period_100pct = 0.0f; // Reset to zero
+                pt_AnimatedLeds->u8CurrentSetpoint++; // Move to next setpoint
+            }
+
+            /// \todo - interpolate between setpoints - ideally, we want to create a function that can find color of any LED for a given LED strip
+            break;
+#ifdef PRINT_ERROR_STATEMENTS
+        default:
+            Serial.println("THIS IS MY OWN PRIVATE DOMICILE, AND I WILL NOT BE HARASSED!");
+            break;
+#endif
+    }
 }
 
 
@@ -77,6 +147,7 @@ static void _v_AppAnimatedLights_ShiftSects(LiquidCrystal_I2C   j_Lcd,
                                             CRGB              * pat_Leds,
                                             T_LedStrip        * pt_Setpoint,    
                                             T_LedStrip        * pt_Shift,   
+                                            uint32              u32CycleTime_ms,
                                             uint8               u8Selection)
 {
     
@@ -131,6 +202,7 @@ void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,
                                     T_AnimatedLeds    * pt_AnimatedLeds,
                                     CRGB              * pat_Leds,
                                     T_LedStrip        * pat_LedStrip,
+                                    uint32              u32CycleTime_ms,
                                     uint8               u8Selection)
 {
     switch (u8Selection)
@@ -163,7 +235,8 @@ void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,
                                         j_Keypad, 
                                         pt_AnimatedLeds, 
                                         pat_Leds, 
-                                        pat_LedStrip, 
+                                        pat_LedStrip,
+                                        u32CycleTime_ms,
                                         u8Selection);
             break;
         case e_AnimationStyleShift:
@@ -172,7 +245,8 @@ void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,
                                             pt_AnimatedLeds,
                                             pat_Leds, 
                                             &pat_LedStrip[e_InitialSetpoint], 
-                                            &pat_LedStrip[e_Shift], 
+                                            &pat_LedStrip[e_Shift],
+                                            u32CycleTime_ms, 
                                             u8Selection - SHIFT_OPTION_OFFSET);
             break;
 #ifdef PRINT_ERROR_STATEMENTS
