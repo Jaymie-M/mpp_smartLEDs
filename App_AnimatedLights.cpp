@@ -116,8 +116,8 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
 
         case e_FadeAnimationLoop:
             // Calculate percentage of period elapsed - cycle time (ms) divided by period (ms)
-            sf32_Period_100pct = (float32) u32CycleTime_ms 
-                               / (100.0f * (float32) (pt_AnimatedLeds->au8Period_01s[pt_AnimatedLeds->u8CurrentSetpoint]));
+            sf32_Period_100pct += (float32) u32CycleTime_ms 
+                                / (100.0f * (float32) (pt_AnimatedLeds->au8Period_01s[pt_AnimatedLeds->u8CurrentSetpoint]));
             
             if (1.0f == sf32_Period_100pct)
             { // Full period has elapsed
