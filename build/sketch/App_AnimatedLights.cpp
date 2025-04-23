@@ -76,6 +76,8 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
             st_ScreenSetptPeriod.bReprintScreen = true;
             pt_AnimatedLeds->u8CurrentSetpoint  = 0;
             sf32_Period_100pct                  = 0.0f;
+
+            e_FadeAnimationStep = e_FadeAnimationSetpointPeriod; // Next step
             break;
 
         case e_FadeAnimationSetpointPeriod:
@@ -116,14 +118,59 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
             break;
 
         case e_FadeAnimationLoop:
-            // Calculate percentage of period elapsed - cycle time (ms) divided by period (ms)
+
+            /* Calculate percentage of period elapsed - cycle time (ms) divided by period (ms) */
             sf32_Period_100pct += (float32) u32CycleTime_ms 
                                 / (100.0f * (float32) (pt_AnimatedLeds->au8Period_01s[pt_AnimatedLeds->u8CurrentSetpoint]));
             
             if (1.0f == sf32_Period_100pct)
             { // Full period has elapsed
                 sf32_Period_100pct = 0.0f; // Reset to zero
-                pt_AnimatedLeds->u8CurrentSetpoint++; // Move to next setpoint
+
+                if ((pt_AnimatedLeds->u8CurrentSetpoint + 1) < pt_AnimatedLeds->u8NumberSetpoints)
+                { // Move to next setpoint if next in order is less than total
+                    pt_AnimatedLeds->u8CurrentSetpoint++; 
+                }
+                else
+                { // Otherwise, reset to initial starting setpoint
+                    pt_AnimatedLeds->u8CurrentSetpoint = e_InitialSetpoint; 
+                }
+            }
+
+            /* Determine next setpoint */
+            // Default to initial in case greater than or equal to total setpoints
+            uint8 u8NextSetpoint = e_InitialSetpoint;
+
+            if ((pt_AnimatedLeds->u8CurrentSetpoint + 1) < pt_AnimatedLeds->u8NumberSetpoints)
+            { // If next in order is less than total, set to next in order
+                u8NextSetpoint = pt_AnimatedLeds->u8NumberSetpoints + 1;
+            }
+
+            /* Code shortening */
+            T_LedStrip * pt_Setpoint     = &pat_LedStrip[pt_AnimatedLeds->u8CurrentSetpoint],
+                       * pt_NextSetpoint = &pat_LedStrip[u8NextSetpoint];
+            T_Color      t_Color         = T_COLOR_CLEAR(); // Default color
+            T_Color      t_NextColor     = T_COLOR_CLEAR();
+
+            for (size_t i = 0; i < NUM_LEDS; i++)
+            {
+                /* Get LED color */
+                v_AppStillLights_GetLedColor(pt_Setpoint,     &t_Color,     i); // Get current color
+                v_AppStillLights_GetLedColor(pt_NextSetpoint, &t_NextColor, i); // Get next    color
+                
+                /* Set LED color */ /* Red   */
+                pat_Leds[i].setRGB ((uint8)   (sf32_Period_100pct *
+                                    (float32) (t_NextColor.u8Red    - t_Color.u8Red  )) +
+                                               t_Color    .u8Red,
+                                    /* Green */
+                                    (uint8)   (sf32_Period_100pct *
+                                    (float32) (t_NextColor.u8Green  - t_Color.u8Green)) +
+                                               t_Color    .u8Green,
+                                    /* Blue  */
+                                    (uint8)   (sf32_Period_100pct *
+                                    (float32) (t_NextColor.u8Blue   - t_Color.u8Blue )) +
+                                               t_Color    .u8Blue
+                                   );
             }
 
             /// \todo - interpolate between setpoints - ideally, we want to create a function that can find color of any LED for a given LED strip

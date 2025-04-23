@@ -1397,6 +1397,18 @@ void v_AppStillsLights_Gradient_TLU(LiquidCrystal_I2C   j_Lcd,          // [I, ]
 }
 
 
+/** \brief  This function finds color of specified LED in current strip
+ *
+ *  \return pt_Color
+ */
+void v_AppStillLights_GetLedColor  (T_LedStrip    * pt_Setpoint,    // [I, ] LED strip in which to find LED color
+                                    T_Color       * pt_Color,       // [ ,O] LED color data
+                                    uint8           u8CurrentLed)   // [I, ] Current LED number
+{
+
+}
+
+
 /** \brief  This function determines if animations are currently enabled
  *
  *  \return: State of mbEnableAnimations

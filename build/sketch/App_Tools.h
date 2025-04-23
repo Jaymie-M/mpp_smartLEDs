@@ -209,8 +209,8 @@ typedef union
  */
 typedef struct
 {
-    U_Section   u_Section[MAX_UNIQUE_SECTIONS   ]; // Specifying order of actual sections
-    uint8	    au8Order [MAX_PATTERNED_SECTIONS]; // Unique sections
+    U_Section   u_Section[MAX_UNIQUE_SECTIONS   ]; // Unique sections
+    uint8	    au8Order [MAX_PATTERNED_SECTIONS]; // Specifying order of actual sections
 
 } T_PatternedSections;
 
