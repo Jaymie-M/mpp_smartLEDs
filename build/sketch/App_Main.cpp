@@ -270,10 +270,6 @@ void v_AppMain_TLU(void)
                                     }
                                     else if (!mt_AnimatedLeds.bSetpointsDefined)
                                     {
-                                        // Reset setpoint screens for next loop
-                                        st_ScreenSetpoints.bValuesDefined = false;
-                                        st_ScreenSetpoints.bReprintScreen = true;
-
                                         /// \todo - replace below with function
                                         if (NO_SELECTION(mt_StillLightsMenu.u8Selection))
                                         {
@@ -333,11 +329,17 @@ void v_AppMain_TLU(void)
                                         mt_AnimatedLeds.u8NumberSetpoints = SELECTION_NONE; // Reset number of setpoints to no selection
 
                                         if (mt_AnimatedLeds.bDefined)
-                                        { // Animations are defined
+                                        { // Animations are defined - go back to main menu
                                             mt_AnimatedLightsMenu.u8Selection = BACK_TO_MAIN_MENU;
+
+                                            /// \todo - create function
+                                            // Reset setpoints screen for next loop
+                                            st_ScreenSetpoints.bValuesDefined = false;
+                                            st_ScreenSetpoints.bReprintScreen = true;
+                                            mt_AnimatedLeds.bSetpointsDefined = false;
                                         }
                                         else
-                                        {
+                                        { // Set animations to enabled
                                             v_AppStillsLights_EnableAnimations();
                                         }
                                     }
@@ -398,6 +400,10 @@ void v_AppMain_TLU(void)
                                          &mat_SmartDormLedStrip[0],
                                          mu32SmartDormLedsCycleTime_ms,
                                          mt_AnimatedLightsMenu.u8Selection);
+        }
+        else if (mt_AnimatedLeds.bDefined)
+        { // Animations were just disabled
+            v_AppAnimatedLights_Reset(&mt_AnimatedLeds);
         }
 
         /// \todo - do other loops here - e.g., clock update, animations update, music update

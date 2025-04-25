@@ -65,11 +65,12 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
                                         uint32              u32CycleTime_ms,
                                         uint8               u8Selection)
 {
-    static T_ScreenGetValues    st_ScreenSetptPeriod    = T_SETPOINTPERIODSCREEN_DEFAULT();
-    static E_FadeAnimationStep  e_FadeAnimationStep     = e_FadeAnimationInit;
-    static float32              sf32_Period_100pct      = 0.0f; // Percentage of period completed thus far
+    static  T_ScreenGetValues   st_ScreenSetptPeriod    = T_SETPOINTPERIODSCREEN_DEFAULT();
+    static  float32             sf32_Period_100pct      = 0.0f; // Percentage of period completed thus far
+    static  uint8               su8PrevPress            = KEYPRESS_NONE;   
+            uint8               u8CurrentPress          = KEYPRESS_NONE;
     
-    switch (e_FadeAnimationStep)
+    switch (pt_AnimatedLeds->e_FadeAnimationStep)
     {
         case e_FadeAnimationInit:
             st_ScreenSetptPeriod.bValuesDefined = false;
@@ -77,7 +78,7 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
             pt_AnimatedLeds->u8CurrentSetpoint  = 0;
             sf32_Period_100pct                  = 0.0f;
 
-            e_FadeAnimationStep = e_FadeAnimationSetpointPeriod; // Next step
+            pt_AnimatedLeds->e_FadeAnimationStep = e_FadeAnimationSetpointPeriod; // Next step
             break;
 
         case e_FadeAnimationSetpointPeriod:
@@ -114,7 +115,12 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
             v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenSetptPeriod);
 
             // Go to next step when values are defined
-            if (st_ScreenSetptPeriod.bValuesDefined)    e_FadeAnimationStep = e_FadeAnimationLoop;
+            if (st_ScreenSetptPeriod.bValuesDefined)
+            {
+                pt_AnimatedLeds->e_FadeAnimationStep = e_FadeAnimationLoop;
+
+                v_AppScreen_PressZeroIfDone(j_Lcd); // Request operator input to continue
+            }
             break;
 
         case e_FadeAnimationLoop:
@@ -173,7 +179,18 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
                                    );
             }
 
-            /// \todo - interpolate between setpoints - ideally, we want to create a function that can find color of any LED for a given LED strip
+            FastLED.show(); // Show LEDs
+
+            if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE))  // Falling edge of keypress
+            { // Animations are now defined if zero key is pressed
+                if (0 == gc_au8DigitConv[su8PrevPress])
+                { // 0 key was pressed - set LED strip to defined
+                    pt_AnimatedLeds->bDefined = true;
+                }
+            }
+
+            su8PrevPress = u8CurrentPress; // Store current keypress
+
             break;
 #ifdef PRINT_ERROR_STATEMENTS
         default:
@@ -202,40 +219,37 @@ static void _v_AppAnimatedLights_ShiftSects(LiquidCrystal_I2C   j_Lcd,
 }
 
 
-/** \brief This function requests the number of LED strip setpoints for 'Fade Setpoint' animation selection
+/** \brief This function brings the user to the animated lights menu and returns a selection
  *
- *  \return: pt_AnimatedLeds->u8NumberSetpoints is set 
+ *  \return: pt_Menu->u8OptionOffset and pt_Menu->u8Selection are set 
  */
-void v_AppAnimatedLights_ChooseNumberOfSetpoints(LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, T_AnimatedLeds * pt_AnimatedLeds, T_ScreenGetValues * pt_ScreenSetpoints)
+void v_AppAnimatedLights_MainMenu(LiquidCrystal_I2C  j_Lcd,     // [I, ] LCD    Object
+                                  Keypad             j_Keypad,  // [I, ] Keypad Object
+                                  T_MenuSelection  * pt_Menu)   // [I,O] Menu data
 {
-    if (pt_ScreenSetpoints->bReprintScreen)
+    if (pt_Menu->bReprintMenu)
     {
         /* Title */
-        v_AppScreen_GetValues_SetTitle      (pt_ScreenSetpoints,    "# SETPTS:");
+        v_AppScreen_MenuSelection_SetTitle (pt_Menu,    "ANIMATIONS:");
 
-        /* Description */
-        charn c_Description[MAX_LENGTH_DESCRIPTION] = "MAX ";
-        charn c_Number     [MAX_DIGITS_PER_UINT8  ];
-
-        // Convert number of LED strip setpoints into string
-        itoa(e_NumLedStripSetpoints, &c_Number[0], 10);
-
-        strncat(&c_Description[0], &c_Number[0], CONCAT_LENGTH(c_Description)); // Concat max value
-        strncat(&c_Description[0], " SETPOINTS", CONCAT_LENGTH(c_Description)); // Concat " SETPOINTS"
-
-        v_AppScreen_GetValues_SetDescription(pt_ScreenSetpoints,    &c_Description[0]);
-
-        /* Values Array */
-        v_AppScreen_GetValues_SetValuesArray(pt_ScreenSetpoints,    &pt_AnimatedLeds->u8NumberSetpoints);
+        /* Options */
+        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Presets",          e_AnimatedPresets             );
+        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Fade Loop",        e_AnimatedFadeLoop            );
+        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Fade Setpoint",    e_AnimatedFadeSetpoint        );
+        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Shift Whole",      e_AnimatedShiftWhole          );
+        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Shift H&H",        e_AnimatedShiftHalfAndHalf    );
+        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Shift Uneq Sect",  e_AnimatedShiftUnequalSections);
+        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Shift Eq Sect",    e_AnimatedShiftEqualSections  );
+        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Themed",           e_AnimatedThemed              );
 
         // Print first menu
-        v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, pt_ScreenSetpoints);
+        v_AppScreen_MenuSelection_Init(j_Lcd, pt_Menu);
 
-        pt_ScreenSetpoints->bReprintScreen = false; // Clear, so reprint only occurs once
+        pt_Menu->bReprintMenu = false; // Clear, so reprint only occurs once
     }
 
-    // Run task loop update until values are defined
-    v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, pt_ScreenSetpoints);
+    // Receive selection commands and scroll menu options (if required)
+    v_AppScreen_MenuSelection_TLU(j_Lcd, j_Keypad, pt_Menu);
 }
 
 
@@ -245,13 +259,13 @@ void v_AppAnimatedLights_ChooseNumberOfSetpoints(LiquidCrystal_I2C j_Lcd, Keypad
  *
  *  \return: none
  */
-void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,
-                                    Keypad              j_Keypad,
-                                    T_AnimatedLeds    * pt_AnimatedLeds,
-                                    CRGB              * pat_Leds,
-                                    T_LedStrip        * pat_LedStrip,
-                                    uint32              u32CycleTime_ms,
-                                    uint8               u8Selection)
+void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,              // [I, ] LCD    Object
+                                    Keypad              j_Keypad,           // [I, ] Keypad Object
+                                    T_AnimatedLeds    * pt_AnimatedLeds,    // [I,O] Animated LED data
+                                    CRGB              * pat_Leds,           // [I,O] LED struct array
+                                    T_LedStrip        * pat_LedStrip,       // [I, ] LED strip struct array
+                                    uint32              u32CycleTime_ms,    // [I, ] Cycle time
+                                    uint8               u8Selection)        // [I, ] Animations selection
 {
     switch (u8Selection)
     {
@@ -306,35 +320,77 @@ void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,
 }
 
 
-/** \brief This function brings the user to the animated lights menu and returns a selection
+/** \brief This function resets the animated lights data
  *
- *  \return: pt_Menu->u8OptionOffset and pt_Menu->u8Selection are set 
+ *  \return pt_AnimatedLeds flags cleared and data reset
  */
-void v_AppAnimatedLights_MainMenu(LiquidCrystal_I2C  j_Lcd,     // [I, ] LCD    Object
-                                  Keypad             j_Keypad,  // [I, ] Keypad Object
-                                  T_MenuSelection  * pt_Menu)   // [I,O] Menu data
+void v_AppAnimatedLights_Reset(T_AnimatedLeds * pt_AnimatedLeds) // [ ,O] Animated LED data
 {
-    if (pt_Menu->bReprintMenu)
+    // Clear defined and setpoints defined flags
+    pt_AnimatedLeds->bDefined           = false;
+    pt_AnimatedLeds->bSetpointsDefined  = false;
+
+    // Reset setpoint periods
+    for (size_t i; i < LENGTHOF(pt_AnimatedLeds->au8Period_01s); i++)
+        pt_AnimatedLeds->au8Period_01s[i] = 0;
+
+    // Reset fade animations to init step
+    pt_AnimatedLeds->e_FadeAnimationStep = e_FadeAnimationInit;
+
+    // Reset setpoint data
+    pt_AnimatedLeds->u8CurrentSetpoint = 0;
+    pt_AnimatedLeds->u8NumberSetpoints = 0;
+}
+
+
+/** \brief This function requests the number of LED strip setpoints for 'Fade Setpoint' animation selection
+ *
+ *  \return pt_SetpointsScreen and pt_AnimatedLeds flags set/cleared
+ */
+void v_AppAnimatedLights_SetpointsScreenReset(T_ScreenGetValues * pt_SetpointsScreen,   // [ ,O] Setpoint 'get values' screen data
+                                              T_AnimatedLeds    * pt_AnimatedLeds)      // [I,O] Animated LED data
+{
+    // Clear defined and setpoints defined flags
+    pt_AnimatedLeds->bSetpointsDefined  = false;
+    pt_SetpointsScreen->bValuesDefined  = false;
+    
+    // Set reprint screen for next selection
+    pt_SetpointsScreen->bReprintScreen  = true;
+}
+
+
+/** \brief This function requests the number of LED strip setpoints for 'Fade Setpoint' animation selection
+ *
+ *  \return: pt_AnimatedLeds->u8NumberSetpoints is set 
+ */
+void v_AppAnimatedLights_ChooseNumberOfSetpoints(LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, T_AnimatedLeds * pt_AnimatedLeds, T_ScreenGetValues * pt_ScreenSetpoints)
+{
+    if (pt_ScreenSetpoints->bReprintScreen)
     {
         /* Title */
-        v_AppScreen_MenuSelection_SetTitle (pt_Menu,    "ANIMATIONS:");
+        v_AppScreen_GetValues_SetTitle      (pt_ScreenSetpoints,    "# SETPTS:");
 
-        /* Options */
-        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Presets",          e_AnimatedPresets             );
-        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Fade Loop",        e_AnimatedFadeLoop            );
-        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Fade Setpoint",    e_AnimatedFadeSetpoint        );
-        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Shift Whole",      e_AnimatedShiftWhole          );
-        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Shift H&H",        e_AnimatedShiftHalfAndHalf    );
-        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Shift Uneq Sect",  e_AnimatedShiftUnequalSections);
-        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Shift Eq Sect",    e_AnimatedShiftEqualSections  );
-        v_AppScreen_MenuSelection_SetOption(pt_Menu,    "Themed",           e_AnimatedThemed              );
+        /* Description */
+        charn c_Description[MAX_LENGTH_DESCRIPTION] = "MAX ";
+        charn c_Number     [MAX_DIGITS_PER_UINT8  ];
+
+        // Convert number of LED strip setpoints into string
+        itoa(e_NumLedStripSetpoints, &c_Number[0], 10);
+
+        strncat(&c_Description[0], &c_Number[0], CONCAT_LENGTH(c_Description)); // Concat max value
+        strncat(&c_Description[0], " SETPOINTS", CONCAT_LENGTH(c_Description)); // Concat " SETPOINTS"
+
+        v_AppScreen_GetValues_SetDescription(pt_ScreenSetpoints,    &c_Description[0]);
+
+        /* Values Array */
+        v_AppScreen_GetValues_SetValuesArray(pt_ScreenSetpoints,    &pt_AnimatedLeds->u8NumberSetpoints);
 
         // Print first menu
-        v_AppScreen_MenuSelection_Init(j_Lcd, pt_Menu);
+        v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, pt_ScreenSetpoints);
 
-        pt_Menu->bReprintMenu = false; // Clear, so reprint only occurs once
+        pt_ScreenSetpoints->bReprintScreen = false; // Clear, so reprint only occurs once
     }
 
-    // Receive selection commands and scroll menu options (if required)
-    v_AppScreen_MenuSelection_TLU(j_Lcd, j_Keypad, pt_Menu);
+    // Run task loop update until values are defined
+    v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, pt_ScreenSetpoints);
 }

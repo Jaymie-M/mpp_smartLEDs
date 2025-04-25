@@ -171,6 +171,7 @@ typedef struct
 {
     uint8                   au8Period_01s[e_NumLedStripSetpoints];  // Fade time between setpoints
     E_AnimationStyle        e_Style;                                // Animation style
+    E_FadeAnimationStep     e_FadeAnimationStep;                    // Fade animations step
     uint8                   u8NumberSetpoints;                      // Number of setpoints to be defined
     uint8                   u8CurrentSetpoint;                      // Current setpoint being defined
     bool                    bSetpointsDefined;                      // Setpoints defined
@@ -181,11 +182,12 @@ typedef struct
 /***************************
  *    Exported Functions   *
  ***************************/
-void v_AppAnimatedLights_Main_TLU               (LiquidCrystal_I2C  j_Lcd,      Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds,
-                                                 CRGB             * pat_Leds,   T_LedStrip    * pat_LedStrip,   uint32              u32CycleTime_ms, 
-                                                 uint8              u8Selection                                                                       );
-void v_AppAnimatedLights_ChooseNumberOfSetpoints(LiquidCrystal_I2C  j_Lcd,      Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds, 
-                                                                                                                T_ScreenGetValues * pt_ScreenSetpoints);
-void v_AppAnimatedLights_MainMenu               (LiquidCrystal_I2C  j_Lcd,      Keypad          j_Keypad,       T_MenuSelection   * pt_Menu           );
-
+void v_AppAnimatedLights_MainMenu               (LiquidCrystal_I2C  j_Lcd,      Keypad              j_Keypad,           T_MenuSelection   * pt_Menu           );
+void v_AppAnimatedLights_Main_TLU               (LiquidCrystal_I2C  j_Lcd,      Keypad              j_Keypad,           T_AnimatedLeds    * pt_AnimatedLeds,
+                                                 CRGB             * pat_Leds,   T_LedStrip        * pat_LedStrip,       uint32              u32CycleTime_ms, 
+                                                 uint8              u8Selection                                                                               );
+void v_AppAnimatedLights_Reset                  (                                                                       T_AnimatedLeds    * pt_AnimatedLeds   );
+void v_AppAnimatedLights_SetpointsScreenReset   (                               T_ScreenGetValues * pt_SetpointsScreen, T_AnimatedLeds    * pt_AnimatedLeds   );
+void v_AppAnimatedLights_ChooseNumberOfSetpoints(LiquidCrystal_I2C  j_Lcd,      Keypad              j_Keypad,           T_AnimatedLeds    * pt_AnimatedLeds, 
+                                                                                                                        T_ScreenGetValues * pt_ScreenSetpoints);
 #endif /* APP_ANIMATEDLIGHTS_H */

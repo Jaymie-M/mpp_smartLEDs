@@ -1160,76 +1160,6 @@ static void _v_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,
 }
 
 
-/** \brief This function resets all LED strip data to "undefined"
- *
- *  \return: pt_Menu->u8OptionOffset and pt_Menu->u8Selection are set 
- */
-void v_AppStillLights_LedStrip_Reset(T_LedStrip * pt_LedStrip) // [I,O] LED strip struct
-{
-    pt_LedStrip->bDefined   = false;
-    pt_LedStrip->bDisplayed = false;
-
-    switch (pt_LedStrip->e_Style)
-    {
-        case e_StylePatternedSections:
-        case e_StylePatternedCheckpoints:
-
-            /// \todo - refactor to at_Section
-            for (size_t i = 0; i < MAX_UNIQUE_SECTIONS; i++)
-            { // Reset section data
-                pt_LedStrip->u_Style.t_Pattern.u_Section[i].t_Color.bDefined = false;
-                pt_LedStrip->u_Style.t_Pattern.u_Section[i].t_Color.u8Red    = 0;
-                pt_LedStrip->u_Style.t_Pattern.u_Section[i].t_Color.u8Green  = 0;
-                pt_LedStrip->u_Style.t_Pattern.u_Section[i].t_Color.u8Blue   = 0;
-            }
-
-            for (size_t j = 0; j < MAX_PATTERNED_SECTIONS; j++)
-            { // Reset order
-                pt_LedStrip->u_Style.t_Pattern.au8Order[j] = 0;
-            }
-            break;
-
-        case e_StyleEqualSections:
-        case e_StyleEqualCheckpoints:
-
-            for (size_t i = 0; i < MAX_PATTERNED_SECTIONS; i++)
-            { // Reset section data
-                pt_LedStrip->u_Style.t_Equal.u_Section[i].t_Color.bDefined = false;
-                pt_LedStrip->u_Style.t_Equal.u_Section[i].t_Color.u8Red    = 0;
-                pt_LedStrip->u_Style.t_Equal.u_Section[i].t_Color.u8Green  = 0;
-                pt_LedStrip->u_Style.t_Equal.u_Section[i].t_Color.u8Blue   = 0;
-            }
-            break;
-
-        case e_StyleUnequalSections:
-        case e_StyleUnequalCheckpoints:
-
-            for (size_t i = 0; i < MAX_UNIQUE_SECTIONS; i++)
-            { // Reset section data
-                pt_LedStrip->u_Style.t_Unequal.u_Section[i].t_Color.bDefined = false;
-                pt_LedStrip->u_Style.t_Unequal.u_Section[i].t_Color.u8Red    = 0;
-                pt_LedStrip->u_Style.t_Unequal.u_Section[i].t_Color.u8Green  = 0;
-                pt_LedStrip->u_Style.t_Unequal.u_Section[i].t_Color.u8Blue   = 0;
-            }
-
-            for (size_t j = 0; j < MAX_UNIQUE_SECTIONS; j++)
-            { // Reset order
-                pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[j] = 0;
-            }
-            break;
-        
-        case e_StyleRainbow:
-            // Reset direction and length of rainbow
-            pt_LedStrip->u_Style.t_Rainbow.u8Direction      = e_Direction_None;
-            pt_LedStrip->u_Style.t_Rainbow.u8Length_LEDs    = 0;
-            break;
-
-        default: // Valid case when called just after system unlocked - do not initialize the union
-            break;
-    }
-}
-
-
 /** \brief This function brings the user to the still lights menu and returns a selection
  *
  *  \return: pt_Menu->u8OptionOffset and pt_Menu->u8Selection are set 
@@ -1303,8 +1233,8 @@ void v_AppStillsLights_GradientMenu(LiquidCrystal_I2C  j_Lcd,       // [I, ] LCD
  */
 void v_AppStillsLights_Main_TLU(LiquidCrystal_I2C    j_Lcd,          // [I, ] LCD    Object
                                 Keypad               j_Keypad,       // [I, ] Keypad Object
-                                CRGB               * pat_Leds,       // [I, ] LED struct array
-                                T_LedStrip         * pt_LedStrip,    // [I, ] LED strip struct
+                                CRGB               * pat_Leds,       // [ ,O] LED struct array
+                                T_LedStrip         * pt_LedStrip,    // [I,O] LED strip struct
                                 uint8                u8Selection)    // [I, ] Stills menu selection
 {    
     switch (u8Selection)
@@ -1365,8 +1295,8 @@ void v_AppStillsLights_Main_TLU(LiquidCrystal_I2C    j_Lcd,          // [I, ] LC
  */
 void v_AppStillsLights_Gradient_TLU(LiquidCrystal_I2C   j_Lcd,          // [I, ] LCD    Object
                                     Keypad              j_Keypad,       // [I, ] Keypad Object
-                                    CRGB              * pat_Leds,       // [I, ] LED struct array
-                                    T_LedStrip        * pt_LedStrip,    // [I, ] LED strip struct
+                                    CRGB              * pat_Leds,       // [ ,O] LED struct array
+                                    T_LedStrip        * pt_LedStrip,    // [I,O] LED strip struct
                                     uint8               u8Selection)    // [I, ] Gradient menu selection
 {   
     if ((e_GradientLightsMenuUnd != u8Selection) && (e_MaxGradientLightsMenu >= u8Selection))
@@ -1392,70 +1322,140 @@ void v_AppStillsLights_Gradient_TLU(LiquidCrystal_I2C   j_Lcd,          // [I, ]
 }
 
 
-/** \brief  This function finds color of specified LED in current strip
+/** \brief This function resets all LED strip data to "undefined"
  *
- *  \return pt_Color
+ *  \return: pt_Menu->u8OptionOffset and pt_Menu->u8Selection are set 
  */
-void v_AppStillLights_GetLedColor  (T_LedStrip    * pt_Setpoint,    // [I, ] LED strip in which to find LED color
-                                    T_Color       * pt_Color,       // [ ,O] LED color data
-                                    uint16          u16CurrentLed)  // [I, ] Current LED number
+void v_AppStillLights_LedStrip_Reset(T_LedStrip * pt_LedStrip) // [I,O] LED strip struct
 {
-    bool        bGradientDisplay    = false;
-    bool        bCheckpointStyle    = (e_StyleEqualCheckpoints       == pt_Setpoint->e_Style);
-                bCheckpointStyle   |= (e_StyleUnequalCheckpoints     == pt_Setpoint->e_Style);
-                bCheckpointStyle   |= (e_StylePatternedCheckpoints   == pt_Setpoint->e_Style);
-    uint16      u16SumLeds          = 0,
-                u16StartLeds        = 0,
-                u16EndLeds          = 0;
-    uint8       u8NumberSections    = pt_Setpoint->t_SectionData.u8NumPatternedSections; // Default to displaying number of patterned sections
-    U_Section * pu_Section, 
-              * pu_PrevSection;
+    pt_LedStrip->bDefined   = false;
+    pt_LedStrip->bDisplayed = false;
 
-    /* Find number of sections in unequal sect LED strip */
-    if ((e_StyleUnequalSections     == pt_Setpoint->e_Style) ||
-        (e_StyleUnequalCheckpoints  == pt_Setpoint->e_Style) )
-    { // If unequal sections/checkpoints are selected, set number of sections to number unique sections
-        u8NumberSections = pt_Setpoint->t_SectionData.u8NumUniqueSections;
-    }
-
-    // Defaults for equal sections
-    pt_Setpoint->t_SectionData.u8SectionNumber  = (uint8 ) ( u16CurrentLed  
-                                                / (uint16)   pt_Setpoint->t_SectionData.u8NumLeds);
-    u16StartLeds                                = (uint16) ( pt_Setpoint->t_SectionData.u8NumLeds *  
-                                                             pt_Setpoint->t_SectionData.u8SectionNumber);
-    u16EndLeds                                  = (uint16) ( pt_Setpoint->t_SectionData.u8NumLeds * 
-                                                            (pt_Setpoint->t_SectionData.u8SectionNumber + 1));
-
-    if (bCheckpointStyle)
-    { // Defaults for equal checkpoints
-        pt_Setpoint->t_SectionData.u8SectionNumber += 1; // Checkpoint number is one higher
-
-        if (0 != pt_Setpoint->t_SectionData.u8SectionNumber)
-        { // Gradient display is active
-            bGradientDisplay    = true;
-            u16StartLeds        = (uint16)  pt_Setpoint->t_SectionData.u8NumLeds
-                                * (uint16) (pt_Setpoint->t_SectionData.u8SectionNumber - 1);
-            u16EndLeds          = (uint16)  pt_Setpoint->t_SectionData.u8NumLeds
-                                * (uint16)  pt_Setpoint->t_SectionData.u8SectionNumber;
-        }
-    }
-
-    switch (pt_Setpoint->e_Style)
+    switch (pt_LedStrip->e_Style)
     {
         case e_StylePatternedSections:
         case e_StylePatternedCheckpoints:
 
-            if (0 < pt_Setpoint->u_Style.t_Pattern.au8Order[
-                    pt_Setpoint->t_SectionData.u8SectionNumber])
+            /// \todo - refactor to at_Section
+            for (size_t i = 0; i < MAX_UNIQUE_SECTIONS; i++)
+            { // Reset section data
+                pt_LedStrip->u_Style.t_Pattern.u_Section[i].t_Color.bDefined = false;
+                pt_LedStrip->u_Style.t_Pattern.u_Section[i].t_Color.u8Red    = 0;
+                pt_LedStrip->u_Style.t_Pattern.u_Section[i].t_Color.u8Green  = 0;
+                pt_LedStrip->u_Style.t_Pattern.u_Section[i].t_Color.u8Blue   = 0;
+            }
+
+            for (size_t j = 0; j < MAX_PATTERNED_SECTIONS; j++)
+            { // Reset order
+                pt_LedStrip->u_Style.t_Pattern.au8Order[j] = 0;
+            }
+            break;
+
+        case e_StyleEqualSections:
+        case e_StyleEqualCheckpoints:
+
+            for (size_t i = 0; i < MAX_PATTERNED_SECTIONS; i++)
+            { // Reset section data
+                pt_LedStrip->u_Style.t_Equal.u_Section[i].t_Color.bDefined = false;
+                pt_LedStrip->u_Style.t_Equal.u_Section[i].t_Color.u8Red    = 0;
+                pt_LedStrip->u_Style.t_Equal.u_Section[i].t_Color.u8Green  = 0;
+                pt_LedStrip->u_Style.t_Equal.u_Section[i].t_Color.u8Blue   = 0;
+            }
+            break;
+
+        case e_StyleUnequalSections:
+        case e_StyleUnequalCheckpoints:
+
+            for (size_t i = 0; i < MAX_UNIQUE_SECTIONS; i++)
+            { // Reset section data
+                pt_LedStrip->u_Style.t_Unequal.u_Section[i].t_Color.bDefined = false;
+                pt_LedStrip->u_Style.t_Unequal.u_Section[i].t_Color.u8Red    = 0;
+                pt_LedStrip->u_Style.t_Unequal.u_Section[i].t_Color.u8Green  = 0;
+                pt_LedStrip->u_Style.t_Unequal.u_Section[i].t_Color.u8Blue   = 0;
+            }
+
+            for (size_t j = 0; j < MAX_UNIQUE_SECTIONS; j++)
+            { // Reset order
+                pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[j] = 0;
+            }
+            break;
+        
+        case e_StyleRainbow:
+            // Reset direction and length of rainbow
+            pt_LedStrip->u_Style.t_Rainbow.u8Direction      = e_Direction_None;
+            pt_LedStrip->u_Style.t_Rainbow.u8Length_LEDs    = 0;
+            break;
+
+        default: // Valid case when called just after system unlocked - do not initialize the union
+            break;
+    }
+}
+
+
+/** \brief  This function finds color of specified LED in current strip
+ *
+ *  \return pt_Color
+ */
+void v_AppStillLights_GetLedColor  (T_LedStrip    * pt_LedStrip,    // [I, ] LED strip in which to find LED color
+                                    T_Color       * pt_Color,       // [ ,O] LED color data
+                                    uint16          u16CurrentLed)  // [I, ] Current LED number
+{
+    bool        bGradientDisplay    = false;
+    bool        bCheckpointStyle    = (e_StyleEqualCheckpoints       == pt_LedStrip->e_Style);
+                bCheckpointStyle   |= (e_StyleUnequalCheckpoints     == pt_LedStrip->e_Style);
+                bCheckpointStyle   |= (e_StylePatternedCheckpoints   == pt_LedStrip->e_Style);
+    uint16      u16SumLeds          = 0,
+                u16StartLeds        = 0,
+                u16EndLeds          = 0;
+    uint8       u8NumberSections    = pt_LedStrip->t_SectionData.u8NumPatternedSections; // Default to displaying number of patterned sections
+    U_Section * pu_Section, 
+              * pu_PrevSection;
+
+    /* Find number of sections in unequal sect LED strip */
+    if ((e_StyleUnequalSections     == pt_LedStrip->e_Style) ||
+        (e_StyleUnequalCheckpoints  == pt_LedStrip->e_Style) )
+    { // If unequal sections/checkpoints are selected, set number of sections to number unique sections
+        u8NumberSections = pt_LedStrip->t_SectionData.u8NumUniqueSections;
+    }
+
+    // Defaults for equal sections
+    pt_LedStrip->t_SectionData.u8SectionNumber  = (uint8 ) ( u16CurrentLed  
+                                                / (uint16)   pt_LedStrip->t_SectionData.u8NumLeds);
+    u16StartLeds                                = (uint16) ( pt_LedStrip->t_SectionData.u8NumLeds *  
+                                                             pt_LedStrip->t_SectionData.u8SectionNumber);
+    u16EndLeds                                  = (uint16) ( pt_LedStrip->t_SectionData.u8NumLeds * 
+                                                            (pt_LedStrip->t_SectionData.u8SectionNumber + 1));
+
+    if (bCheckpointStyle)
+    { // Defaults for equal checkpoints
+        pt_LedStrip->t_SectionData.u8SectionNumber += 1; // Checkpoint number is one higher
+
+        if (0 != pt_LedStrip->t_SectionData.u8SectionNumber)
+        { // Gradient display is active
+            bGradientDisplay    = true;
+            u16StartLeds        = (uint16)  pt_LedStrip->t_SectionData.u8NumLeds
+                                * (uint16) (pt_LedStrip->t_SectionData.u8SectionNumber - 1);
+            u16EndLeds          = (uint16)  pt_LedStrip->t_SectionData.u8NumLeds
+                                * (uint16)  pt_LedStrip->t_SectionData.u8SectionNumber;
+        }
+    }
+
+    switch (pt_LedStrip->e_Style)
+    {
+        case e_StylePatternedSections:
+        case e_StylePatternedCheckpoints:
+
+            if (0 < pt_LedStrip->u_Style.t_Pattern.au8Order[
+                    pt_LedStrip->t_SectionData.u8SectionNumber])
             { // Set pu_Section to next section in pattern order
-                                        pu_Section      =  &pt_Setpoint->u_Style.t_Pattern.u_Section[
-                                                            pt_Setpoint->u_Style.t_Pattern.au8Order  [
-                                                            pt_Setpoint->t_SectionData.u8SectionNumber] - 1];
+                                        pu_Section      =  &pt_LedStrip->u_Style.t_Pattern.u_Section[
+                                                            pt_LedStrip->u_Style.t_Pattern.au8Order  [
+                                                            pt_LedStrip->t_SectionData.u8SectionNumber] - 1];
 
                 // Set pt_PrevColor to prior section in pattern order (if not the first one)
-                if (bGradientDisplay)   pu_PrevSection  =  &pt_Setpoint->u_Style.t_Pattern.u_Section[
-                                                            pt_Setpoint->u_Style.t_Pattern.au8Order  [
-                                                            pt_Setpoint->t_SectionData.u8SectionNumber - 1] - 1];
+                if (bGradientDisplay)   pu_PrevSection  =  &pt_LedStrip->u_Style.t_Pattern.u_Section[
+                                                            pt_LedStrip->u_Style.t_Pattern.au8Order  [
+                                                            pt_LedStrip->t_SectionData.u8SectionNumber - 1] - 1];
             }
 #ifdef PRINT_ERROR_STATEMENTS
             else
@@ -1467,39 +1467,39 @@ void v_AppStillLights_GetLedColor  (T_LedStrip    * pt_Setpoint,    // [I, ] LED
 
         case e_StyleEqualSections:
         case e_StyleEqualCheckpoints: // Set pu_Section to next section in array order
-                                    pu_Section      = &pt_Setpoint->u_Style.t_Equal  .u_Section[
-                                                       pt_Setpoint->t_SectionData.u8SectionNumber];
+                                    pu_Section      = &pt_LedStrip->u_Style.t_Equal  .u_Section[
+                                                       pt_LedStrip->t_SectionData.u8SectionNumber];
 
             // Set pt_PrevColor to prior section in pattern order (if not the first one)
-            if (bGradientDisplay)   pu_PrevSection  = &pt_Setpoint->u_Style.t_Equal  .u_Section[
-                                                       pt_Setpoint->t_SectionData.u8SectionNumber - 1];
+            if (bGradientDisplay)   pu_PrevSection  = &pt_LedStrip->u_Style.t_Equal  .u_Section[
+                                                       pt_LedStrip->t_SectionData.u8SectionNumber - 1];
             break;
 
         case e_StyleUnequalSections:
         case e_StyleUnequalCheckpoints:
 
-            for (size_t k; k < pt_Setpoint->t_SectionData.u8NumUniqueSections; k++)
+            for (size_t k; k < pt_LedStrip->t_SectionData.u8NumUniqueSections; k++)
             { // Find current section
-                u16SumLeds +=   pt_Setpoint->u_Style.t_Unequal.au8NumberOfLeds[k];
+                u16SumLeds +=   pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[k];
 
                 if (u16SumLeds >= u16CurrentLed)
                 { // Sum is greater than or equal to current LED, this is the current section
-                    pt_Setpoint->t_SectionData.u8SectionNumber = k;
+                    pt_LedStrip->t_SectionData.u8SectionNumber = k;
 
                     // Find the start LEDs (sum minus current section) and end LEDs (equal to sum)
-                    u16StartLeds    = u16SumLeds - pt_Setpoint->u_Style.t_Unequal.au8NumberOfLeds[k];
+                    u16StartLeds    = u16SumLeds - pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[k];
                     u16EndLeds      = u16SumLeds;
                     break;   
                 }
             }
 
             // Set pu_Section to next section in array order
-                                    pu_Section      = &pt_Setpoint->u_Style.t_Unequal.u_Section[
-                                                       pt_Setpoint->t_SectionData.u8SectionNumber];
+                                    pu_Section      = &pt_LedStrip->u_Style.t_Unequal.u_Section[
+                                                       pt_LedStrip->t_SectionData.u8SectionNumber];
 
             // Set pt_PrevColor to prior section in pattern order (if not the first one)
-            if (bGradientDisplay)   pu_PrevSection  = &pt_Setpoint->u_Style.t_Unequal.u_Section[
-                                                       pt_Setpoint->t_SectionData.u8SectionNumber - 1];
+            if (bGradientDisplay)   pu_PrevSection  = &pt_LedStrip->u_Style.t_Unequal.u_Section[
+                                                       pt_LedStrip->t_SectionData.u8SectionNumber - 1];
             break;
 #ifdef PRINT_ERROR_STATEMENTS
         default: // Invalid case
