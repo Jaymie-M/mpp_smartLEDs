@@ -1156,7 +1156,9 @@ void v_AppScreen_MenuSelection_TLU(LiquidCrystal_I2C    j_Lcd,      // [I, ] Lcd
  * \brief  This function displays a screen requesting user to press zero if done or press another key if desiring to re-enter colors
  * \return none
  */
-void v_AppScreen_PressZeroIfDone(LiquidCrystal_I2C  j_Lcd)  // [I, ] Lcd object
+void v_AppScreen_PressZeroIfDone(LiquidCrystal_I2C  j_Lcd,          // [I, ] Lcd object
+                                 const charn      * pc_ThirdLine,   // [I, ] Third  line
+                                 const charn      * pc_FourthLine)  // [I, ] Fourth line
 {
     // Clear LCD and update time
     j_Lcd.clear();
@@ -1168,34 +1170,11 @@ void v_AppScreen_PressZeroIfDone(LiquidCrystal_I2C  j_Lcd)  // [I, ] Lcd object
 
     // Print third line (second line skipped)
     j_Lcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_3RD_LINE_Y);
-    j_Lcd.print(F("Press any other key"));
+    j_Lcd.print(String(pc_ThirdLine));
 
     // Print fourth line
     j_Lcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_4TH_LINE_Y);
-    j_Lcd.print(F("to pick more colors."));
-}
-
-
-/**
- * \brief  This function displays a screen requesting user to press pound (#) when done to exit the given screen
- * \return none
- */
-void v_AppScreen_PressPoundWhenDone(LiquidCrystal_I2C   j_Lcd,      // [I, ] Lcd object
-                                    const charn       * pc_Title)   // [I, ] Screen title
-{
-    // Clear LCD and reset cursor to top left (title position)
-    j_Lcd.clear();
-    j_Lcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_TITLE_Y);
-
-    // Print title
-    j_Lcd.print(String(pc_Title));
-
-    // Update clock
-    v_AppClock_UpdateTimeLcdDisplay(j_Lcd);
-
-    // Print third line
-    j_Lcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_3RD_LINE_Y);
-    j_Lcd.print(F("Press # when done!"));
+    j_Lcd.print(String(pc_FourthLine));
 }
 
 

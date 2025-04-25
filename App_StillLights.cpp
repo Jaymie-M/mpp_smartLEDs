@@ -407,7 +407,10 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
 
                     FastLED.show(); // Show LEDs
 
-                    v_AppScreen_PressZeroIfDone(j_Lcd); // Request operator input to continue
+                    // Request operator input to continue
+                    v_AppScreen_PressZeroIfDone(j_Lcd, 
+                                                "Press any other key", 
+                                                "to pick more colors.");
 
                     // Set displayed flag true to avoid coming back in here
                     pt_LedStrip->bDisplayed = true; 
@@ -835,7 +838,8 @@ static void _v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
 
             if (sbReprintPressPound)
             { // Display starting screen for pattern order for 2 seconds
-                v_AppScreen_PressPoundWhenDone(j_Lcd, "PAT ORDER:"); /// \todo - just use v_AppScreen_TitleAndText
+                v_AppScreen_TitleAndText(j_Lcd, "PAT ORDER:",           "", 
+                                                "Press # when done!",   "");
 
                 sbReprintPressPound = false; 					// Clear, so reprint only occurs once
                 v_AppClock_TimeDelay_Reset(&Td_PatternOrder); 	// Reset pattern order timer
@@ -1130,7 +1134,10 @@ static void _v_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,
 
                 FastLED.show(); // Show LEDs
 
-                v_AppScreen_PressZeroIfDone(j_Lcd); // Request operator input to continue
+                // Request operator input to continue
+                v_AppScreen_PressZeroIfDone(j_Lcd, 
+                                            "Press any other key", 
+                                            "to pick more colors.");
 
                 // Set displayed flag true to avoid coming back in here
                 pt_LedStrip->bDisplayed = true;

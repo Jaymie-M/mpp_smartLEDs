@@ -119,7 +119,7 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
             {
                 pt_AnimatedLeds->e_FadeAnimationStep = e_FadeAnimationLoop;
 
-                v_AppScreen_PressZeroIfDone(j_Lcd); // Request operator input to continue
+                v_AppScreen_PressZeroIfDone(j_Lcd, "", ""); // Request operator input to continue
             }
             break;
 

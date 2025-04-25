@@ -239,8 +239,7 @@ void    v_AppScreen_MenuSelection_SelectionsReset(                              
 void    v_AppScreen_MenuSelection_TLU            (LiquidCrystal_I2C     j_Lcd,      Keypad          j_Keypad,       T_MenuSelection   * pt_Menu                          );
 
 // Miscellaneous screens  
-void    v_AppScreen_PressZeroIfDone              (LiquidCrystal_I2C     j_Lcd                                                                                            );
-void    v_AppScreen_PressPoundWhenDone           (LiquidCrystal_I2C     j_Lcd,      const charn   * pc_Title                                                             );
+void    v_AppScreen_PressZeroIfDone              (LiquidCrystal_I2C     j_Lcd,      const charn   * pc_ThirdLine,   const charn       * pc_FourthLine                    );
 void    v_AppScreen_TitleAndText                 (LiquidCrystal_I2C     j_Lcd,      const charn   * pc_Title,       const charn       * pc_SecondLine, 
                                                                                     const charn   * pc_ThirdLine,   const charn       * pc_FourthLine                    );
 

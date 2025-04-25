@@ -27,11 +27,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_Main.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_AnimatedLights.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_Main.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_AnimatedLights.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_Main.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_AnimatedLights.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -66,6 +66,74 @@
    "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\mpp_smartLEDs.ino.cpp.o"
   ],
   "file": "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\mpp_smartLEDs.ino.cpp"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_StillLights.cpp",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_StillLights.cpp.o"
+  ],
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_StillLights.cpp"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_Screen.cpp",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_Screen.cpp.o"
+  ],
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_Screen.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -163,45 +231,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_StillLights.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_Main.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_StillLights.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_Main.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_StillLights.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_AnimatedLights.cpp",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_AnimatedLights.cpp.o"
-  ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_AnimatedLights.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_Main.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -265,11 +299,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_Screen.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src\\Key.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_Screen.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\Keypad\\Key.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\App_Screen.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src\\Key.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -304,40 +338,6 @@
    "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\Keypad\\Keypad.cpp.o"
   ],
   "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src\\Keypad.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src\\Key.cpp",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\Keypad\\Key.cpp.o"
-  ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src\\Key.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -568,40 +568,6 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\FastLED.cpp",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\FastLED.cpp.o"
-  ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\FastLED.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
    "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\colorpalettes.cpp",
    "-o",
    "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\colorpalettes.cpp.o"
@@ -704,79 +670,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\ref.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\FastLED.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fl\\ref.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\FastLED.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\ref.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\json.cpp",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fl\\json.cpp.o"
-  ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\json.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\cled_controller.cpp",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\cled_controller.cpp.o"
-  ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\cled_controller.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\FastLED.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -840,11 +738,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\five_bit_hd_gamma.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\json.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\five_bit_hd_gamma.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fl\\json.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\five_bit_hd_gamma.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\json.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -874,113 +772,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\stub_main.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\ref.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fl\\stub_main.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fl\\ref.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\stub_main.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\screenmap.cpp",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fl\\screenmap.cpp.o"
-  ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\screenmap.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\crgb.cpp",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\crgb.cpp.o"
-  ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\crgb.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\str.cpp",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fl\\str.cpp.o"
-  ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\str.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\ref.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1044,6 +840,74 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\str.cpp",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fl\\str.cpp.o"
+  ],
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\str.cpp"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\stub_main.cpp",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fl\\stub_main.cpp.o"
+  ],
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\stub_main.cpp"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
    "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\xmap.cpp",
    "-o",
    "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fl\\xmap.cpp.o"
@@ -1078,11 +942,79 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\xymap.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\crgb.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fl\\xymap.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\crgb.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\xymap.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\crgb.cpp"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\screenmap.cpp",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fl\\screenmap.cpp.o"
+  ],
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\screenmap.cpp"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\five_bit_hd_gamma.cpp",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\five_bit_hd_gamma.cpp.o"
+  ],
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\five_bit_hd_gamma.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1146,11 +1078,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\time.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\cled_controller.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fx\\time.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\cled_controller.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\time.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\cled_controller.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1180,11 +1112,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\video\\frame_tracker.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\xymap.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fx\\video\\frame_tracker.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fl\\xymap.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\video\\frame_tracker.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\xymap.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1248,11 +1180,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\fx_engine.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\video\\frame_tracker.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fx\\fx_engine.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fx\\video\\frame_tracker.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\fx_engine.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\video\\frame_tracker.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1282,11 +1214,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\video\\frame_interpolator.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\time.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fx\\video\\frame_interpolator.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fx\\time.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\video\\frame_interpolator.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\time.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1350,11 +1282,45 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\video.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\video\\frame_interpolator.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fx\\video.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fx\\video\\frame_interpolator.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\video.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\video\\frame_interpolator.cpp"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\fx_engine.cpp",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fx\\fx_engine.cpp.o"
+  ],
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\fx_engine.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1389,74 +1355,6 @@
    "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fx\\video\\video_impl.cpp.o"
   ],
   "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\video\\video_impl.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\hsv2rgb.cpp",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\hsv2rgb.cpp.o"
-  ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\hsv2rgb.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\2d\\scale_up.cpp",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fx\\2d\\scale_up.cpp.o"
-  ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\2d\\scale_up.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1554,11 +1452,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\esp\\32\\clockless_i2s_esp32s3.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\2d\\scale_up.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\esp\\32\\clockless_i2s_esp32s3.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fx\\2d\\scale_up.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\esp\\32\\clockless_i2s_esp32s3.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\2d\\scale_up.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1588,11 +1486,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\avr\\avr_millis_timer_source.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\video.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\avr\\avr_millis_timer_source.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\fx\\video.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\avr\\avr_millis_timer_source.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\video.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1622,11 +1520,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\lib8tion.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\hsv2rgb.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\lib8tion.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\hsv2rgb.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\lib8tion.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\hsv2rgb.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1690,6 +1588,74 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\esp\\32\\clockless_i2s_esp32s3.cpp",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\esp\\32\\clockless_i2s_esp32s3.cpp.o"
+  ],
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\esp\\32\\clockless_i2s_esp32s3.cpp"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\lib8tion.cpp",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\lib8tion.cpp.o"
+  ],
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\lib8tion.cpp"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
    "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\esp\\32\\rmt_4\\idf4_rmt.cpp",
    "-o",
    "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\esp\\32\\rmt_4\\idf4_rmt.cpp.o"
@@ -1724,11 +1690,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\esp\\32\\rmt_4\\idf4_rmt_impl.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\avr\\avr_millis_timer_source.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\esp\\32\\rmt_4\\idf4_rmt_impl.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\avr\\avr_millis_timer_source.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\esp\\32\\rmt_4\\idf4_rmt_impl.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\avr\\avr_millis_timer_source.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1792,11 +1758,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\noise.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\esp\\32\\spi_ws2812\\strip_spi.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\noise.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\esp\\32\\spi_ws2812\\strip_spi.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\noise.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\esp\\32\\spi_ws2812\\strip_spi.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1860,11 +1826,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\esp\\32\\spi_ws2812\\strip_spi.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\esp\\32\\rmt_4\\idf4_rmt_impl.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\esp\\32\\spi_ws2812\\strip_spi.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\esp\\32\\rmt_4\\idf4_rmt_impl.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\esp\\32\\spi_ws2812\\strip_spi.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\esp\\32\\rmt_4\\idf4_rmt_impl.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1894,11 +1860,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\active_strip_data.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\noise.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\wasm\\active_strip_data.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\noise.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\active_strip_data.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\noise.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1962,11 +1928,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\compiler\\Arduino.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\active_strip_data.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\wasm\\compiler\\Arduino.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\wasm\\active_strip_data.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\compiler\\Arduino.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\active_strip_data.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -2030,11 +1996,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\button.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\fs_wasm.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\wasm\\ui\\button.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\wasm\\fs_wasm.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\button.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\fs_wasm.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -2064,11 +2030,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\fs_wasm.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\compiler\\Arduino.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\wasm\\fs_wasm.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\wasm\\compiler\\Arduino.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\fs_wasm.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\compiler\\Arduino.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -2132,79 +2098,45 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\button.cpp",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\wasm\\ui\\button.cpp.o"
+  ],
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\button.cpp"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
    "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\timer.cpp",
    "-o",
    "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\wasm\\timer.cpp.o"
   ],
   "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\timer.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\slider.cpp",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\wasm\\ui\\slider.cpp.o"
-  ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\slider.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\title.cpp",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\wasm\\ui\\title.cpp.o"
-  ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\title.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -2302,11 +2234,79 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\ui_number_field.cpp",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\wasm\\ui\\ui_number_field.cpp.o"
+  ],
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\ui_number_field.cpp"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
    "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\ui_internal.cpp",
    "-o",
    "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\wasm\\ui\\ui_internal.cpp.o"
   ],
   "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\ui_internal.cpp"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms.cpp",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms.cpp.o"
+  ],
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -2370,11 +2370,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\ui_number_field.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\slider.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\wasm\\ui\\ui_number_field.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\wasm\\ui\\slider.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\ui_number_field.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\slider.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -2404,11 +2404,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\title.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\platforms\\wasm\\ui\\title.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\wasm\\ui\\title.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -2440,6 +2440,68 @@
    "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\third_party\\espressif\\led_strip\\src\\led_strip_api.c.o"
   ],
   "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\third_party\\espressif\\led_strip\\src\\led_strip_api.c"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu11",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-MMD",
+   "-flto",
+   "-fno-fat-lto-objects",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\third_party\\espressif\\led_strip\\src\\led_strip_rmt_dev.c",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\third_party\\espressif\\led_strip\\src\\led_strip_rmt_dev.c.o"
+  ],
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\third_party\\espressif\\led_strip\\src\\led_strip_rmt_dev.c"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu11",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-MMD",
+   "-flto",
+   "-fno-fat-lto-objects",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\third_party\\espressif\\led_strip\\src\\led_strip_rmt_encoder.c",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\third_party\\espressif\\led_strip\\src\\led_strip_rmt_encoder.c.o"
+  ],
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\third_party\\espressif\\led_strip\\src\\led_strip_rmt_encoder.c"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -2500,73 +2562,45 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\third_party\\espressif\\led_strip\\src\\led_strip_rmt_encoder.c",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\third_party\\espressif\\led_strip\\src\\led_strip_rmt_encoder.c.o"
-  ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\third_party\\espressif\\led_strip\\src\\led_strip_rmt_encoder.c"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu11",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-MMD",
-   "-flto",
-   "-fno-fat-lto-objects",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\third_party\\espressif\\led_strip\\src\\led_strip_rmt_dev.c",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\third_party\\espressif\\led_strip\\src\\led_strip_rmt_dev.c.o"
-  ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\third_party\\espressif\\led_strip\\src\\led_strip_rmt_dev.c"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu11",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-MMD",
-   "-flto",
-   "-fno-fat-lto-objects",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
    "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\third_party\\espressif\\led_strip\\src\\led_strip_spi_dev.c",
    "-o",
    "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\third_party\\espressif\\led_strip\\src\\led_strip_spi_dev.c.o"
   ],
   "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\third_party\\espressif\\led_strip\\src\\led_strip_spi_dev.c"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\power_mgt.cpp",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\power_mgt.cpp.o"
+  ],
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\power_mgt.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -2664,11 +2698,11 @@
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
    "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\power_mgt.cpp",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\rgbw.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\power_mgt.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\rgbw.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\power_mgt.cpp"
+  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\rgbw.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -2796,105 +2830,11 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-   "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\rgbw.cpp",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\libraries\\FastLED\\rgbw.cpp.o"
-  ],
-  "file": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\rgbw.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
    "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\HardwareSerial.cpp",
    "-o",
    "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\HardwareSerial.cpp.o"
   ],
   "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\HardwareSerial.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\HardwareSerial3.cpp",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\HardwareSerial3.cpp.o"
-  ],
-  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\HardwareSerial3.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\CDC.cpp",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\CDC.cpp.o"
-  ],
-  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\CDC.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -2950,11 +2890,41 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\IPAddress.cpp",
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\HardwareSerial1.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\IPAddress.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\HardwareSerial1.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\IPAddress.cpp"
+  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\HardwareSerial1.cpp"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\HardwareSerial3.cpp",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\HardwareSerial3.cpp.o"
+  ],
+  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\HardwareSerial3.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -3010,11 +2980,11 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\HardwareSerial1.cpp",
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\IPAddress.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\HardwareSerial1.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\IPAddress.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\HardwareSerial1.cpp"
+  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\IPAddress.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -3070,11 +3040,98 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\CDC.cpp",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\CDC.cpp.o"
+  ],
+  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\CDC.cpp"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
    "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\Print.cpp",
    "-o",
    "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\Print.cpp.o"
   ],
   "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\Print.cpp"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\Stream.cpp",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\Stream.cpp.o"
+  ],
+  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\Stream.cpp"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu11",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-MMD",
+   "-flto",
+   "-fno-fat-lto-objects",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\WInterrupts.c",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\WInterrupts.c.o"
+  ],
+  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\WInterrupts.c"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -3130,68 +3187,11 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\Stream.cpp",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\Stream.cpp.o"
-  ],
-  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\Stream.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
    "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\Tone.cpp",
    "-o",
    "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\Tone.cpp.o"
   ],
   "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\Tone.cpp"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu11",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-MMD",
-   "-flto",
-   "-fno-fat-lto-objects",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\WInterrupts.c",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\WInterrupts.c.o"
-  ],
-  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\WInterrupts.c"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -3247,11 +3247,11 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\WString.cpp",
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\abi.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\WString.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\abi.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\WString.cpp"
+  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\abi.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -3277,11 +3277,11 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\abi.cpp",
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\WString.cpp",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\abi.cpp.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\WString.cpp.o"
   ],
-  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\abi.cpp"
+  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\WString.cpp"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -3309,60 +3309,6 @@
    "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\hooks.c.o"
   ],
   "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\hooks.c"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu11",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-MMD",
-   "-flto",
-   "-fno-fat-lto-objects",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\wiring_analog.c",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\wiring_analog.c.o"
-  ],
-  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\wiring_analog.c"
- },
- {
-  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu11",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-MMD",
-   "-flto",
-   "-fno-fat-lto-objects",
-   "-mmcu=atmega2560",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_MEGA2560",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\wiring.c",
-   "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\wiring.c.o"
-  ],
-  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\wiring.c"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -3445,11 +3391,38 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\wiring_digital.c",
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\wiring.c",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\wiring_digital.c.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\wiring.c.o"
   ],
-  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\wiring_digital.c"
+  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\wiring.c"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu11",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-MMD",
+   "-flto",
+   "-fno-fat-lto-objects",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\wiring_analog.c",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\wiring_analog.c.o"
+  ],
+  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\wiring_analog.c"
  },
  {
   "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -3484,6 +3457,29 @@
    "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
    "-c",
    "-g",
+   "-x",
+   "assembler-with-cpp",
+   "-flto",
+   "-MMD",
+   "-mmcu=atmega2560",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_MEGA2560",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+   "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\wiring_pulse.S",
+   "-o",
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\wiring_pulse.S.o"
+  ],
+  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\wiring_pulse.S"
+ },
+ {
+  "directory": "C:\\Users\\jaymi\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
+   "-c",
+   "-g",
    "-Os",
    "-w",
    "-std=gnu11",
@@ -3511,10 +3507,14 @@
    "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
    "-c",
    "-g",
-   "-x",
-   "assembler-with-cpp",
-   "-flto",
+   "-Os",
+   "-w",
+   "-std=gnu11",
+   "-ffunction-sections",
+   "-fdata-sections",
    "-MMD",
+   "-flto",
+   "-fno-fat-lto-objects",
    "-mmcu=atmega2560",
    "-DF_CPU=16000000L",
    "-DARDUINO=10607",
@@ -3522,10 +3522,10 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
    "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\wiring_pulse.S",
+   "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\wiring_digital.c",
    "-o",
-   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\wiring_pulse.S.o"
+   "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\core\\wiring_digital.c.o"
   ],
-  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\wiring_pulse.S"
+  "file": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\wiring_digital.c"
  }
 ]
