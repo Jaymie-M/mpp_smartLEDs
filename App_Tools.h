@@ -203,13 +203,26 @@ typedef union
 
 
 /**
+ * \brief - Data for an LED strip section
+ */
+typedef struct
+{
+    uint8 u8NumLeds;
+    uint8 u8NumPatternedSections;
+    uint8 u8NumUniqueSections;
+    uint8 u8SectionNumber;
+
+} T_SectionData;
+
+
+/**
  * \brief - Data to define the patterned LED sections
  *          (Approx 90 bytes)
  */
 typedef struct
 {
-    U_Section   u_Section[MAX_UNIQUE_SECTIONS   ]; // Unique sections
-    uint8	    au8Order [MAX_PATTERNED_SECTIONS]; // Specifying order of actual sections
+    U_Section       u_Section[MAX_UNIQUE_SECTIONS   ];      // Section definitions
+    uint8	        au8Order [MAX_PATTERNED_SECTIONS];      // Specifying order of actual sections
 
 } T_PatternedSections;
 
@@ -220,7 +233,7 @@ typedef struct
  */
 typedef struct
 {
-    U_Section   u_Section[MAX_PATTERNED_SECTIONS];
+    U_Section       u_Section[MAX_PATTERNED_SECTIONS];      // Section definitions
 
 } T_EqualSections;
 
@@ -231,8 +244,8 @@ typedef struct
  */
 typedef struct
 {
-    U_Section   u_Section      [MAX_UNIQUE_SECTIONS];
-    uint8       au8NumberOfLeds[MAX_UNIQUE_SECTIONS];
+    U_Section       u_Section      [MAX_UNIQUE_SECTIONS];   // Section definitions
+    uint8           au8NumberOfLeds[MAX_UNIQUE_SECTIONS];
 
 } T_UnequalSections;
 
@@ -271,8 +284,9 @@ typedef struct
 {
     bool            bDefined;
     bool            bDisplayed;
-    E_SectionStyle  e_Style; // Section style definition
-    U_SectionStyle	u_Style; // Section definitions dependent on style
+    E_SectionStyle  e_Style;        // Section style definition
+    U_SectionStyle	u_Style;        // Section definitions dependent on style
+    T_SectionData   t_SectionData;  // Data about number of and active sections
 
 } T_LedStrip;
 
