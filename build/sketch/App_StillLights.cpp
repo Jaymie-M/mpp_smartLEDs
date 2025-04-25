@@ -545,126 +545,16 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
             {
                 if (!pt_LedStrip->bDisplayed)
                 { // Display LEDs
-                    uint8 u8NumberSections = pt_LedStrip->t_SectionData.u8NumPatternedSections; // Default to displaying number of patterned sections
+                    T_Color t_Color = T_COLOR_CLEAR();
 
-                    if ((e_StyleUnequalSections     == pt_LedStrip->e_Style) || 
-                        (e_StyleUnequalCheckpoints  == pt_LedStrip->e_Style) )
-                    { // If unequal sections/checkpoints are selected, set number of sections to number unique sections
-                        u8NumberSections = pt_LedStrip->t_SectionData.u8NumUniqueSections;
-                    } 
+                    for (size_t i = 0; i < NUM_LEDS; i++)
+                    { // Get current LED color
+                        _v_AppStillLights_GetLedColor_SectsChkpts(pt_LedStrip, &t_Color, i);
 
-                    for (size_t i = 0; i < u8NumberSections; i++)
-                    { // Current section (i)
-
-                        // Defaults for equal sections
-                        u16StartLeds = pt_LedStrip->t_SectionData.u8NumLeds *  i;
-                        u16EndLeds   = pt_LedStrip->t_SectionData.u8NumLeds * (i + 1);
-
-                        // Re-define bGradient display based on 'i' as section number
-                        bGradientDisplay = bCheckpointStyle && (0 != i);
-
-                        if (bGradientDisplay)
-                        { // Subtract 1 from section number in calculation
-                            u16StartLeds = pt_LedStrip->t_SectionData.u8NumLeds * (i - 1);
-                            u16EndLeds   = pt_LedStrip->t_SectionData.u8NumLeds *  i;
-                        }
-
-                        switch (pt_LedStrip->e_Style)
-                        {
-                            case e_StylePatternedSections:
-                            case e_StylePatternedCheckpoints:
-
-                                if (0 < pt_LedStrip->u_Style.t_Pattern.au8Order[i])
-                                { // Set pu_Section to next section in pattern order
-                                                            pu_Section      =  &pt_LedStrip->u_Style.t_Pattern.u_Section[
-                                                                                pt_LedStrip->u_Style.t_Pattern.au8Order[i] - 1];
-
-                                    // Set pt_PrevColor to prior section in pattern order (if not the first one)
-                                    if (bGradientDisplay)   pu_PrevSection  =  &pt_LedStrip->u_Style.t_Pattern.u_Section[
-                                                                                pt_LedStrip->u_Style.t_Pattern.au8Order[i - 1] - 1];
-                                }
-#ifdef PRINT_ERROR_STATEMENTS
-                                else
-                                {
-                                    Serial.println("MISA WANNA BE FRIENDS!"); // Error print statements
-                                }
-#endif
-                                break;
-
-                            case e_StyleEqualSections:
-                            case e_StyleEqualCheckpoints: // Set pt_Color to next section in array order
-                                                        pu_Section      = &pt_LedStrip->u_Style.t_Equal  .u_Section[i];
-
-                                // Set pt_PrevColor to prior section in pattern order (if not the first one)
-                                if (bGradientDisplay)   pu_PrevSection  = &pt_LedStrip->u_Style.t_Equal  .u_Section[i - 1];
-                                break;
-
-                            case e_StyleUnequalSections:
-                            case e_StyleUnequalCheckpoints: // Set pt_Color to next section in array order
-                                                        pu_Section      = &pt_LedStrip->u_Style.t_Unequal.u_Section[i];
-
-                                    // Set pt_PrevColor to prior section in pattern order (if not the first one)
-                                if (bGradientDisplay)   pu_PrevSection  = &pt_LedStrip->u_Style.t_Unequal.u_Section[i - 1];
-
-
-                                u16SumLeds = 0; // Default to zero
-
-                                for (size_t k = 0; k < i; k++)
-                                { // Calculate LED sum
-                                    u16SumLeds += pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[k];
-                                }
-                                
-                                u16StartLeds = u16SumLeds;
-                                u16EndLeds   = u16SumLeds + pt_LedStrip->u_Style.t_Unequal.au8NumberOfLeds[i];
-
-                                break;
-#ifdef PRINT_ERROR_STATEMENTS
-                            default: // Invalid case
-                                Serial.println("I'M JUST KEN!"); // Error print statement
-                                break;
-#endif
-                        }
-
-                        if (NULL != pu_Section)
-                        {
-                            if (bGradientDisplay)
-                            { // Display gradient
-                                if (NULL != pu_PrevSection)
-                                {
-                                    for (size_t j = u16StartLeds; j < u16EndLeds; j++)
-                                    { // Set RGB values to struct
-                                        // Calculate distance between start and end point
-                                        float32 f32Dist_100Percent = (float32) (j          - u16StartLeds)
-                                                                   / (float32) (u16EndLeds - u16StartLeds);
-                
-                                                            /* Red   */
-                                        pat_Leds[j].setRGB ((uint8)   (f32Dist_100Percent *
-                                                            (float32) (pu_Section    ->t_Color.u8Red     - pu_PrevSection->t_Color.u8Red  )) +
-                                                                       pu_PrevSection->t_Color.u8Red,
-                                                            /* Green */
-                                                            (uint8)   (f32Dist_100Percent *
-                                                            (float32) (pu_Section    ->t_Color.u8Green   - pu_PrevSection->t_Color.u8Green)) +
-                                                                       pu_PrevSection->t_Color.u8Green,
-                                                            /* Blue  */
-                                                            (uint8)   (f32Dist_100Percent *
-                                                            (float32) (pu_Section    ->t_Color.u8Blue    - pu_PrevSection->t_Color.u8Blue )) +
-                                                                       pu_PrevSection->t_Color.u8Blue
-                                                        );
-                                    }
-                                }
-                            }
-                            else if (!bCheckpointStyle)
-                            { // Display sections
-                                for (size_t j = u16StartLeds; j < u16EndLeds; j++)
-                                { // Current LED (j) = Num LEDs per section * Current patterned section (i) + Offset from first LED in section
-                                    { // Set section color
-                                        pat_Leds[j].setRGB(pu_Section->t_Color.u8Red,
-                                                           pu_Section->t_Color.u8Green,
-                                                           pu_Section->t_Color.u8Blue);
-                                    }
-                                }
-                            }
-                        }
+                        // Set current LED color
+                        pat_Leds[i].setRGB(t_Color.u8Red,
+                                           t_Color.u8Green,
+                                           t_Color.u8Blue);
                     }
 
                     FastLED.show(); // Show LEDs
@@ -1188,35 +1078,6 @@ static void _v_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,
     static  E_StillRainbowStep  e_StillRainbowStep      = e_StillRainbowInit;
             uint8               u8CurrentPress          = KEYPRESS_NONE;
     static  uint8               su8PrevPress            = KEYPRESS_NONE;
-
-    static  T_RainbowColors st_RainbowColors    = {
-                                                    .t_Color     = T_COLOR_CLEAR(),
-                                                    .t_PrevColor = T_COLOR_CLEAR(),
-                                                  };
-    const   T_RainbowColors ct_RedToGreen       = {
-                                                    .t_Color     = T_COLOR_GREEN(),
-                                                    .t_PrevColor = T_COLOR_RED(),
-                                                  },
-                            ct_GreenToBlue      = {
-                                                    .t_Color     = T_COLOR_BLUE(),
-                                                    .t_PrevColor = T_COLOR_GREEN(),
-                                                  },
-                            ct_BlueToRed        = {
-                                                    .t_Color     = T_COLOR_RED(),
-                                                    .t_PrevColor = T_COLOR_BLUE(),
-                                                  },
-                            ct_RedToBlue        = {
-                                                    .t_Color     = T_COLOR_BLUE(),
-                                                    .t_PrevColor = T_COLOR_RED(),
-                                                  },
-                            ct_BlueToGreen      = {
-                                                    .t_Color     = T_COLOR_GREEN(),
-                                                    .t_PrevColor = T_COLOR_BLUE(),
-                                                  },
-                            ct_GreenToRed       = {
-                                                    .t_Color     = T_COLOR_RED(),
-                                                    .t_PrevColor = T_COLOR_GREEN(),
-                                                  };
     
     switch (e_StillRainbowStep)
     {
@@ -1316,82 +1177,16 @@ static void _v_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,
 
             if (!pt_LedStrip->bDisplayed)
             {
-                uint16  u16StartLeds    = 0;
-                uint16  u16EndLeds      = (uint16) pt_LedStrip->u_Style.t_Rainbow.u8Length_LEDs;
-    
-                while (u16EndLeds <= NUM_LEDS)
-                {
-                    for (size_t i = u16StartLeds; i < u16EndLeds; i++)
-                    { // Set RGB values to struct
-                        // Calculate distance between start and end point
-                        float32 f32Dist_100Percent      = (float32) (i          - u16StartLeds)
-                                                        / (float32) (u16EndLeds - u16StartLeds);
-                        float32 f32DistThird_100Percent = 0.0f; // Distance between a third of the start and end point
-                        
-                        switch (pt_LedStrip->u_Style.t_Rainbow.u8Direction)
-                        { // Determine colors based on direction and percentage
-                            case e_Direction_ROYGBIV: // Red -> Violet
-                                if      (0.3333333333333333f > f32Dist_100Percent)
-                                { // Red -> Green
-                                    st_RainbowColors        = ct_RedToGreen;
-                                    f32DistThird_100Percent = 3.0f * f32Dist_100Percent;
-                                }
-                                else if (0.6666666666666667f > f32Dist_100Percent)
-                                { // Green -> Blue
-                                    st_RainbowColors        = ct_GreenToBlue;
-                                    f32DistThird_100Percent = 3.0f * (f32Dist_100Percent - 0.3333333333333333f);
-                                }
-                                else
-                                { // Blue -> Red
-                                    st_RainbowColors = ct_BlueToRed;
-                                    f32DistThird_100Percent = 3.0f * (f32Dist_100Percent - 0.6666666666666667f);
-                                }
-                                break;
-                            case e_Direction_VIBGYOR: // Violet -> Red
-                                if      (0.3333333333333333f > f32Dist_100Percent)
-                                { // Red -> Blue
-                                    st_RainbowColors = ct_RedToBlue;
-                                    f32DistThird_100Percent = 3.0f * f32Dist_100Percent;
-                                }
-                                else if (0.6666666666666667f > f32Dist_100Percent)
-                                { // Blue -> Green
-                                    st_RainbowColors = ct_BlueToGreen;
-                                    f32DistThird_100Percent = 3.0f * (f32Dist_100Percent - 0.3333333333333333f);
-                                }
-                                else
-                                { // Green -> Red
-                                    st_RainbowColors = ct_GreenToRed;
-                                    f32DistThird_100Percent = 3.0f * (f32Dist_100Percent - 0.6666666666666667f);
-                                }
-                                break;
-    #ifdef PRINT_ERROR_STATEMENTS
-                            default:
-                                Serial.println("I'M AS FREE AS A BIRD NOW!");
-                                break;
-    #endif
-                        }
-                        
-                        /// \todo - make helper function to calculate color from current, prev, and percentage
-                        /* Set colors */    /* Red   */
-                        pat_Leds[i].setRGB ((uint8)   (f32DistThird_100Percent *
-                                            (float32) (st_RainbowColors.t_Color    .u8Red    - st_RainbowColors.t_PrevColor.u8Red  )) +
-                                                       st_RainbowColors.t_PrevColor.u8Red,
-                                            /* Green */           
-                                            (uint8)   (f32DistThird_100Percent *
-                                            (float32) (st_RainbowColors.t_Color    .u8Green  - st_RainbowColors.t_PrevColor.u8Green)) +
-                                                       st_RainbowColors.t_PrevColor.u8Green,
-                                            /* Blue  */
-                                            (uint8)   (f32DistThird_100Percent *
-                                            (float32) (st_RainbowColors.t_Color    .u8Blue   - st_RainbowColors.t_PrevColor.u8Blue )) +
-                                                       st_RainbowColors.t_PrevColor.u8Blue
-                                           );
-                    }
+                T_Color t_Color = T_COLOR_CLEAR();
 
-                    // Set start LEDs to end LEDs for next loop
-                    u16StartLeds    = u16EndLeds;
+                for (size_t i = 0; i < NUM_LEDS; i++)
+                { // Get current LED color
+                    _v_AppStillLights_GetLedColor_Rainbow(pt_LedStrip, &t_Color, i);
 
-                    // Add LED length to end LEDs for next loop
-                    u16EndLeds     += (uint16) pt_LedStrip->u_Style.t_Rainbow.u8Length_LEDs;
+                    // Set current LED color
+                    pat_Leds[i].setRGB(t_Color.u8Red,
+                                       t_Color.u8Green,
+                                       t_Color.u8Blue);
                 }
 
                 FastLED.show(); // Show LEDs
