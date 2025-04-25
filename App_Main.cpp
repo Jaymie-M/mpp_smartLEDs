@@ -331,11 +331,8 @@ void v_AppMain_TLU(void)
                                         { // Animations are defined - go back to main menu
                                             mt_AnimatedLightsMenu.u8Selection = BACK_TO_MAIN_MENU;
 
-                                            /// \todo - create function
                                             // Reset setpoints screen for next loop
-                                            st_ScreenSetpoints.bValuesDefined = false;
-                                            st_ScreenSetpoints.bReprintScreen = true;
-                                            mt_AnimatedLeds.bSetpointsDefined = false;
+                                            v_AppAnimatedLights_SetpointsScreenReset(&st_ScreenSetpoints, &mt_AnimatedLeds);
                                         }
                                         else
                                         { // Set animations to enabled
