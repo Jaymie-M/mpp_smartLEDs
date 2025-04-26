@@ -55,26 +55,6 @@ bool b_AppTools_FallingEdge(uint8 u8Current,    // [I, ] Current loop value
            (u8Stored  != u8ValueLow);   // -BUT- stored value from previous loop contains a valid return value
 }
 
-/// \todo - remove when able
-/**
- * \brief  This function waits until a keypad key is pressed to continue
- * \return u8LatestKeyValue
- */
-uint8 u8_AppTools_Wait_for_Keypress(Keypad j_Keypad)  // [I, ] Keypad object
-{
-    // Define function variables
-    charn cLatestKeyPress = 0;
-    
-    delay(10);
-    
-    while(0 == cLatestKeyPress)
-    { /// \todo - Do other routine updates - e.g. clock update in here while waiting to get the keypress
-        cLatestKeyPress = j_Keypad.getKey();
-    }
-    
-    return ((uint8) cLatestKeyPress) - ASCII_NUM_OFFSET - 1;
-}
-
 
 /**
  * \brief  This function returns a key press or 0xFF if no key is pressed

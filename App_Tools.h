@@ -303,7 +303,6 @@ const uint8   gc_au8DigitConv  [NUM_TOTAL] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0xE, 0,
  *    Exported Functions   *
  ***************************/
 bool    b_AppTools_FallingEdge              (uint8 u8Current,   uint8 u8Stored, uint8   u8ValueLow  );
-uint8   u8_AppTools_Wait_for_Keypress       (Keypad             j_Keypad                            );
 uint8   u8_AppTools_GetKeypress             (Keypad             j_Keypad                            );
 uint32  u32_AppTools_DigitArray_to_uint32   (uint8            * pu8DigitArray,  uint8   u8NumDigits );
 uint32  u32_AppTools_NibbleArray_to_uint32  (uint8            * pu8NibbleArray, uint8   u8NumNibbles);
