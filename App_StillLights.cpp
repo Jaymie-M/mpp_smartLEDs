@@ -36,6 +36,7 @@ static bool mbEnableAnimations = false;
 /***************************
  *   Function Prototypes   *
  ***************************/
+static void _v_AppStillLights_GetLedColor_Rainbow       (                                          T_LedStrip * pt_LedStrip,    T_Color    * pt_Color,      uint16  u16CurrentLed);
 static void _v_AppStillLights_GetLedColor_SectsChkpts   (                                          T_LedStrip * pt_LedStrip,    T_Color    * pt_Color,      uint16  u16CurrentLed);
 static bool _b_AppStillLights_DefineLedStripSections    (LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, CRGB       * pat_Leds,       T_LedStrip * pt_LedStrip,   uint8	u8Selection  );
 static void _v_AppStillLights_StillSectsChkpts          (LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, CRGB       * pat_Leds,       T_LedStrip * pt_LedStrip,   uint8   u8Selection  );
@@ -57,6 +58,7 @@ static void _v_AppStillLights_GetLedColor_Rainbow      (T_LedStrip    * pt_LedSt
                                                         T_Color       * pt_Color,       // [ ,O] LED color data
                                                         uint16          u16CurrentLed)  // [I, ] Current LED number
 {
+    /// \todo - see if there is a way to reduce time for rainbow LED display
             uint16          u16StartLeds        = 0,
                             u16EndLeds          = (uint16) pt_LedStrip->u_Style.t_Rainbow.u8Length_LEDs;
     static  T_RainbowColors st_RainbowColors    = {
@@ -167,17 +169,18 @@ static void _v_AppStillLights_GetLedColor_SectsChkpts  (T_LedStrip    * pt_LedSt
                                                         T_Color       * pt_Color,       // [ ,O] LED color data
                                                         uint16          u16CurrentLed)  // [I, ] Current LED number
 {
-    bool        bGradientDisplay    = false;
-    bool        bCheckpointStyle    = (e_StyleEqualCheckpoints       == pt_LedStrip->e_Style);
-                bCheckpointStyle   |= (e_StyleUnequalCheckpoints     == pt_LedStrip->e_Style);
-                bCheckpointStyle   |= (e_StylePatternedCheckpoints   == pt_LedStrip->e_Style);
-    uint16      u16SumLeds          = 0,
-                u16StartLeds        = 0,
-                u16EndLeds          = 0;
-    uint8       u8NumberSections    = pt_LedStrip->t_SectionData.u8NumPatternedSections,    // Default to displaying number of patterned sections
-                u8SectionNumber     = 0;                                                    // Section number of current LED
-    U_Section * pu_Section, 
-              * pu_PrevSection;
+            bool        bGradientDisplay    = false;
+            bool        bCheckpointStyle    = (e_StyleEqualCheckpoints       == pt_LedStrip->e_Style);
+                        bCheckpointStyle   |= (e_StyleUnequalCheckpoints     == pt_LedStrip->e_Style);
+                        bCheckpointStyle   |= (e_StylePatternedCheckpoints   == pt_LedStrip->e_Style);
+            uint16      u16SumLeds          = 0,
+                        u16StartLeds        = 0,
+                        u16EndLeds          = 0;
+            uint8       u8NumberSections    = pt_LedStrip->t_SectionData.u8NumPatternedSections,    // Default to displaying number of patterned sections
+                        u8SectionNumber     = 0;                                                    // Section number of current LED
+            U_Section * pu_Section, 
+                      * pu_PrevSection;
+    const   T_Color     ct_ColorClear       = T_COLOR_CLEAR();
 
     /* Find number of sections in unequal sect LED strip */
     if ((e_StyleUnequalSections     == pt_LedStrip->e_Style) ||
@@ -218,12 +221,6 @@ static void _v_AppStillLights_GetLedColor_SectsChkpts  (T_LedStrip    * pt_LedSt
                 if (bGradientDisplay)   pu_PrevSection  =  &pt_LedStrip->u_Style.t_Pattern.u_Section[
                                                             pt_LedStrip->u_Style.t_Pattern.au8Order  [u8SectionNumber - 1] - 1];
             }
-#ifdef PRINT_ERROR_STATEMENTS
-            else
-            {
-                Serial.println("MISA WANNA BE FRIENDS!"); // Error print statements
-            }
-#endif
             break;
 
         case e_StyleEqualSections:
@@ -250,6 +247,11 @@ static void _v_AppStillLights_GetLedColor_SectsChkpts  (T_LedStrip    * pt_LedSt
                     u16EndLeds      = u16SumLeds;
                     break;   
                 }
+                else if (k == (pt_LedStrip->t_SectionData.u8NumUniqueSections - 1))
+                { // Quick exit - sum is still less than current LED and on the last section
+                    *pt_Color = ct_ColorClear; // Set color to clear
+                    return;
+                }
             }
 
             // Set pu_Section to next section in array order
@@ -263,6 +265,13 @@ static void _v_AppStillLights_GetLedColor_SectsChkpts  (T_LedStrip    * pt_LedSt
             Serial.println("I'M JUST KEN!"); // Error print statement
             break;
 #endif
+    }
+
+    // Quick exit - calculated section number is greater than number of sections
+    if (u8SectionNumber >= u8NumberSections)
+    { // Set color to clear
+        *pt_Color = ct_ColorClear;
+        return;
     }
 
     if (NULL != pu_Section)
@@ -535,7 +544,7 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                 if (!pt_LedStrip->bDisplayed)
                 { // Display LEDs
                     T_Color t_Color = T_COLOR_CLEAR();
-
+                    
                     for (size_t i = 0; i < NUM_LEDS; i++)
                     { // Get current LED color
                         _v_AppStillLights_GetLedColor_SectsChkpts(pt_LedStrip, &t_Color, i);
