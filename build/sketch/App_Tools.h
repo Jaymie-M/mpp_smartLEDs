@@ -28,11 +28,12 @@
 //#define OLD_ANIMATIONS_MENUS
 
 /* TikTok Style */
-//#define LED_STRIP_DRIVER_CHIP   WS2812B
+// #define LED_STRIP_DRIVER_CHIP   WS2812B
 //#define LED_STRIP_RGB_SEQUENCE  GRB
 
 /* Christmas Lights Style */
 #define LED_STRIP_DRIVER_CHIP   WS2811
+// #define LED_STRIP_DRIVER_CHIP   WS2812
 #define LED_STRIP_RGB_SEQUENCE  RGB
 
 #define NULL              ((void *) 0)
@@ -200,7 +201,7 @@ typedef union
     T_Color t_Color; // Section with section/checkpoint style
     T_Shift t_Shift; // Section with shift style
 
-} U_Section;
+} N_Section;
 
 
 /**
@@ -222,7 +223,7 @@ typedef struct
  */
 typedef struct
 {
-    U_Section       u_Section[MAX_UNIQUE_SECTIONS   ];      // Section definitions
+    N_Section       n_Section[MAX_UNIQUE_SECTIONS   ];      // Section definitions
     uint8	        au8Order [MAX_PATTERNED_SECTIONS];      // Specifying order of actual sections
 
 } T_PatternedSections;
@@ -234,7 +235,7 @@ typedef struct
  */
 typedef struct
 {
-    U_Section       u_Section[MAX_PATTERNED_SECTIONS];      // Section definitions
+    N_Section       n_Section[MAX_PATTERNED_SECTIONS];      // Section definitions
 
 } T_EqualSections;
 
@@ -245,7 +246,7 @@ typedef struct
  */
 typedef struct
 {
-    U_Section       u_Section      [MAX_UNIQUE_SECTIONS];   // Section definitions
+    N_Section       n_Section      [MAX_UNIQUE_SECTIONS];   // Section definitions
     uint8           au8NumberOfLeds[MAX_UNIQUE_SECTIONS];
 
 } T_UnequalSections;
@@ -274,7 +275,7 @@ typedef union
     T_UnequalSections   t_Unequal;
     T_RainbowStyle      t_Rainbow;
 
-} U_SectionStyle;
+} N_SectionStyle;
 
 
 /**
@@ -286,7 +287,7 @@ typedef struct
     bool            bDefined;
     bool            bDisplayed;
     E_SectionStyle  e_Style;        // Section style definition
-    U_SectionStyle	u_Style;        // Section definitions dependent on style
+    N_SectionStyle	n_Style;        // Section definitions dependent on style
     T_SectionData   t_SectionData;  // Data about number of and active sections
 
 } T_LedStrip;

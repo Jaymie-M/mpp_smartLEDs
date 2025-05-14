@@ -123,7 +123,7 @@ typedef enum
     e_AnimatedShiftHalfAndHalf         = 5,
     e_AnimatedShiftUnequalSections     = 6,
     e_AnimatedShiftEqualSections       = 7,
-    e_AnimatedThemed                   = 9,
+    e_AnimatedThemed                   = 8,
     e_MaxAnimatedLightsMenuPlus1,
     e_MaxAnimatedLightsMenu            = e_MaxAnimatedLightsMenuPlus1
                                        - POS1_MINUS_ZERO,

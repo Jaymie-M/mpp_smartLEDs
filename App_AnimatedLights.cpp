@@ -64,6 +64,7 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
                                         uint32              u32CycleTime_ms,
                                         uint8               u8Selection)
 {
+    static  T_TimeDelay         Td_FadeLoop             = T_TIMEDELAY_DEFAULT();
     static  T_ScreenGetValues   st_ScreenSetptPeriod    = T_SETPOINTPERIODSCREEN_DEFAULT();
     static  float32             sf32_Period_100pct      = 0.0f; // Percentage of period completed thus far
     static  uint8               su8PrevPress            = KEYPRESS_NONE;   
@@ -72,10 +73,13 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
     switch (pt_AnimatedLeds->e_FadeAnimationStep)
     {
         case e_FadeAnimationInit:
+            // Set defaults
             st_ScreenSetptPeriod.bValuesDefined = false;
             st_ScreenSetptPeriod.bReprintScreen = true;
             pt_AnimatedLeds->u8CurrentSetpoint  = 0;
             sf32_Period_100pct                  = 0.0f;
+
+            v_AppClock_TimeDelay_Init(&Td_FadeLoop, 100);
 
             pt_AnimatedLeds->e_FadeAnimationStep = e_FadeAnimationSetpointPeriod; // Next step
             break;
@@ -128,9 +132,10 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
             sf32_Period_100pct += (float32) u32CycleTime_ms 
                                 / (100.0f * (float32) (pt_AnimatedLeds->au8Period_01s[pt_AnimatedLeds->u8CurrentSetpoint]));
             
-            if (1.0f == sf32_Period_100pct)
-            { // Full period has elapsed
-                sf32_Period_100pct = 0.0f; // Reset to zero
+            while (1.0f <= sf32_Period_100pct)
+            { // Full period has elapsed - should only come in here once every several loops, 
+                // but set to while loop in case of excessively long loop time or fairly small period
+                sf32_Period_100pct -= 1.0f; // Subtract 100% from period
 
                 if ((pt_AnimatedLeds->u8CurrentSetpoint + 1) < pt_AnimatedLeds->u8NumberSetpoints)
                 { // Move to next setpoint if next in order is less than total
@@ -138,8 +143,21 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
                 }
                 else
                 { // Otherwise, reset to initial starting setpoint
-                    pt_AnimatedLeds->u8CurrentSetpoint = e_InitialSetpoint; 
+                    pt_AnimatedLeds->u8CurrentSetpoint = e_InitialSetpoint;
                 }
+
+                // Serial.println("");
+                // Serial.println("");
+                // Serial.println("/*----------------------------------------------*/");
+                // Serial.print("Current Setpoint: ");
+                // Serial.println(pt_AnimatedLeds->u8CurrentSetpoint);
+                // Serial.print("Period pct: ");
+                // Serial.println(sf32_Period_100pct);
+                // Serial.print("Cycle time (ms): ");
+                // Serial.println(u32CycleTime_ms);
+                // Serial.println("/*----------------------------------------------*/");
+                // Serial.println("");
+                // Serial.println("");
             }
 
             /* Determine next setpoint */
@@ -148,45 +166,51 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
 
             if ((pt_AnimatedLeds->u8CurrentSetpoint + 1) < pt_AnimatedLeds->u8NumberSetpoints)
             { // If next in order is less than total, set to next in order
-                u8NextSetpoint = pt_AnimatedLeds->u8NumberSetpoints + 1;
+                u8NextSetpoint = pt_AnimatedLeds->u8CurrentSetpoint + 1;
             }
 
             /* Code shortening */
-            T_LedStrip * pt_Setpoint     = &pat_LedStrip[pt_AnimatedLeds->u8CurrentSetpoint],
-                       * pt_NextSetpoint = &pat_LedStrip[u8NextSetpoint];
-            T_Color      t_Color         = T_COLOR_CLEAR(); // Default color
-            T_Color      t_NextColor     = T_COLOR_CLEAR();
+            if (b_AppClock_TimeDelay_TLU(&Td_FadeLoop, true))
+            { // Only calculate a new position every 100ms minimum
+                T_LedStrip * pt_Setpoint     = &pat_LedStrip[pt_AnimatedLeds->u8CurrentSetpoint],
+                           * pt_NextSetpoint = &pat_LedStrip[u8NextSetpoint];
+                T_Color      t_Color         = T_COLOR_CLEAR(); // Default color
+                T_Color      t_NextColor     = T_COLOR_CLEAR();
 
-            for (size_t i = 0; i < NUM_LEDS; i++)
-            {
-                /* Get LED color */
-                v_AppStillLights_GetLedColor(pt_Setpoint,     &t_Color,     i); // Get current color
-                v_AppStillLights_GetLedColor(pt_NextSetpoint, &t_NextColor, i); // Get next    color
-                
-                /* Set LED color */ /* Red   */
-                pat_Leds[i].setRGB ((uint8)   (sf32_Period_100pct *
-                                    (float32) (t_NextColor.u8Red    - t_Color.u8Red  )) +
-                                               t_Color    .u8Red,
-                                    /* Green */
-                                    (uint8)   (sf32_Period_100pct *
-                                    (float32) (t_NextColor.u8Green  - t_Color.u8Green)) +
-                                               t_Color    .u8Green,
-                                    /* Blue  */
-                                    (uint8)   (sf32_Period_100pct *
-                                    (float32) (t_NextColor.u8Blue   - t_Color.u8Blue )) +
-                                               t_Color    .u8Blue
-                                   );
+                for (size_t i = 0; i < NUM_LEDS; i++)
+                {
+                    /* Get LED color */
+                    v_AppStillLights_GetLedColor(pt_Setpoint,     &t_Color,     i); // Get current color
+                    v_AppStillLights_GetLedColor(pt_NextSetpoint, &t_NextColor, i); // Get next    color
+                    
+                    /* Set LED color */ /* Red   */
+                    pat_Leds[i].setRGB ((uint8)   (sf32_Period_100pct *
+                                        (float32) (t_NextColor.u8Red    - t_Color.u8Red  )) +
+                                                   t_Color    .u8Red,
+                                        /* Green */
+                                        (uint8)   (sf32_Period_100pct *
+                                        (float32) (t_NextColor.u8Green  - t_Color.u8Green)) +
+                                                   t_Color    .u8Green,
+                                        /* Blue  */
+                                        (uint8)   (sf32_Period_100pct *
+                                        (float32) (t_NextColor.u8Blue   - t_Color.u8Blue )) +
+                                                   t_Color    .u8Blue
+                                    );
+                }
+
+                v_AppClock_TimeDelay_Reset(&Td_FadeLoop); // Reset once timer expires
             }
 
             FastLED.show(); // Show LEDs
+            pt_AnimatedLeds->bDefined = true;
 
-            if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE))  // Falling edge of keypress
-            { // Animations are now defined if zero key is pressed
-                if (0 == gc_au8DigitConv[su8PrevPress])
-                { // 0 key was pressed - set LED strip to defined
-                    pt_AnimatedLeds->bDefined = true;
-                }
-            }
+            // if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE))  // Falling edge of keypress
+            // { // Animations are now defined if zero key is pressed
+            //     if (0 == gc_au8DigitConv[su8PrevPress])
+            //     { // 0 key was pressed - set LED strip to defined
+            //         pt_AnimatedLeds->bDefined = true;
+            //     }
+            // }
 
             su8PrevPress = u8CurrentPress; // Store current keypress
 
@@ -295,11 +319,9 @@ void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,              // [
         case e_AnimatedShiftEqualSections:
             pt_AnimatedLeds->e_Style = e_AnimationStyleShift;
             break;
-#ifdef PRINT_ERROR_STATEMENTS
         default:
-            Serial.println("OWEN IS AWESOME!");
+            // Do nothing - valid case after we return to main menu and animation is still active
             break;
-#endif
     }
 
     switch (pt_AnimatedLeds->e_Style)

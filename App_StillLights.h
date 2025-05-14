@@ -207,13 +207,13 @@
  */
 typedef enum
 {
-    e_StillSectionsInit 					= 0,
-    e_StillSectionsMethodMenu 		        = 1,
-    e_StillSectionsOrLedsScreen		        = 2,
-    e_StillSectionsUniqueSectsScreen		= 3,
-    e_StillSectionsPatternOrderInfoScreen	= 4,
-    e_StillSectionsSetPatternOrderScreen	= 5,
-    e_StillSectionsClearLedStrip            = 6,
+    e_StillSectionsClearLedStrip            = 0,
+    e_StillSectionsInit 					= 1,
+    e_StillSectionsMethodMenu 		        = 2,
+    e_StillSectionsOrLedsScreen		        = 3,
+    e_StillSectionsUniqueSectsScreen		= 4,
+    e_StillSectionsPatternOrderInfoScreen	= 5,
+    e_StillSectionsSetPatternOrderScreen	= 6,
     e_StillSectionsDefineLedStrip           = 7,
     e_StillSectionsNumberofSteps,
     
@@ -225,10 +225,10 @@ typedef enum
  */
 typedef enum
 {
-    e_StillRainbowInit 					    = 0,
-    e_StillRainbowDirectionMenu 		    = 1,
-    e_StillRainbowLengthLedsScreen		    = 2,
-    e_StillRainbowClearLedStrip             = 3,
+    e_StillRainbowClearLedStrip             = 0,
+    e_StillRainbowInit 					    = 1,
+    e_StillRainbowDirectionMenu 		    = 2,
+    e_StillRainbowLengthLedsScreen		    = 3,
     e_StillRainbowDefineLedStrip            = 4,
     e_StillRainbowNumberofSteps,
     
