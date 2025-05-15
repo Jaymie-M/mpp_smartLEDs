@@ -26,15 +26,21 @@
 // Settings
 #define PRINT_ERROR_STATEMENTS
 //#define OLD_ANIMATIONS_MENUS
+//#define LED_STRIP_STYLE_TIKTOK
+#define LED_STRIP_STYLE_CHRISTMAS
 
 /* TikTok Style */
-// #define LED_STRIP_DRIVER_CHIP   WS2812B
-//#define LED_STRIP_RGB_SEQUENCE  GRB
+#ifdef LED_STRIP_STYLE_TIKTOK
+#define LED_STRIP_DRIVER_CHIP   WS2812B
+#define LED_STRIP_RGB_SEQUENCE  GRB
+#endif
 
 /* Christmas Lights Style */
+#ifdef LED_STRIP_STYLE_CHRISTMAS
 #define LED_STRIP_DRIVER_CHIP   WS2811
 // #define LED_STRIP_DRIVER_CHIP   WS2812
 #define LED_STRIP_RGB_SEQUENCE  RGB
+#endif
 
 #define NULL              ((void *) 0)
 #define NUM_ROWS                     4

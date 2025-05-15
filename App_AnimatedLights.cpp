@@ -243,11 +243,11 @@ static void _v_AppAnimatedLights_ShiftSects(LiquidCrystal_I2C   j_Lcd,
         /* Set LED strip style */
         if      (e_AnimatedShiftUnequalSections == u8Selection)
         { // Unequal   style
-            pt_LedStrip->e_Style = e_StyleUnequalShift;
+            pt_Shift->e_Style = e_StyleUnequalShift;
         }
         else
         { // Equal     style
-            pt_LedStrip->e_Style = e_StyleEqualShift;
+            pt_Shift->e_Style = e_StyleEqualShift;
         }
 
         v_AppStillLights_StillSectsChkpts(j_Lcd, j_Keypad, pat_Leds, pt_Shift, u8Selection - SHIFT_OPTION_OFFSET);

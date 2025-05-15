@@ -226,7 +226,7 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
 
 
 /** \brief This function defines the sections to be shifted on an LED strip, including the 
- *         shift direction and period for each section. Once defined, this activately animates the LED strip.
+ *         shift direction and period for each section. Once defined, this actively animates the LED strip.
  *
  *  \return N/A 
  */
@@ -239,7 +239,20 @@ static void _v_AppAnimatedLights_ShiftSects(LiquidCrystal_I2C   j_Lcd,
                                             uint32              u32CycleTime_ms,
                                             uint8               u8Selection)
 {
-    
+    if ((e_AnimatedLightsMenuUnd != u8Selection) && (e_MaxAnimatedLightsMenu >= u8Selection))
+    { // If animated selection is valid, select style
+        /* Set LED strip style */
+        if      (e_AnimatedShiftUnequalSections == u8Selection)
+        { // Unequal   style
+            pt_Shift->e_Style = e_StyleUnequalShift;
+        }
+        else
+        { // Equal     style
+            pt_Shift->e_Style = e_StyleEqualShift;
+        }
+
+        v_AppStillLights_StillSectsChkpts(j_Lcd, j_Keypad, pat_Leds, pt_Shift, u8Selection - SHIFT_OPTION_OFFSET);
+    }
 }
 
 

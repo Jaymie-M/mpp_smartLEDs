@@ -309,6 +309,23 @@ typedef enum
 } E_GradientLightsMenuOptions;
 
 
+/**
+ * \brief - List of shift direction menu options
+ */
+typedef enum
+{
+    e_DirectionUndefined    = 0,
+    e_DirectionOut          = 1,
+    e_DirectionIn           = 2,
+    e_MaxShiftDirectionMenuPlus1,
+    e_MaxShiftDirectionMenu            = e_MaxShiftDirectionMenuPlus1
+                                       - POS1_MINUS_ZERO,
+    e_MaxShiftDirectionMenuMin1        = e_MaxShiftDirectionMenuPlus1
+                                       - POS1_MINUS_NEG1,
+
+} E_ShiftDirectionMenuOptions;
+
+
 /***************************
  *         Structs         *
  ***************************/
@@ -331,6 +348,8 @@ void v_AppStillsLights_GradientMenu        (LiquidCrystal_I2C   j_Lcd,          
 void v_AppStillsLights_Main_TLU            (LiquidCrystal_I2C   j_Lcd,          Keypad      j_Keypad,       CRGB              * pat_Leds,
                                             T_LedStrip        * pt_LedStrip,    uint8       u8Selection                                      );
 void v_AppStillsLights_Gradient_TLU        (LiquidCrystal_I2C   j_Lcd,          Keypad      j_Keypad,       CRGB              * pat_Leds,
+                                            T_LedStrip        * pt_LedStrip,    uint8       u8Selection                                      );
+void v_AppStillLights_StillSectsChkpts     (LiquidCrystal_I2C   j_Lcd,          Keypad      j_Keypad,       CRGB              * pat_Leds,
                                             T_LedStrip        * pt_LedStrip,    uint8       u8Selection                                      );
 void v_AppStillLights_LedStrip_Reset       (T_LedStrip        * pt_LedStrip                                                                  );
 void v_AppStillLights_GetLedColor          (T_LedStrip        * pt_LedStrip,    T_Color   * pt_Color,       uint16              u16CurrentLed);

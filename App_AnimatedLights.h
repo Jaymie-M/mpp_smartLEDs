@@ -132,23 +132,6 @@ typedef enum
 
 
 /**
- * \brief - List of shift direction menu options
- */
-typedef enum
-{
-    e_DirectionUndefined    = 0,
-    e_DirectionOut          = 1,
-    e_DirectionIn           = 2,
-    e_MaxShiftDirectionMenuPlus1,
-    e_MaxShiftDirectionMenu            = e_MaxShiftDirectionMenuPlus1
-                                       - POS1_MINUS_ZERO,
-    e_MaxShiftDirectionMenuMin1        = e_MaxShiftDirectionMenuPlus1
-                                       - POS1_MINUS_NEG1,
-
-} E_ShiftDirectionMenuOptions;
-
-
-/**
  * \brief - Section Style Options
  */
 typedef enum
