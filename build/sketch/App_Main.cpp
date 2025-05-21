@@ -478,10 +478,10 @@ void v_AppMain_TLU(void)
         {
             u8LoopCount = 0;
 
-            mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_3RD_LINE_Y);
+            mj_SmartDormLcd.setCursor(DISPLAY_POS_TIME_X, DISPLAY_POS_3RD_LINE_Y);
             if(b_AppStillsLights_AnimationsEnabled())   mj_SmartDormLcd.print("TRUE");
             else                                        mj_SmartDormLcd.print("FALSE");
-            mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_4TH_LINE_Y);
+            mj_SmartDormLcd.setCursor(DISPLAY_POS_TIME_X, DISPLAY_POS_4TH_LINE_Y);
             mj_SmartDormLcd.print(mu32SmartDormLedsCycleTime_ms);
         }
 
