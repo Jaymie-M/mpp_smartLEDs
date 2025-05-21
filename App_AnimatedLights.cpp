@@ -201,7 +201,19 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
                 v_AppClock_TimeDelay_Reset(&Td_FadeLoop); // Reset once timer expires
             }
 
+            uint32 showTime = millis();
+
             FastLED.show(); // Show LEDs
+
+            showTime = millis() - showTime;
+
+            if (showTime > 5)
+            {
+                Serial.print("show(): ");
+                Serial.print(showTime);
+                Serial.println("ms");
+            }
+
             pt_AnimatedLeds->bDefined = true;
 
             // if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE))  // Falling edge of keypress
