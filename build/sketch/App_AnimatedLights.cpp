@@ -57,10 +57,10 @@ static void _v_AppAnimatedLights_ShiftSects(LiquidCrystal_I2C j_Lcd,            
  *
  *  \return N/A 
  */
-static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,    
-                                        Keypad              j_Keypad,       
-                                        T_AnimatedLeds    * pt_AnimatedLeds, 
-                                        CRGB              * pat_Leds, 
+static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
+                                        Keypad              j_Keypad,
+                                        T_AnimatedLeds    * pt_AnimatedLeds,
+                                        CRGB              * pat_Leds,
                                         T_LedStrip        * pat_LedStrip,
                                         uint32              u32CycleTime_ms,
                                         uint8               u8Selection)
@@ -68,7 +68,7 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
     static  T_TimeDelay         Td_FadeLoop             = T_TIMEDELAY_DEFAULT();
     static  T_ScreenGetValues   st_ScreenSetptPeriod    = T_SETPOINTPERIODSCREEN_DEFAULT();
     static  float32             sf32_Period_100pct      = 0.0f; // Percentage of period completed thus far
-    static  uint8               su8PrevPress            = KEYPRESS_NONE;   
+    static  uint8               su8PrevPress            = KEYPRESS_NONE;
             uint8               u8CurrentPress          = KEYPRESS_NONE;
     
     switch (pt_AnimatedLeds->e_FadeAnimationStep)
@@ -140,7 +140,7 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
 
                 if ((pt_AnimatedLeds->u8CurrentSetpoint + 1) < pt_AnimatedLeds->u8NumberSetpoints)
                 { // Move to next setpoint if next in order is less than total
-                    pt_AnimatedLeds->u8CurrentSetpoint++; 
+                    pt_AnimatedLeds->u8CurrentSetpoint++;
                 }
                 else
                 { // Otherwise, reset to initial starting setpoint
@@ -215,18 +215,17 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
                 Serial.println("ms");
             }
 
-            pt_AnimatedLeds->bDefined = true;
+            u8CurrentPress = u8_AppTools_GetKeypress(j_Keypad);
 
-            // if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE))  // Falling edge of keypress
-            // { // Animations are now defined if zero key is pressed
-            //     if (0 == gc_au8DigitConv[su8PrevPress])
-            //     { // 0 key was pressed - set LED strip to defined
-            //         pt_AnimatedLeds->bDefined = true;
-            //     }
-            // }
+            if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE))  // Falling edge of keypress
+            { // Animations are now defined if zero key is pressed
+                if (0 == gc_au8DigitConv[su8PrevPress])
+                { // 0 key was pressed - set LED strip to defined
+                    pt_AnimatedLeds->bDefined = true;
+                }
+            }
 
             su8PrevPress = u8CurrentPress; // Store current keypress
-
             break;
 #ifdef PRINT_ERROR_STATEMENTS
         default:
@@ -318,9 +317,12 @@ void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,              // [
 {
     switch (u8Selection)
     {
-        case e_AnimatedPresets: 
-        case e_AnimatedThemed:
-            /// \todo - create 'this feature not supported' screen
+        case e_AnimatedPresets:
+        case e_AnimatedThemed: // Not supported
+            v_AppScreen_FeatureNotSupported(j_Lcd, j_Keypad, &u8Selection);
+
+            // If set to back to main menu, set animated LEDs defined
+            pt_AnimatedLeds->bDefined = (BACK_TO_MAIN_MENU == u8Selection);
             break;
         case e_AnimatedFadeLoop:
         case e_AnimatedFadeSetpoint:
@@ -340,20 +342,20 @@ void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,              // [
     switch (pt_AnimatedLeds->e_Style)
     {
         case e_AnimationStyleFade:
-            _v_AppAnimatedLights_Fade  (j_Lcd, 
-                                        j_Keypad, 
-                                        pt_AnimatedLeds, 
-                                        pat_Leds, 
+            _v_AppAnimatedLights_Fade  (j_Lcd,
+                                        j_Keypad,
+                                        pt_AnimatedLeds,
+                                        pat_Leds,
                                         pat_LedStrip,
                                         u32CycleTime_ms,
                                         u8Selection);
             break;
         case e_AnimationStyleShift:
-            _v_AppAnimatedLights_ShiftSects(j_Lcd, 
-                                            j_Keypad, 
+            _v_AppAnimatedLights_ShiftSects(j_Lcd,
+                                            j_Keypad,
                                             pt_AnimatedLeds,
-                                            pat_Leds, 
-                                            &pat_LedStrip[e_InitialSetpoint], 
+                                            pat_Leds,
+                                            &pat_LedStrip[e_InitialSetpoint],
                                             &pat_LedStrip[e_Shift],
                                             u32CycleTime_ms, 
                                             u8Selection - SHIFT_OPTION_OFFSET);

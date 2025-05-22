@@ -318,7 +318,7 @@ void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,              // [
     {
         case e_AnimatedPresets:
         case e_AnimatedThemed: // Not supported
-            v_AppScreen_FeatureNotSupported(j_Lcd, &u8Selection);
+            v_AppScreen_FeatureNotSupported(j_Lcd, j_Keypad, &u8Selection);
 
             // If set to back to main menu, set animated LEDs defined
             pt_AnimatedLeds->bDefined = (BACK_TO_MAIN_MENU == u8Selection);

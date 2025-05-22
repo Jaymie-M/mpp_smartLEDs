@@ -1156,6 +1156,7 @@ void v_AppScreen_MenuSelection_TLU(LiquidCrystal_I2C    j_Lcd,      // [I, ] Lcd
  * \return none
  */
 void v_AppScreen_FeatureNotSupported(LiquidCrystal_I2C  j_Lcd,          // [I, ] Lcd object
+                                     Keypad             j_Keypad,       // [I, ] Keypad object
                                      uint8            * pu8Selection)   // [I, ] Pointer to selection variable
 {
     static  bool    sbReprintMenu   = true;

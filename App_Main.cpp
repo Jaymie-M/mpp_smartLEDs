@@ -165,10 +165,10 @@ void v_AppMain_TLU(void)
                                                             mt_ClockMenu            .u8MaxOptions);
 
                 /// \todo - SNAKEBITE - remove these conditions once these menus are developed
-                bReturnToMainMenu |= (RETURN_TO_MAIN_MENU == mu8TempMenuSelect    );
-                bReturnToMainMenu |= (RETURN_TO_MAIN_MENU == mu8MusicMenuSelect   );
-                bReturnToMainMenu |= (RETURN_TO_MAIN_MENU == mu8SettingsMenuSelect);
-                bReturnToMainMenu |= (RETURN_TO_MAIN_MENU == mu8SearchMenuSelect  );
+                bReturnToMainMenu |= (BACK_TO_MAIN_MENU == mu8TempMenuSelect    );
+                bReturnToMainMenu |= (BACK_TO_MAIN_MENU == mu8MusicMenuSelect   );
+                bReturnToMainMenu |= (BACK_TO_MAIN_MENU == mu8SettingsMenuSelect);
+                bReturnToMainMenu |= (BACK_TO_MAIN_MENU == mu8SearchMenuSelect  );
 
         // If returning to main menu, set all menu selections to NONE
         if (bReturnToMainMenu)
@@ -458,7 +458,7 @@ void v_AppMain_TLU(void)
                     }
                     else
                     { // Feature not supported
-                        v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, &mt_ClockMenu.u8Selection);
+                        v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, mj_SmartDormKeypad, &mt_ClockMenu.u8Selection);
                     }
                     break;
                     
@@ -655,8 +655,8 @@ static uint32 u32_RequestPassword(void)
             uint8           u8CurrentPress  = KEYPRESS_NONE;
 
     const   charn           c_cDescription[MAX_LENGTH_DESCRIPTION]  = "Enter Password:";
-    const   uint8           cu8DisplayPositionDescription_x         = (DISPLAY_WIDTH - strnlen(&c_cDescription[0])) / 2;
-    const   uint8           cu8DisplayPositionPassword_x            = (DISPLAY_WIDTH - NUM_DIGITS_PASSWORD        ) / 2;
+    const   uint8           cu8DisplayPositionDescription_x         = (DISPLAY_WIDTH_X - strnlen(&c_cDescription[0], MAX_LENGTH_DESCRIPTION)) / 2;
+    const   uint8           cu8DisplayPositionPassword_x            = (DISPLAY_WIDTH_X - NUM_DIGITS_PASSWORD                                ) / 2;
 
     if (sbResetLcd)
     { // Initialize digit timer
@@ -670,7 +670,7 @@ static uint32 u32_RequestPassword(void)
 
         // Second   line
         mj_SmartDormLcd.setCursor(cu8DisplayPositionDescription_x,  DISPLAY_POS_2ND_LINE_Y);
-        mj_SmartDormLcd.print(F(&c_cDescription[0]));
+        mj_SmartDormLcd.print(&c_cDescription[0]);
 
         // Third    line
         mj_SmartDormLcd.setCursor(cu8DisplayPositionPassword_x,     DISPLAY_POS_3RD_LINE_Y);
@@ -949,7 +949,7 @@ static uint8 u8_TempMenu(void)
 { // Not supported
     uint8 u8Return = SELECTION_NONE;
 
-    v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, &u8Return);
+    v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, mj_SmartDormKeypad, &u8Return);
 
     return u8Return;
 }
@@ -963,7 +963,7 @@ static uint8 u8_MusicMenu(void)
 { // Not supported
     uint8 u8Return = SELECTION_NONE;
 
-    v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, &u8Return);
+    v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, mj_SmartDormKeypad, &u8Return);
 
     return u8Return;
 }
@@ -977,7 +977,7 @@ static uint8 u8_SettingsMenu(void)
 { // Not supported
     uint8 u8Return = SELECTION_NONE;
 
-    v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, &u8Return);
+    v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, mj_SmartDormKeypad, &u8Return);
 
     return u8Return;
 }
@@ -991,7 +991,7 @@ static uint8 u8_SearchMenu(void)
 { // Not supported
     uint8 u8Return = SELECTION_NONE;
 
-    v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, &u8Return);
+    v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, mj_SmartDormKeypad, &u8Return);
 
     return u8Return;
 }

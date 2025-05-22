@@ -64,11 +64,15 @@ static uint32 mu32SmartDormLedsCycleTime_ms = 0;
 static uint32 mu32PrevLoopTime_ms           = 0;
 
 // Animations menus
+#ifdef OLD_ANIMATIONS_MENUS
 static uint8  mu8StartingPointMenuSelect    = 0;
+#endif
 
 // Stills and Animations menus
+static uint8  mu8TempMenuSelect             = 0;
 static uint8  mu8MusicMenuSelect            = 0;
 static uint8  mu8SettingsMenuSelect         = 0;
+static uint8  mu8SearchMenuSelect           = 0;
 
 // Structs
 static T_AnimatedLeds   mt_AnimatedLeds;
@@ -109,9 +113,10 @@ static uint8    u8_StartingPointMenu  (void);
 #endif
 
 // Misc
+static uint8    u8_TempMenu           (void);
 static uint8    u8_MusicMenu          (void);
 static uint8    u8_SettingsMenu       (void);
-
+static uint8    u8_SearchMenu         (void);
 
 /***************************
  *   Function Definitions  *
@@ -154,23 +159,35 @@ void v_AppMain_TLU(void)
                                                             mt_GradientLightsMenu   .u8MaxOptions);
                 bReturnToMainMenu |= RETURN_TO_MAIN_MENU(   mt_AnimatedLightsMenu   .u8Selection,
                                                             mt_AnimatedLightsMenu   .u8MaxOptions);
+#ifdef OLD_ANIMATIONS_MENUS
                 bReturnToMainMenu |= RETURN_TO_MAIN_MENU(mu8StartingPointMenuSelect,              7);
-                bReturnToMainMenu |= RETURN_TO_MAIN_MENU(mt_ClockMenu .u8Selection, mt_ClockMenu .u8MaxOptions);
+#endif
+                bReturnToMainMenu |= RETURN_TO_MAIN_MENU(   mt_ClockMenu            .u8Selection,
+                                                            mt_ClockMenu            .u8MaxOptions);
 
                 /// \todo - SNAKEBITE - remove these conditions once these menus are developed
-                bReturnToMainMenu |= (e_Temp        == mt_MainMenu.u8Selection);
-                bReturnToMainMenu |= (e_Music       == mt_MainMenu.u8Selection);
-                bReturnToMainMenu |= (e_Settings    == mt_MainMenu.u8Selection);
-                bReturnToMainMenu |= (e_Search      == mt_MainMenu.u8Selection);
+                bReturnToMainMenu |= (BACK_TO_MAIN_MENU == mu8TempMenuSelect    );
+                bReturnToMainMenu |= (BACK_TO_MAIN_MENU == mu8MusicMenuSelect   );
+                bReturnToMainMenu |= (BACK_TO_MAIN_MENU == mu8SettingsMenuSelect);
+                bReturnToMainMenu |= (BACK_TO_MAIN_MENU == mu8SearchMenuSelect  );
 
         // If returning to main menu, set all menu selections to NONE
-        if (bReturnToMainMenu)  v_ResetMenuSelections();
+        if (bReturnToMainMenu)
+        {
+            v_ResetMenuSelections(); // Reset all menu selections to SELECTION_NONE
+
+            for (size_t i = 0; i < e_NumLedStripDefinitions; i++)
+            { // Reset all LED strip definitions to FALSE, without resetting all
+                // LED strip data (that may be needed for animations)
+                mat_SmartDormLedStrip[i].bDefined = false;
+            }
+        }
 
         // Go to main menu if no selection has been made
         if (NO_SELECTION(mt_MainMenu.u8Selection))
         {
-            v_MainMenu(mj_SmartDormLcd, 
-                       mj_SmartDormKeypad, 
+            v_MainMenu(mj_SmartDormLcd,
+                       mj_SmartDormKeypad,
                        &mt_MainMenu);
         }
         else
@@ -433,32 +450,33 @@ void v_AppMain_TLU(void)
                     }
                     break;
                     
-                case e_Clock:
-                    // Clock menu
+                case e_Clock:       // Clock menu
                     if (NO_SELECTION(mt_ClockMenu.u8Selection))
                     {
                         v_AppClockMenu(mj_SmartDormLcd,
                                        mj_SmartDormKeypad,
                                        &mt_ClockMenu);
                     }
+                    else
+                    { // Feature not supported
+                        v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, mj_SmartDormKeypad, &mt_ClockMenu.u8Selection);
+                    }
                     break;
                     
-                case e_Temp:
-                    // Temp Menu
+                case e_Temp:        // Temp Menu
+                    mu8TempMenuSelect      = u8_TempMenu();
                     break;
                     
-                case e_Music:
-                    // Music menu
+                case e_Music:       // Music menu
                     mu8MusicMenuSelect     = u8_MusicMenu();
                     break;
                     
-                case e_Settings:
-                    // Settings Menu
+                case e_Settings:    // Settings Menu
                     mu8SettingsMenuSelect  = u8_SettingsMenu();
                     break;
                     
-                case e_Search:
-                    // Search all items
+                case e_Search:      // Search all items
+                    mu8SearchMenuSelect    = u8_SearchMenu();
                     break;
                     
                 default:
@@ -606,13 +624,17 @@ static void v_ResetMenuSelections(void)
     v_AppScreen_MenuSelection_SelectionsReset(&mt_GradientLightsMenu);  // Gradient Lights  Menu
     v_AppScreen_MenuSelection_SelectionsReset(&mt_AnimatedLightsMenu);  // Animated Lights  Menu
     
+#ifdef OLD_ANIMATIONS_MENUS
     mu8StartingPointMenuSelect      = SELECTION_NONE;
+#endif
     
     // Other menus
     v_AppScreen_MenuSelection_SelectionsReset(&mt_ClockMenu         );  // Clock            Menu
 
+    mu8TempMenuSelect               = SELECTION_NONE;
     mu8MusicMenuSelect              = SELECTION_NONE;
     mu8SettingsMenuSelect           = SELECTION_NONE;
+    mu8SearchMenuSelect             = SELECTION_NONE;
 }
 
 
@@ -623,30 +645,40 @@ static void v_ResetMenuSelections(void)
 static uint32 u32_RequestPassword(void)
 {
     // Define function variables
-    static  T_TimeDelay   Td_Digit        = T_TIMEDELAY_DEFAULT();
-    static  bool          sbResetLcd      = true;
-    static  uint8       su8InputDigit   = 0;
-    static  uint8       su8DisplayDigit = 0;
+    static  T_TimeDelay     Td_Digit        = T_TIMEDELAY_DEFAULT();
+    static  bool            sbResetLcd      = true;
+    static  uint8           su8InputDigit   = 0;
+    static  uint8           su8DisplayDigit = 0;
 
-    static  uint8       sau8Digit[NUM_DIGITS_PASSWORD];
-    static  uint8       su8PrevPress    = KEYPRESS_NONE;
-            uint32      u32Guess        = DEFAULT_GUESS;
-            uint8       u8CurrentPress  = KEYPRESS_NONE;
+    static  uint8           sau8Digit[NUM_DIGITS_PASSWORD];
+    static  uint8           su8PrevPress    = KEYPRESS_NONE;
+            uint32          u32Guess        = DEFAULT_GUESS;
+            uint8           u8CurrentPress  = KEYPRESS_NONE;
+
+    const   charn           c_cDescription[MAX_LENGTH_DESCRIPTION]  = "Enter Password:";
+    const   uint8           cu8DisplayPositionDescription_x         = (DISPLAY_WIDTH_X - strnlen(&c_cDescription[0], MAX_LENGTH_DESCRIPTION)) / 2;
+    const   uint8           cu8DisplayPositionPassword_x            = (DISPLAY_WIDTH_X - NUM_DIGITS_PASSWORD                                ) / 2;
 
     if (sbResetLcd)
-    { 
-        // Initialize digit timer
+    { // Initialize digit timer
         v_AppClock_TimeDelay_Init(&Td_Digit, 300);
 
-        // Set up first screen
+        /* Set up first screen */
+        // First    line
         mj_SmartDormLcd.clear();
-        mj_SmartDormLcd.setCursor(0, 0);
+        mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X,           DISPLAY_POS_1ST_LINE_Y);
         mj_SmartDormLcd.print(F("********************"));
-        mj_SmartDormLcd.setCursor(2, 1);
-        mj_SmartDormLcd.print(F("Enter Password:"));
-        mj_SmartDormLcd.setCursor(7, 2);
+
+        // Second   line
+        mj_SmartDormLcd.setCursor(cu8DisplayPositionDescription_x,  DISPLAY_POS_2ND_LINE_Y);
+        mj_SmartDormLcd.print(&c_cDescription[0]);
+
+        // Third    line
+        mj_SmartDormLcd.setCursor(cu8DisplayPositionPassword_x,     DISPLAY_POS_3RD_LINE_Y);
         mj_SmartDormLcd.print(F("______"));
-        mj_SmartDormLcd.setCursor(0, 3);
+
+        // Fourth   line
+        mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X,           DISPLAY_POS_4TH_LINE_Y);
         mj_SmartDormLcd.print(F("********************"));
 
         // Clear so first screen is only set up once per password attempt
@@ -911,12 +943,30 @@ static uint8 u8_StartingPointMenu(void){
 
 
 /**
+ * \brief  This function brings the user to the temperature menu and returns a selection
+ * \return mu8SettingsMenuSelect
+ */
+static uint8 u8_TempMenu(void)
+{ // Not supported
+    uint8 u8Return = SELECTION_NONE;
+
+    v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, mj_SmartDormKeypad, &u8Return);
+
+    return u8Return;
+}
+
+
+/**
  * \brief  This function brings the user to the music menu and returns a selection
  * \return mu8MusicMenuSelect
  */
 static uint8 u8_MusicMenu(void)
-{
-  
+{ // Not supported
+    uint8 u8Return = SELECTION_NONE;
+
+    v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, mj_SmartDormKeypad, &u8Return);
+
+    return u8Return;
 }
 
 
@@ -925,8 +975,26 @@ static uint8 u8_MusicMenu(void)
  * \return mu8SettingsMenuSelect
  */
 static uint8 u8_SettingsMenu(void)
-{
-  
+{ // Not supported
+    uint8 u8Return = SELECTION_NONE;
+
+    v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, mj_SmartDormKeypad, &u8Return);
+
+    return u8Return;
+}
+
+
+/**
+ * \brief  This function brings the user to the search menu and returns a selection
+ * \return mu8SearchMenuSelect
+ */
+static uint8 u8_SearchMenu(void)
+{ // Not supported
+    uint8 u8Return = SELECTION_NONE;
+
+    v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, mj_SmartDormKeypad, &u8Return);
+
+    return u8Return;
 }
 
 

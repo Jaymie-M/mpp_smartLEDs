@@ -638,6 +638,15 @@ static void _v_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,
 
     switch (e_StillRainbowStep)
     {
+        case e_StillRainbowClearLedStrip:
+
+            mbEnableAnimations = false; // Clear flag that enables animations
+            FastLED.clear();            // Clear and update LEDs
+            FastLED.show();
+
+            e_StillRainbowStep = e_StillRainbowInit; // Next step
+            break;
+
         case e_StillRainbowInit:
 
             // Initialize all menus and screens to be reprinted
@@ -718,16 +727,7 @@ static void _v_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,
             v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_RainbowLengthScreen);
 
             // Move to next step if rainbow length is defined
-            if (st_RainbowLengthScreen.bValuesDefined)  e_StillRainbowStep = e_StillRainbowClearLedStrip; // Next step
-            break;
-
-        case e_StillRainbowClearLedStrip:
-
-            mbEnableAnimations = false; // Clear flag that enables animations
-            FastLED.clear();            // Clear and update LEDs
-            FastLED.show();
-
-            e_StillRainbowStep = e_StillRainbowDefineLedStrip; // Next step
+            if (st_RainbowLengthScreen.bValuesDefined)  e_StillRainbowStep = e_StillRainbowDefineLedStrip; // Next step
             break;
 
         case e_StillRainbowDefineLedStrip:
@@ -1336,8 +1336,11 @@ void v_AppStillsLights_Main_TLU(LiquidCrystal_I2C    j_Lcd,          // [I, ] LC
     switch (u8Selection)
     {
         case e_StillPresets:
-        case e_StillThemed:
-            /// \todo - create these menus - before release, at least create "this feature not supported screen"
+        case e_StillThemed: // Not supported
+            v_AppScreen_FeatureNotSupported(j_Lcd, j_Keypad, &u8Selection);
+
+            // If set to back to main menu, set LED strip defined
+            pt_LedStrip->bDefined = (BACK_TO_MAIN_MENU == u8Selection);
             break;
 
         case e_StillSolidColor:
@@ -1398,18 +1401,19 @@ void v_AppStillsLights_Gradient_TLU(LiquidCrystal_I2C   j_Lcd,          // [I, ]
     if ((e_GradientLightsMenuUnd != u8Selection) && (e_MaxGradientLightsMenu >= u8Selection))
     { // If gradient selection is valid, select style
 
-        /* Set LED strip style */
-        if 		(e_GradientUnequalCheckpts 	        == u8Selection)
-        { // Unequal   style
-            pt_LedStrip->e_Style = e_StyleUnequalCheckpoints;
-        }
-        else if (e_GradientPatternedEqualCheckpts   == u8Selection)
-        { // Patterned style
-            pt_LedStrip->e_Style = e_StylePatternedCheckpoints;
-        }
-        else
-        { // Equal     style
-            pt_LedStrip->e_Style = e_StyleEqualCheckpoints;
+        switch (u8Selection)
+        {
+            case e_GradientUnequalCheckpts:         // Unequal   style
+                pt_LedStrip->e_Style = e_StyleUnequalCheckpoints;
+                break;
+
+            case e_GradientPatternedEqualCheckpts:  // Patterned style
+                pt_LedStrip->e_Style = e_StylePatternedCheckpoints;
+                break;
+
+            default:                                // Equal     style
+                pt_LedStrip->e_Style = e_StyleEqualCheckpoints;
+                break;
         }
 
         // Select checkpoints

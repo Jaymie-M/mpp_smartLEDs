@@ -1336,7 +1336,7 @@ void v_AppStillsLights_Main_TLU(LiquidCrystal_I2C    j_Lcd,          // [I, ] LC
     {
         case e_StillPresets:
         case e_StillThemed: // Not supported
-            v_AppScreen_FeatureNotSupported(j_Lcd, &u8Selection);
+            v_AppScreen_FeatureNotSupported(j_Lcd, j_Keypad, &u8Selection);
 
             // If set to back to main menu, set LED strip defined
             pt_LedStrip->bDefined = (BACK_TO_MAIN_MENU == u8Selection);
