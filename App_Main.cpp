@@ -163,13 +163,22 @@ void v_AppMain_TLU(void)
                 bReturnToMainMenu |= (e_Search      == mt_MainMenu.u8Selection);
 
         // If returning to main menu, set all menu selections to NONE
-        if (bReturnToMainMenu)  v_ResetMenuSelections();
+        if (bReturnToMainMenu)
+        {
+            v_ResetMenuSelections(); // Reset all menu selections to SELECTION_NONE
+
+            for (size_t i = 0; i < e_NumLedStripDefinitions; i++)
+            { // Reset all LED strip definitions to FALSE, without resetting all
+                // LED strip data (that may be needed for animations)
+                mat_SmartDormLedStrip[i].bDefined = false;
+            }
+        }
 
         // Go to main menu if no selection has been made
         if (NO_SELECTION(mt_MainMenu.u8Selection))
         {
-            v_MainMenu(mj_SmartDormLcd, 
-                       mj_SmartDormKeypad, 
+            v_MainMenu(mj_SmartDormLcd,
+                       mj_SmartDormKeypad,
                        &mt_MainMenu);
         }
         else
