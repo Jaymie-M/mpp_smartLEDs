@@ -631,30 +631,40 @@ static void v_ResetMenuSelections(void)
 static uint32 u32_RequestPassword(void)
 {
     // Define function variables
-    static  T_TimeDelay   Td_Digit        = T_TIMEDELAY_DEFAULT();
-    static  bool          sbResetLcd      = true;
-    static  uint8       su8InputDigit   = 0;
-    static  uint8       su8DisplayDigit = 0;
+    static  T_TimeDelay     Td_Digit        = T_TIMEDELAY_DEFAULT();
+    static  bool            sbResetLcd      = true;
+    static  uint8           su8InputDigit   = 0;
+    static  uint8           su8DisplayDigit = 0;
 
-    static  uint8       sau8Digit[NUM_DIGITS_PASSWORD];
-    static  uint8       su8PrevPress    = KEYPRESS_NONE;
-            uint32      u32Guess        = DEFAULT_GUESS;
-            uint8       u8CurrentPress  = KEYPRESS_NONE;
+    static  uint8           sau8Digit[NUM_DIGITS_PASSWORD];
+    static  uint8           su8PrevPress    = KEYPRESS_NONE;
+            uint32          u32Guess        = DEFAULT_GUESS;
+            uint8           u8CurrentPress  = KEYPRESS_NONE;
+
+    const   charn           c_cDescription[MAX_LENGTH_DESCRIPTION]  = "Enter Password:";
+    const   uint8           cu8DisplayPositionDescription_x         = (DISPLAY_WIDTH - strnlen(&c_cDescription[0])) / 2;
+    const   uint8           cu8DisplayPositionPassword_x            = (DISPLAY_WIDTH - NUM_DIGITS_PASSWORD        ) / 2;
 
     if (sbResetLcd)
-    { 
-        // Initialize digit timer
+    { // Initialize digit timer
         v_AppClock_TimeDelay_Init(&Td_Digit, 300);
 
-        // Set up first screen
+        /* Set up first screen */
+        // First    line
         mj_SmartDormLcd.clear();
-        mj_SmartDormLcd.setCursor(0, 0);
+        mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X,           DISPLAY_POS_1ST_LINE_Y);
         mj_SmartDormLcd.print(F("********************"));
-        mj_SmartDormLcd.setCursor(2, 1);
-        mj_SmartDormLcd.print(F("Enter Password:"));
-        mj_SmartDormLcd.setCursor(7, 2);
+
+        // Second   line
+        mj_SmartDormLcd.setCursor(cu8DisplayPositionDescription_x,  DISPLAY_POS_2ND_LINE_Y);
+        mj_SmartDormLcd.print(F(&c_cDescription[0]));
+
+        // Third    line
+        mj_SmartDormLcd.setCursor(cu8DisplayPositionPassword_x,     DISPLAY_POS_3RD_LINE_Y);
         mj_SmartDormLcd.print(F("______"));
-        mj_SmartDormLcd.setCursor(0, 3);
+
+        // Fourth   line
+        mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X,           DISPLAY_POS_4TH_LINE_Y);
         mj_SmartDormLcd.print(F("********************"));
 
         // Clear so first screen is only set up once per password attempt

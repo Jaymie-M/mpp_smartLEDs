@@ -338,20 +338,20 @@ void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,              // [
     switch (pt_AnimatedLeds->e_Style)
     {
         case e_AnimationStyleFade:
-            _v_AppAnimatedLights_Fade  (j_Lcd, 
-                                        j_Keypad, 
-                                        pt_AnimatedLeds, 
-                                        pat_Leds, 
+            _v_AppAnimatedLights_Fade  (j_Lcd,
+                                        j_Keypad,
+                                        pt_AnimatedLeds,
+                                        pat_Leds,
                                         pat_LedStrip,
                                         u32CycleTime_ms,
                                         u8Selection);
             break;
         case e_AnimationStyleShift:
-            _v_AppAnimatedLights_ShiftSects(j_Lcd, 
-                                            j_Keypad, 
+            _v_AppAnimatedLights_ShiftSects(j_Lcd,
+                                            j_Keypad,
                                             pt_AnimatedLeds,
-                                            pat_Leds, 
-                                            &pat_LedStrip[e_InitialSetpoint], 
+                                            pat_Leds,
+                                            &pat_LedStrip[e_InitialSetpoint],
                                             &pat_LedStrip[e_Shift],
                                             u32CycleTime_ms, 
                                             u8Selection - SHIFT_OPTION_OFFSET);
