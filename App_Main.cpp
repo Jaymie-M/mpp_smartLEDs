@@ -63,11 +63,15 @@ static uint32 mu32SmartDormLedsCycleTime_ms = 0;
 static uint32 mu32PrevLoopTime_ms           = 0;
 
 // Animations menus
+#ifdef OLD_ANIMATIONS_MENUS
 static uint8  mu8StartingPointMenuSelect    = 0;
+#endif
 
 // Stills and Animations menus
+static uint8  mu8TempMenuSelect             = 0;
 static uint8  mu8MusicMenuSelect            = 0;
 static uint8  mu8SettingsMenuSelect         = 0;
+static uint8  mu8SearchMenuSelect           = 0;
 
 // Structs
 static T_AnimatedLeds   mt_AnimatedLeds;
@@ -108,9 +112,10 @@ static uint8    u8_StartingPointMenu  (void);
 #endif
 
 // Misc
+static uint8    u8_TempMenu           (void);
 static uint8    u8_MusicMenu          (void);
 static uint8    u8_SettingsMenu       (void);
-
+static uint8    u8_SearchMenu         (void);
 
 /***************************
  *   Function Definitions  *
@@ -153,14 +158,17 @@ void v_AppMain_TLU(void)
                                                             mt_GradientLightsMenu   .u8MaxOptions);
                 bReturnToMainMenu |= RETURN_TO_MAIN_MENU(   mt_AnimatedLightsMenu   .u8Selection,
                                                             mt_AnimatedLightsMenu   .u8MaxOptions);
+#ifdef OLD_ANIMATIONS_MENUS
                 bReturnToMainMenu |= RETURN_TO_MAIN_MENU(mu8StartingPointMenuSelect,              7);
-                bReturnToMainMenu |= RETURN_TO_MAIN_MENU(mt_ClockMenu .u8Selection, mt_ClockMenu .u8MaxOptions);
+#endif
+                bReturnToMainMenu |= RETURN_TO_MAIN_MENU(   mt_ClockMenu            .u8Selection,
+                                                            mt_ClockMenu            .u8MaxOptions);
 
                 /// \todo - SNAKEBITE - remove these conditions once these menus are developed
-                bReturnToMainMenu |= (e_Temp        == mt_MainMenu.u8Selection);
-                bReturnToMainMenu |= (e_Music       == mt_MainMenu.u8Selection);
-                bReturnToMainMenu |= (e_Settings    == mt_MainMenu.u8Selection);
-                bReturnToMainMenu |= (e_Search      == mt_MainMenu.u8Selection);
+                bReturnToMainMenu |= (RETURN_TO_MAIN_MENU == mu8TempMenuSelect    );
+                bReturnToMainMenu |= (RETURN_TO_MAIN_MENU == mu8MusicMenuSelect   );
+                bReturnToMainMenu |= (RETURN_TO_MAIN_MENU == mu8SettingsMenuSelect);
+                bReturnToMainMenu |= (RETURN_TO_MAIN_MENU == mu8SearchMenuSelect  );
 
         // If returning to main menu, set all menu selections to NONE
         if (bReturnToMainMenu)
@@ -441,32 +449,33 @@ void v_AppMain_TLU(void)
                     }
                     break;
                     
-                case e_Clock:
-                    // Clock menu
+                case e_Clock:       // Clock menu
                     if (NO_SELECTION(mt_ClockMenu.u8Selection))
                     {
                         v_AppClockMenu(mj_SmartDormLcd,
                                        mj_SmartDormKeypad,
                                        &mt_ClockMenu);
                     }
+                    else
+                    { // Feature not supported
+                        v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, &mt_ClockMenu.u8Selection);
+                    }
                     break;
                     
-                case e_Temp:
-                    // Temp Menu
+                case e_Temp:        // Temp Menu
+                    mu8TempMenuSelect      = u8_TempMenu();
                     break;
                     
-                case e_Music:
-                    // Music menu
+                case e_Music:       // Music menu
                     mu8MusicMenuSelect     = u8_MusicMenu();
                     break;
                     
-                case e_Settings:
-                    // Settings Menu
+                case e_Settings:    // Settings Menu
                     mu8SettingsMenuSelect  = u8_SettingsMenu();
                     break;
                     
-                case e_Search:
-                    // Search all items
+                case e_Search:      // Search all items
+                    mu8SearchMenuSelect    = u8_SearchMenu();
                     break;
                     
                 default:
@@ -614,13 +623,17 @@ static void v_ResetMenuSelections(void)
     v_AppScreen_MenuSelection_SelectionsReset(&mt_GradientLightsMenu);  // Gradient Lights  Menu
     v_AppScreen_MenuSelection_SelectionsReset(&mt_AnimatedLightsMenu);  // Animated Lights  Menu
     
+#ifdef OLD_ANIMATIONS_MENUS
     mu8StartingPointMenuSelect      = SELECTION_NONE;
+#endif
     
     // Other menus
     v_AppScreen_MenuSelection_SelectionsReset(&mt_ClockMenu         );  // Clock            Menu
 
+    mu8TempMenuSelect               = SELECTION_NONE;
     mu8MusicMenuSelect              = SELECTION_NONE;
     mu8SettingsMenuSelect           = SELECTION_NONE;
+    mu8SearchMenuSelect             = SELECTION_NONE;
 }
 
 
@@ -929,12 +942,30 @@ static uint8 u8_StartingPointMenu(void){
 
 
 /**
+ * \brief  This function brings the user to the temperature menu and returns a selection
+ * \return mu8SettingsMenuSelect
+ */
+static uint8 u8_TempMenu(void)
+{ // Not supported
+    uint8 u8Return = SELECTION_NONE;
+
+    v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, &u8Return);
+
+    return u8Return;
+}
+
+
+/**
  * \brief  This function brings the user to the music menu and returns a selection
  * \return mu8MusicMenuSelect
  */
 static uint8 u8_MusicMenu(void)
-{
-  
+{ // Not supported
+    uint8 u8Return = SELECTION_NONE;
+
+    v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, &u8Return);
+
+    return u8Return;
 }
 
 
@@ -943,8 +974,26 @@ static uint8 u8_MusicMenu(void)
  * \return mu8SettingsMenuSelect
  */
 static uint8 u8_SettingsMenu(void)
-{
-  
+{ // Not supported
+    uint8 u8Return = SELECTION_NONE;
+
+    v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, &u8Return);
+
+    return u8Return;
+}
+
+
+/**
+ * \brief  This function brings the user to the search menu and returns a selection
+ * \return mu8SearchMenuSelect
+ */
+static uint8 u8_SearchMenu(void)
+{ // Not supported
+    uint8 u8Return = SELECTION_NONE;
+
+    v_AppScreen_FeatureNotSupported(mj_SmartDormLcd, &u8Return);
+
+    return u8Return;
 }
 
 

@@ -1155,6 +1155,38 @@ void v_AppScreen_MenuSelection_TLU(LiquidCrystal_I2C    j_Lcd,      // [I, ] Lcd
  * \brief  This function displays a screen requesting user to press zero if done or press another key if desiring to re-enter colors
  * \return none
  */
+void v_AppScreen_FeatureNotSupported(LiquidCrystal_I2C  j_Lcd,          // [I, ] Lcd object
+                                     uint8            * pu8Selection)   // [I, ] Pointer to selection variable
+{
+    static  bool    sbReprintMenu   = true;
+    static  uint8   su8PrevPress    = KEYPRESS_NONE;
+            uint8   u8CurrentPress  = KEYPRESS_NONE;
+
+    if (sbReprintMenu)
+    { // Print menu indicating that feature is unsupported
+        v_AppScreen_TitleAndText(j_Lcd, "", "Feature unsupported!",
+                                            "Press any key to",
+                                            "continue.");
+
+        sbReprintMenu = false; // Only reprint menu once
+    }
+
+    u8CurrentPress = u8_AppTools_GetKeypress(j_Keypad);
+
+    if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE))  // Falling edge of keypress
+    { // Return to main menu if any key is pressed
+        *pu8Selection   = BACK_TO_MAIN_MENU;
+        sbReprintMenu   = true; // Reprint menu if we ever come back in here
+    }
+
+    su8PrevPress = u8CurrentPress; // Store current keypress
+}
+
+
+/**
+ * \brief  This function displays a screen requesting user to press zero if done or press another key if desiring to re-enter colors
+ * \return none
+ */
 void v_AppScreen_PressZeroIfDone(LiquidCrystal_I2C  j_Lcd,          // [I, ] Lcd object
                                  const charn      * pc_ThirdLine,   // [I, ] Third  line
                                  const charn      * pc_FourthLine)  // [I, ] Fourth line
