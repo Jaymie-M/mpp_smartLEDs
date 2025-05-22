@@ -637,6 +637,15 @@ static void _v_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,
 
     switch (e_StillRainbowStep)
     {
+        case e_StillRainbowClearLedStrip:
+
+            mbEnableAnimations = false; // Clear flag that enables animations
+            FastLED.clear();            // Clear and update LEDs
+            FastLED.show();
+
+            e_StillRainbowStep = e_StillRainbowInit; // Next step
+            break;
+
         case e_StillRainbowInit:
 
             // Initialize all menus and screens to be reprinted
@@ -717,16 +726,7 @@ static void _v_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,
             v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_RainbowLengthScreen);
 
             // Move to next step if rainbow length is defined
-            if (st_RainbowLengthScreen.bValuesDefined)  e_StillRainbowStep = e_StillRainbowClearLedStrip; // Next step
-            break;
-
-        case e_StillRainbowClearLedStrip:
-
-            mbEnableAnimations = false; // Clear flag that enables animations
-            FastLED.clear();            // Clear and update LEDs
-            FastLED.show();
-
-            e_StillRainbowStep = e_StillRainbowDefineLedStrip; // Next step
+            if (st_RainbowLengthScreen.bValuesDefined)  e_StillRainbowStep = e_StillRainbowDefineLedStrip; // Next step
             break;
 
         case e_StillRainbowDefineLedStrip:
