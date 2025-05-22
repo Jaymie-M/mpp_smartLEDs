@@ -36,5 +36,6 @@ C:\Users\jaymi\Documents\Arduino\mpp_smartLEDs\build\libraries\FastLED\fx\video\
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fx/time.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/callback.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fx/frame.h \
+ C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/xymap.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fx/video/frame_tracker.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/circular_buffer.h

@@ -128,7 +128,7 @@ void v_AppMain_Init(void)
     FastLED.clear();
 
     // Start serial monitor
-    Serial.begin(9600);
+    Serial.begin(2000000);
 
     // Configure pins and modules
     v_ConfigurePins();

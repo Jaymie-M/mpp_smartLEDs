@@ -1,11 +1,11 @@
 C:\Users\jaymi\Documents\Arduino\mpp_smartLEDs\build\libraries\FastLED\sensors\digital_pin.cpp.o: \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src\sensors\digital_pin.cpp \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/ui.h \
- C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/platforms/ui_defs.h \
- C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/namespace.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/math_macros.h \
+ C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/namespace.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/template_magic.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/unused.h \
+ C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/platforms/ui_defs.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/ptr.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/scoped_ptr.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src\sensors\digital_pin.h \

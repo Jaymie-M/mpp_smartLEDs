@@ -28,13 +28,13 @@ C:\Users\jaymi\Documents\Arduino\mpp_smartLEDs\build\libraries\FastLED\fx\fx_eng
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fx/detail/fx_compositor.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fx/detail/fx_layer.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fx/frame.h \
+ C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/xymap.h \
+ C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/lut.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/allocator.h \
+ C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/xmap.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/ui.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/platforms/ui_defs.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fx/time.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/callback.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fx/video.h \
- C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fx/fx1d.h \
- C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/xmap.h \
- C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/lut.h \
- C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/xymap.h
+ C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fx/fx1d.h

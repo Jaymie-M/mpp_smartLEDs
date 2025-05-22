@@ -50,7 +50,7 @@ C:\Users\jaymi\Documents\Arduino\mpp_smartLEDs\build\libraries\FastLED\sensors\p
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/math_macros.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/pixel_controller.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/rgbw.h \
- C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/five_bit_hd_gamma.h \
+ C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/five_bit_hd_gamma.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/dither_mode.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/pixel_iterator.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/cled_controller.h \
@@ -92,8 +92,9 @@ C:\Users\jaymi\Documents\Arduino\mpp_smartLEDs\build\libraries\FastLED\sensors\p
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fastspi.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fastspi_bitbang.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/chipsets.h \
+ C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fastpin.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/sensors/pir.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/sensors/digital_pin.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/ui.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/platforms/ui_defs.h \
- C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fastpin.h
+ C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/time_alpha.h

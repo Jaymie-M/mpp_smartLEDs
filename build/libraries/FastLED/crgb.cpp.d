@@ -50,7 +50,7 @@ C:\Users\jaymi\Documents\Arduino\mpp_smartLEDs\build\libraries\FastLED\crgb.cpp.
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src/fl/math_macros.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src\pixel_controller.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src\rgbw.h \
- C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src\five_bit_hd_gamma.h \
+ C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src\fl/five_bit_hd_gamma.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src\dither_mode.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src\pixel_iterator.h \
  C:\Users\jaymi\Documents\Arduino\libraries\FastLED\src\cled_controller.h \

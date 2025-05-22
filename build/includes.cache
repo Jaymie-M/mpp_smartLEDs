@@ -125,12 +125,17 @@
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\five_bit_hd_gamma.cpp",
+    "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\allocator.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\allocator.cpp",
+    "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\bilinear_compression.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\bilinear_expansion.cpp",
     "Include": "",
     "Includepath": null
   },
@@ -146,6 +151,11 @@
   },
   {
     "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\file_system.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\five_bit_hd_gamma.cpp",
     "Include": "",
     "Includepath": null
   },
@@ -170,12 +180,32 @@
     "Includepath": null
   },
   {
+    "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\sin32.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
     "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\str.cpp",
     "Include": "",
     "Includepath": null
   },
   {
     "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\stub_main.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\time_alpha.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\wave_simulation.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fl\\wave_simulation_real.cpp",
     "Include": "",
     "Includepath": null
   },
@@ -190,7 +220,7 @@
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\2d\\bilinear_expansion.cpp",
+    "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\2d\\blend.cpp",
     "Include": "",
     "Includepath": null
   },
@@ -201,6 +231,11 @@
   },
   {
     "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\2d\\scale_up.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\fx\\2d\\wave.cpp",
     "Include": "",
     "Includepath": null
   },
@@ -275,7 +310,7 @@
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\esp\\32\\clockless_rmt_esp32.cpp",
+    "Sourcefile": "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src\\platforms\\esp\\32\\i2s\\i2s_esp32dev.cpp",
     "Include": "",
     "Includepath": null
   },
