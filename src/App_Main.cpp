@@ -277,27 +277,11 @@ void v_AppMain_TLU(void)
                                                                                         mj_SmartDormKeypad,
                                                                                         &mt_AnimatedLeds,
                                                                                         &st_ScreenSetpoints);
-
-                                            // Serial.println("");
-                                            // Serial.println("");
-                                            // Serial.println("/*---------------------------------------------------*/");
-                                            // Serial.println("Choosing number of setpoints!");
-                                            // Serial.println("/*---------------------------------------------------*/");
-                                            // Serial.println("");
-                                            // Serial.println("");
                                         }
                                         else
                                         { // Otherwise choose one setpoint
                                             st_ScreenSetpoints.bValuesDefined = true;
                                             mt_AnimatedLeds.u8NumberSetpoints = 1;
-
-                                            // Serial.println("");
-                                            // Serial.println("");
-                                            // Serial.println("/*---------------------------------------------------*/");
-                                            // Serial.println("Choosing one setpoint!");
-                                            // Serial.println("/*---------------------------------------------------*/");
-                                            // Serial.println("");
-                                            // Serial.println("");
                                         }
                                     }
                                     else if (!mt_AnimatedLeds.bSetpointsDefined)
@@ -308,27 +292,11 @@ void v_AppMain_TLU(void)
                                             v_AppStillsLights_MainMenu(mj_SmartDormLcd,
                                                                        mj_SmartDormKeypad,
                                                                        &mt_StillLightsMenu);
-
-                                            // Serial.println("");
-                                            // Serial.println("");
-                                            // Serial.println("/*---------------------------------------------------*/");
-                                            // Serial.println("Choosing still lights selection!");
-                                            // Serial.println("/*---------------------------------------------------*/");
-                                            // Serial.println("");
-                                            // Serial.println("");
                                         }
                                         else
                                         {
                                             if (e_StillGradient == mt_StillLightsMenu.u8Selection)
                                             {
-                                                // Serial.println("");
-                                                // Serial.println("");
-                                                // Serial.println("/*---------------------------------------------------*/");
-                                                // Serial.println("Chose gradient selection!");
-                                                // Serial.println("/*---------------------------------------------------*/");
-                                                // Serial.println("");
-                                                // Serial.println("");
-
                                                 if (NO_SELECTION(mt_GradientLightsMenu.u8Selection))
                                                 {
                                                     v_AppStillsLights_GradientMenu(mj_SmartDormLcd,
@@ -356,38 +324,14 @@ void v_AppMain_TLU(void)
                                             }
                                             else if (NOT_BACK_TO_MAIN_MENU(mt_StillLightsMenu.u8Selection))
                                             {
-                                                // Serial.println("");
-                                                // Serial.println("");
-                                                // Serial.println("/*---------------------------------------------------*/");
-                                                // Serial.println("Still lights selection not back to main menu!");
-                                                // Serial.println("/*---------------------------------------------------*/");
-                                                // Serial.println("");
-                                                // Serial.println("");
-
                                                 if (mat_SmartDormLedStrip[mt_AnimatedLeds.u8CurrentSetpoint].bDefined)
                                                 { // LED Strip defined, reset still lights selection and increment current setpoint
                                                     v_AppScreen_MenuSelection_SelectionsReset(&mt_StillLightsMenu);
                                                     
                                                     mt_AnimatedLeds.u8CurrentSetpoint++; // Increment current setpoint
-
-                                                    // Serial.println("");
-                                                    // Serial.println("");
-                                                    // Serial.println("/*---------------------------------------------------*/");
-                                                    // Serial.println("Resetting still lights selection and incrementing current setpoint!");
-                                                    // Serial.println("/*---------------------------------------------------*/");
-                                                    // Serial.println("");
-                                                    // Serial.println("");
                                                 }
                                                 else
                                                 {
-                                                    // Serial.println("");
-                                                    // Serial.println("");
-                                                    // Serial.println("/*---------------------------------------------------*/");
-                                                    // Serial.println("Choosing still lights colors!");
-                                                    // Serial.println("/*---------------------------------------------------*/");
-                                                    // Serial.println("");
-                                                    // Serial.println("");
-
                                                     v_AppStillsLights_Main_TLU(mj_SmartDormLcd,
                                                                                mj_SmartDormKeypad,
                                                                                &mat_SmartDormLeds[0],
@@ -403,13 +347,6 @@ void v_AppMain_TLU(void)
                                     }
                                     else
                                     { // Setpoints are defined
-                                        // Serial.println("");
-                                        // Serial.println("");
-                                        // Serial.println("/*---------------------------------------------------*/");
-                                        // Serial.println("Getting in setpoints defined!");
-                                        // Serial.println("/*---------------------------------------------------*/");
-                                        // Serial.println("");
-                                        // Serial.println("");
 
                                         if (mt_AnimatedLeds.bDefined)
                                         { // Animations are defined - go back to main menu
@@ -417,26 +354,10 @@ void v_AppMain_TLU(void)
 
                                             // Reset setpoints screen for next loop
                                             v_AppAnimatedLights_SetpointsScreenReset(&st_ScreenSetpoints, &mt_AnimatedLeds);
-
-                                            // Serial.println("");
-                                            // Serial.println("");
-                                            // Serial.println("/*---------------------------------------------------*/");
-                                            // Serial.println("Getting in reset function!");
-                                            // Serial.println("/*---------------------------------------------------*/");
-                                            // Serial.println("");
-                                            // Serial.println("");
                                         }
                                         else
                                         { // Set animations to enabled
                                             v_AppStillsLights_EnableAnimations();
-
-                                            // Serial.println("");
-                                            // Serial.println("");
-                                            // Serial.println("/*---------------------------------------------------*/");
-                                            // Serial.println("Setting animations enabled!");
-                                            // Serial.println("/*---------------------------------------------------*/");
-                                            // Serial.println("");
-                                            // Serial.println("");
                                         }
                                     }
                                 }
@@ -486,21 +407,6 @@ void v_AppMain_TLU(void)
 
         mu32SmartDormLedsCycleTime_ms = millis() - mu32PrevLoopTime_ms; // Calculate cycle time
         mu32PrevLoopTime_ms           = millis();                       // Store previous loop time
-
-        static uint8 u8LoopCount = 0;
-
-        u8LoopCount++;
-
-        if (u8LoopCount > 20)
-        {
-            u8LoopCount = 0;
-
-            mj_SmartDormLcd.setCursor(DISPLAY_POS_TIME_X, DISPLAY_POS_3RD_LINE_Y);
-            if(b_AppStillsLights_AnimationsEnabled())   mj_SmartDormLcd.print("TRUE");
-            else                                        mj_SmartDormLcd.print("FALSE");
-            mj_SmartDormLcd.setCursor(DISPLAY_POS_TIME_X, DISPLAY_POS_4TH_LINE_Y);
-            mj_SmartDormLcd.print(mu32SmartDormLedsCycleTime_ms);
-        }
 
         /* Updates done outside of main menu selection */
         if (b_AppStillsLights_AnimationsEnabled() )
