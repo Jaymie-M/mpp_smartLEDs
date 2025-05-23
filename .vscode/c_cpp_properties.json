@@ -1,61 +1,62 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
 {
-  "configurations": [
-    {
-      "name": "Arduino",
-      "includePath": [
-        "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino/**",
-        "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega/**",
-        "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src/**",
-        "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C/**",
-        "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src/**",
-        "C:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src/**",
-        "C:\\Users\\jaymi\\Documents\\Arduino\\libraries/**",
-        "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs/**"
-      ],
-      "forcedInclude": [
-        "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\Arduino.h"
-      ],
-      "compilerPath": "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-      "compilerArgs": [
-        "C:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-MMD",
-        "-flto",
-        "-mmcu=atmega2560",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_MEGA2560",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-        "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
-        "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\Keypad\\src",
-        "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
-        "-IC:\\Users\\jaymi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-        "-IC:\\Users\\jaymi\\Documents\\Arduino\\libraries\\FastLED\\src",
-        "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\mpp_smartLEDs.ino.cpp",
-        "-o",
-        "C:\\Users\\jaymi\\Documents\\Arduino\\mpp_smartLEDs\\build\\sketch\\mpp_smartLEDs.ino.cpp.o"
-      ],
-      "defines": [
-        "F_CPU=16000000L",
-        "ARDUINO=10607",
-        "ARDUINO_AVR_MEGA2560",
-        "ARDUINO_ARCH_AVR",
-        "USBCON"
-      ],
-      "cStandard": "c17",
-      "cppStandard": "c++17"
-    }
-  ],
-  "version": 4
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "C:/Users/jaymi/Documents/Arduino/mpp_smartLEDs/include",
+                "C:/Users/jaymi/Documents/Arduino/mpp_smartLEDs/src",
+                "C:/Users/jaymi/Documents/Arduino/mpp_smartLEDs/.pio/libdeps/megaatmega2560/LiquidCrystal_I2C",
+                "C:/Users/jaymi/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+                "C:/Users/jaymi/Documents/Arduino/mpp_smartLEDs/.pio/libdeps/megaatmega2560/Keypad/src",
+                "C:/Users/jaymi/Documents/Arduino/mpp_smartLEDs/.pio/libdeps/megaatmega2560/FastLED/src",
+                "C:/Users/jaymi/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+                "C:/Users/jaymi/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+                "C:/Users/jaymi/.platformio/packages/framework-arduino-avr/cores/arduino",
+                "C:/Users/jaymi/.platformio/packages/framework-arduino-avr/variants/mega",
+                "C:/Users/jaymi/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                "C:/Users/jaymi/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "C:/Users/jaymi/Documents/Arduino/mpp_smartLEDs/include",
+                    "C:/Users/jaymi/Documents/Arduino/mpp_smartLEDs/src",
+                    "C:/Users/jaymi/Documents/Arduino/mpp_smartLEDs/.pio/libdeps/megaatmega2560/LiquidCrystal_I2C",
+                    "C:/Users/jaymi/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+                    "C:/Users/jaymi/Documents/Arduino/mpp_smartLEDs/.pio/libdeps/megaatmega2560/Keypad/src",
+                    "C:/Users/jaymi/Documents/Arduino/mpp_smartLEDs/.pio/libdeps/megaatmega2560/FastLED/src",
+                    "C:/Users/jaymi/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+                    "C:/Users/jaymi/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+                    "C:/Users/jaymi/.platformio/packages/framework-arduino-avr/cores/arduino",
+                    "C:/Users/jaymi/.platformio/packages/framework-arduino-avr/variants/mega",
+                    "C:/Users/jaymi/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                    "C:/Users/jaymi/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=60118",
+                "ARDUINO_AVR_MEGA2560",
+                "F_CPU=16000000L",
+                "ARDUINO_ARCH_AVR",
+                "ARDUINO=10808",
+                "__AVR_ATmega2560__",
+                ""
+            ],
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++11",
+            "compilerPath": "C:/Users/jaymi/.platformio/packages/toolchain-atmelavr/bin/avr-gcc.exe",
+            "compilerArgs": [
+                "-mmcu=atmega2560",
+                ""
+            ]
+        }
+    ],
+    "version": 4
 }

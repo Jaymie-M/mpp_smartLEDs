@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"name": "mpp_smartLEDs",
+			"path": ".."
+		}
+	],
+    "settings": {}
+}
