@@ -233,7 +233,7 @@ static void _v_AppStillLights_GetLedColor_SectsChkpts  (T_LedStrip    * pt_LedSt
         case e_StyleUnequalSections:
         case e_StyleUnequalCheckpoints:
 
-            for (size_t k; k < pt_LedStrip->t_SectionData.u8NumUniqueSections; k++)
+            for (size_t k = 0; k < pt_LedStrip->t_SectionData.u8NumUniqueSections; k++)
             { // Find current section
                 u16SumLeds +=   pt_LedStrip->n_Style.t_Unequal.au8NumberOfLeds[k];
 
@@ -631,7 +631,7 @@ static void _v_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,
     /// \todo - finish developing this function - create default structs for rainbow direction menu/length screen
     static  T_MenuSelection     st_RainbowDirectionMenu = T_RAINBOWDIRECTIONMENU_DEFAULT();
     static  T_ScreenGetValues   st_RainbowLengthScreen  = T_RAINBOWLENGTHSCREEN_DEFAULT();
-    static  E_StillRainbowStep  e_StillRainbowStep      = e_StillRainbowInit;
+    static  E_StillRainbowStep  e_StillRainbowStep      = e_StillRainbowClearLedStrip;
             uint8               u8CurrentPress          = KEYPRESS_NONE;
     static  uint8               su8PrevPress            = KEYPRESS_NONE;
 
@@ -765,7 +765,7 @@ static void _v_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,
                     pt_LedStrip->bDefined = true;
                 }
 
-                e_StillRainbowStep = e_StillRainbowInit; // Reset to init step
+                e_StillRainbowStep = e_StillRainbowClearLedStrip; // Reset to clear step
             }
 
             su8PrevPress = u8CurrentPress; // Store current keypress
@@ -860,15 +860,12 @@ void v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
                                 st_ScreenUniqueSects    = T_UNIQUESECTSSCREEN_DEFAULT(),
                                 st_ScreenPatternOrder   = T_PATTERNORDERSCREEN_DEFAULT();
     static  T_TimeDelay         Td_PatternOrder         = T_TIMEDELAY_DEFAULT();
-    static  E_StillSectionsStep e_StillSectionsStep     = e_StillSectionsInit;
+    static  E_StillSectionsStep e_StillSectionsStep     = e_StillSectionsClearLedStrip;
     static  bool                sbReprintPressPound     = true;
             bool                bCheckpointStyle        = (e_StyleEqualCheckpoints      == pt_LedStrip->e_Style)
                                                        || (e_StyleUnequalCheckpoints    == pt_LedStrip->e_Style)
                                                        || (e_StylePatternedCheckpoints  == pt_LedStrip->e_Style);
             uint32              u32TempCalc             = 0UL;
-            uint8               u8CurrentPress          = KEYPRESS_NONE;
-    static  uint8               su8PrevPress            = KEYPRESS_NONE;
-
 
     switch (e_StillSectionsStep)
     {
@@ -928,8 +925,8 @@ void v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
                     if (e_StyleEqualCheckpoints == pt_LedStrip->e_Style)
                         pt_LedStrip->t_SectionData.u8NumLeds            = NUM_LEDS;                         // For checkpoints style; total LED strip used between checkpoints
 
-                        e_StillSectionsStep 	                        = e_StillSectionsDefineLedStrip;    // Go straight to defining LED strip
-                        break;
+                    e_StillSectionsStep 	                            = e_StillSectionsDefineLedStrip;    // Go straight to defining LED strip
+                    break;
 
                 case e_StillUnequalSections:
                     e_StillSectionsStep                                 = e_StillSectionsUniqueSectsScreen; // Go straight to unique sections selection
@@ -1375,13 +1372,13 @@ void v_AppStillsLights_Main_TLU(LiquidCrystal_I2C    j_Lcd,          // [I, ] LC
                                                 pat_Leds,   pt_LedStrip);
             break;
 
-        case e_StillGradient:
 #ifdef PRINT_ERROR_STATEMENTS
+        case e_StillGradient:
         default: // Should never come in here
             Serial.println("CHICKEN JOCKEY!");
             break;
-    }
 #endif
+    }
 }
 
 

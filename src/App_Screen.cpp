@@ -559,10 +559,6 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
         else                                                        u8DigitsPerValue = 3;
     }
 
-    // Flags for final row loop adjustment
-    bool    bCenterAligned      = (ALIGN_CENTER_X & pt_Screen->eAlignment);
-    bool    bRightAligned       = (ALIGN_RIGHT_X  & pt_Screen->eAlignment);
-
     // Code-shortening steps
     uint8   u8ValuesPerRow      = DISPLAY_WIDTH_X / (u8DigitsPerValue + 1);  // Total width divided by value width (rounded down)
     uint8   u8RowsAvailable     = DISPLAY_HEIGHT_Y - (DISPLAY_POS_TITLE_Y + 1); // Default: Display height minus title row
@@ -948,7 +944,6 @@ static void _v_AppScreen_RGB_SetValue  (LiquidCrystal_I2C j_Lcd,                
             uint8   u8CurrentPress  = KEYPRESS_NONE;
     static  uint8   su8PrevPress    = KEYPRESS_NONE;
     static  uint8   su8PressCount   = 0;
-			uint8	u8MaxDigits		= MAX_DIGITS_RGB;
 
     u8CurrentPress = u8_AppTools_GetKeypress(j_Keypad);
 

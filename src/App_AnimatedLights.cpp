@@ -78,6 +78,16 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
             pt_AnimatedLeds->u8CurrentSetpoint  = 0;
             sf32_Period_100pct                  = 0.0f;
 
+            Serial.println("");
+            Serial.println("/*--------------------------------------------------*/");
+            Serial.println("Fade Animation Init Step: ");
+            Serial.print  ("Number values printed: ");
+            Serial.println(st_ScreenSetptPeriod.t_Index.u8ValuesPrinted);
+            Serial.print  ("Number values total defined: ");
+            Serial.println(st_ScreenSetptPeriod.u8NumberValuesTotalDefined);
+            Serial.println("/*--------------------------------------------------*/");
+            Serial.println("");
+
             pt_AnimatedLeds->e_FadeAnimationStep = e_FadeAnimationSetpointPeriod; // Next step
             break;
 
@@ -113,6 +123,12 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
         
             // Run task loop update until values are defined
             v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenSetptPeriod);
+
+            Serial.println("");
+            Serial.println("/*--------------------------------------------------*/");
+            Serial.println("Fade Animation Setpoint Period Step: ");
+            Serial.println("/*--------------------------------------------------*/");
+            Serial.println("");
 
             // Go to next step when values are defined
             if (st_ScreenSetptPeriod.bValuesDefined)
@@ -182,6 +198,12 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
 
             FastLED.show(); // Show LEDs
 
+            Serial.println("");
+            Serial.println("/*--------------------------------------------------*/");
+            Serial.println("Fade Animation Loop Step: ");
+            Serial.println("/*--------------------------------------------------*/");
+            Serial.println("");
+
             u8CurrentPress = u8_AppTools_GetKeypress(j_Keypad);
 
             if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE))  // Falling edge of keypress
@@ -200,6 +222,17 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
             break;
 #endif
     }
+
+        Serial.println("");
+        Serial.println("/*--------------------------------------------------*/");
+        Serial.print  ("Values Defined? ");
+        if (st_ScreenSetptPeriod.bValuesDefined)    Serial.println("TRUE!");
+        else                                        Serial.println("FALSE!");
+        Serial.print  ("Reprint Screen? ");
+        if (st_ScreenSetptPeriod.bReprintScreen)    Serial.println("TRUE!");
+        else                                        Serial.println("FALSE!");
+        Serial.println("/*--------------------------------------------------*/");
+        Serial.println("");
 }
 
 
@@ -354,8 +387,14 @@ void v_AppAnimatedLights_Reset(T_AnimatedLeds * pt_AnimatedLeds) // [ ,O] Animat
     pt_AnimatedLeds->e_FadeAnimationStep = e_FadeAnimationInit;
 
     // Reset setpoint data
-    pt_AnimatedLeds->u8CurrentSetpoint = 0;
-    pt_AnimatedLeds->u8NumberSetpoints = 0;
+    // pt_AnimatedLeds->u8CurrentSetpoint = 0;
+    // pt_AnimatedLeds->u8NumberSetpoints = 0;
+
+    Serial.println("");
+    Serial.println("/*--------------------------------------------------*/");
+    Serial.println("Animated Lights Reset!");
+    Serial.println("/*--------------------------------------------------*/");
+    Serial.println("");
 }
 
 
@@ -372,6 +411,13 @@ void v_AppAnimatedLights_SetpointsScreenReset(T_ScreenGetValues * pt_SetpointsSc
     
     // Set reprint screen for next selection
     pt_SetpointsScreen->bReprintScreen  = true;
+
+    Serial.println("");
+    Serial.println("/*--------------------------------------------------*/");
+    Serial.println("Setpoints Screen Reset!");
+    Serial.println("/*--------------------------------------------------*/");
+    Serial.println("");
+
 }
 
 

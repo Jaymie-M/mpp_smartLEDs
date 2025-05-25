@@ -132,7 +132,7 @@ void v_AppMain_Init(void)
     FastLED.clear();
 
     // Start serial monitor
-    Serial.begin(2000000);
+    Serial.begin(250000); // 250 Kbits/s to avoid consuming excessive CPU time. Can lower if data not coming through OK
 
     // Configure pins and modules
     v_ConfigurePins();
@@ -159,7 +159,7 @@ void v_AppMain_TLU(void)
                 bReturnToMainMenu |= RETURN_TO_MAIN_MENU(   mt_AnimatedLightsMenu   .u8Selection,
                                                             mt_AnimatedLightsMenu   .u8MaxOptions);
 #ifdef OLD_ANIMATIONS_MENUS
-                bReturnToMainMenu |= RETURN_TO_MAIN_MENU(mu8StartingPointMenuSelect,              7);
+                bReturnToMainMenu |= RETURN_TO_MAIN_MENU(mu8StartingPointMenuSelect,            7);
 #endif
                 bReturnToMainMenu |= RETURN_TO_MAIN_MENU(   mt_ClockMenu            .u8Selection,
                                                             mt_ClockMenu            .u8MaxOptions);
@@ -344,6 +344,18 @@ void v_AppMain_TLU(void)
 
                                         // Set all setpoints defined once current setpoint is equal to number of setpoints
                                         mt_AnimatedLeds.bSetpointsDefined = (mt_AnimatedLeds.u8NumberSetpoints <= mt_AnimatedLeds.u8CurrentSetpoint);
+
+                                        Serial.println("");
+                                        Serial.println("/*--------------------------------------------------*/");
+                                        Serial.print  ("Setpoints Defined? ");
+                                        if (mt_AnimatedLeds.bSetpointsDefined)  Serial.println("TRUE!" );
+                                        else                                    Serial.println("FALSE!");
+                                        Serial.print  ("Number of Setpoints: ");
+                                        Serial.println(mt_AnimatedLeds.u8NumberSetpoints);
+                                        Serial.print  ("Current Setpoint: ");
+                                        Serial.println(mt_AnimatedLeds.u8CurrentSetpoint);
+                                        Serial.println("/*--------------------------------------------------*/");
+                                        Serial.println("");
                                     }
                                     else
                                     { // Setpoints are defined

@@ -41,7 +41,6 @@
 #define LED_STRIP_RGB_SEQUENCE  RGB
 #endif
 
-#define NULL              ((void *) 0)
 #define NUM_ROWS                     4
 #define NUM_COLUMNS                  3
 #define NUM_TOTAL           NUM_COLUMNS * NUM_ROWS
