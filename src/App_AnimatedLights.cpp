@@ -68,6 +68,7 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
     static  float32             sf32_Period_100pct      = 0.0f; // Percentage of period completed thus far
     static  uint8               su8PrevPress            = KEYPRESS_NONE;
             uint8               u8CurrentPress          = KEYPRESS_NONE;
+    static  uint8               su8CurrentFadeSetpoint  = 0;
     
     switch (pt_AnimatedLeds->e_FadeAnimationStep)
     {
@@ -75,18 +76,8 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
             // Set defaults
             st_ScreenSetptPeriod.bValuesDefined = false;
             st_ScreenSetptPeriod.bReprintScreen = true;
-            pt_AnimatedLeds->u8CurrentSetpoint  = 0;
+            su8CurrentFadeSetpoint              = 0;
             sf32_Period_100pct                  = 0.0f;
-
-            Serial.println("");
-            Serial.println("/*--------------------------------------------------*/");
-            Serial.println("Fade Animation Init Step: ");
-            Serial.print  ("Number values printed: ");
-            Serial.println(st_ScreenSetptPeriod.t_Index.u8ValuesPrinted);
-            Serial.print  ("Number values total defined: ");
-            Serial.println(st_ScreenSetptPeriod.u8NumberValuesTotalDefined);
-            Serial.println("/*--------------------------------------------------*/");
-            Serial.println("");
 
             pt_AnimatedLeds->e_FadeAnimationStep = e_FadeAnimationSetpointPeriod; // Next step
             break;
@@ -124,12 +115,6 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
             // Run task loop update until values are defined
             v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenSetptPeriod);
 
-            Serial.println("");
-            Serial.println("/*--------------------------------------------------*/");
-            Serial.println("Fade Animation Setpoint Period Step: ");
-            Serial.println("/*--------------------------------------------------*/");
-            Serial.println("");
-
             // Go to next step when values are defined
             if (st_ScreenSetptPeriod.bValuesDefined)
             {
@@ -143,20 +128,20 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
 
             /* Calculate percentage of period elapsed - cycle time (ms) divided by period (ms) */
             sf32_Period_100pct += (float32) u32CycleTime_ms 
-                                / (100.0f * (float32) (pt_AnimatedLeds->au8Period_01s[pt_AnimatedLeds->u8CurrentSetpoint]));
+                                / (100.0f * (float32) (pt_AnimatedLeds->au8Period_01s[su8CurrentFadeSetpoint]));
             
             while (1.0f <= sf32_Period_100pct)
             { // Full period has elapsed - should only come in here once every several loops, 
                 // but set to while loop in case of excessively long loop time or fairly small period
                 sf32_Period_100pct -= 1.0f; // Subtract 100% from period
 
-                if ((pt_AnimatedLeds->u8CurrentSetpoint + 1) < pt_AnimatedLeds->u8NumberSetpoints)
+                if ((su8CurrentFadeSetpoint + 1) < pt_AnimatedLeds->u8NumberSetpoints)
                 { // Move to next setpoint if next in order is less than total
-                    pt_AnimatedLeds->u8CurrentSetpoint++;
+                    su8CurrentFadeSetpoint++;
                 }
                 else
                 { // Otherwise, reset to initial starting setpoint
-                    pt_AnimatedLeds->u8CurrentSetpoint = e_InitialSetpoint;
+                    su8CurrentFadeSetpoint = e_InitialSetpoint;
                 }
             }
 
@@ -164,14 +149,14 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
             // Default to initial in case greater than or equal to total setpoints
             uint8 u8NextSetpoint = e_InitialSetpoint;
 
-            if ((pt_AnimatedLeds->u8CurrentSetpoint + 1) < pt_AnimatedLeds->u8NumberSetpoints)
+            if ((su8CurrentFadeSetpoint + 1) < pt_AnimatedLeds->u8NumberSetpoints)
             { // If next in order is less than total, set to next in order
-                u8NextSetpoint = pt_AnimatedLeds->u8CurrentSetpoint + 1;
+                u8NextSetpoint = su8CurrentFadeSetpoint + 1;
             }
 
             /* Code shortening */
-            T_LedStrip * pt_Setpoint     = &pat_LedStrip[pt_AnimatedLeds->u8CurrentSetpoint],
-                        * pt_NextSetpoint = &pat_LedStrip[u8NextSetpoint];
+            T_LedStrip * pt_Setpoint     = &pat_LedStrip[su8CurrentFadeSetpoint],
+                       * pt_NextSetpoint = &pat_LedStrip[u8NextSetpoint        ];
             T_Color      t_Color         = T_COLOR_CLEAR(); // Default color
             T_Color      t_NextColor     = T_COLOR_CLEAR();
 
@@ -184,25 +169,19 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
                 /* Set LED color */ /* Red   */
                 pat_Leds[i].setRGB ((uint8)   (sf32_Period_100pct *
                                     (float32) (t_NextColor.u8Red    - t_Color.u8Red  )) +
-                                                t_Color    .u8Red,
+                                               t_Color    .u8Red,
                                     /* Green */
                                     (uint8)   (sf32_Period_100pct *
                                     (float32) (t_NextColor.u8Green  - t_Color.u8Green)) +
-                                                t_Color    .u8Green,
+                                               t_Color    .u8Green,
                                     /* Blue  */
                                     (uint8)   (sf32_Period_100pct *
                                     (float32) (t_NextColor.u8Blue   - t_Color.u8Blue )) +
-                                                t_Color    .u8Blue
+                                               t_Color    .u8Blue
                                 );
             }
 
             FastLED.show(); // Show LEDs
-
-            Serial.println("");
-            Serial.println("/*--------------------------------------------------*/");
-            Serial.println("Fade Animation Loop Step: ");
-            Serial.println("/*--------------------------------------------------*/");
-            Serial.println("");
 
             u8CurrentPress = u8_AppTools_GetKeypress(j_Keypad);
 
@@ -222,17 +201,6 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
             break;
 #endif
     }
-
-        Serial.println("");
-        Serial.println("/*--------------------------------------------------*/");
-        Serial.print  ("Values Defined? ");
-        if (st_ScreenSetptPeriod.bValuesDefined)    Serial.println("TRUE!");
-        else                                        Serial.println("FALSE!");
-        Serial.print  ("Reprint Screen? ");
-        if (st_ScreenSetptPeriod.bReprintScreen)    Serial.println("TRUE!");
-        else                                        Serial.println("FALSE!");
-        Serial.println("/*--------------------------------------------------*/");
-        Serial.println("");
 }
 
 
@@ -385,16 +353,6 @@ void v_AppAnimatedLights_Reset(T_AnimatedLeds * pt_AnimatedLeds) // [ ,O] Animat
 
     // Reset fade animations to init step
     pt_AnimatedLeds->e_FadeAnimationStep = e_FadeAnimationInit;
-
-    // Reset setpoint data
-    // pt_AnimatedLeds->u8CurrentSetpoint = 0;
-    // pt_AnimatedLeds->u8NumberSetpoints = 0;
-
-    Serial.println("");
-    Serial.println("/*--------------------------------------------------*/");
-    Serial.println("Animated Lights Reset!");
-    Serial.println("/*--------------------------------------------------*/");
-    Serial.println("");
 }
 
 
@@ -412,12 +370,8 @@ void v_AppAnimatedLights_SetpointsScreenReset(T_ScreenGetValues * pt_SetpointsSc
     // Set reprint screen for next selection
     pt_SetpointsScreen->bReprintScreen  = true;
 
-    Serial.println("");
-    Serial.println("/*--------------------------------------------------*/");
-    Serial.println("Setpoints Screen Reset!");
-    Serial.println("/*--------------------------------------------------*/");
-    Serial.println("");
-
+    // Reset current setpoint - do not reset number of setpoints as this could cause currently running animation to break
+    pt_AnimatedLeds->u8CurrentSetpoint  = 0;
 }
 
 

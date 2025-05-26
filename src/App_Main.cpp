@@ -344,18 +344,6 @@ void v_AppMain_TLU(void)
 
                                         // Set all setpoints defined once current setpoint is equal to number of setpoints
                                         mt_AnimatedLeds.bSetpointsDefined = (mt_AnimatedLeds.u8NumberSetpoints <= mt_AnimatedLeds.u8CurrentSetpoint);
-
-                                        Serial.println("");
-                                        Serial.println("/*--------------------------------------------------*/");
-                                        Serial.print  ("Setpoints Defined? ");
-                                        if (mt_AnimatedLeds.bSetpointsDefined)  Serial.println("TRUE!" );
-                                        else                                    Serial.println("FALSE!");
-                                        Serial.print  ("Number of Setpoints: ");
-                                        Serial.println(mt_AnimatedLeds.u8NumberSetpoints);
-                                        Serial.print  ("Current Setpoint: ");
-                                        Serial.println(mt_AnimatedLeds.u8CurrentSetpoint);
-                                        Serial.println("/*--------------------------------------------------*/");
-                                        Serial.println("");
                                     }
                                     else
                                     { // Setpoints are defined
