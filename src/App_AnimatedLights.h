@@ -35,6 +35,7 @@
     .u8KeypressFinished         = KEYPRESS_NONE,                                \
     .u8MinValue                 = 0,                                            \
     .u8MaxValue                 = 0xFF,                                         \
+    .u8DecimalPlaces            = 1,                                            \
     .u8NumberValuesTotalDefined = 1,                                            \
     .au8Digit                   = {0, 0, 0},                                    \
     .t_Index                    = {                                             \
@@ -53,29 +54,30 @@
  /**
 * \brief Default definition for unique sections 'Get Values' screen
 */
-#define T_SETPOINTSSCREEN_DEFAULT(...)                                         \
-{                                                                              \
-   .bReprintScreen             = true,                                         \
-   .bDescription               = true,                                         \
-   .bPatternFill               = false,                                        \
-   .bValuesDefined             = false,                                        \
-   .eAlignment                 = e_Algn_LCenter,                               \
-   .u8KeypressHex              = KEYPRESS_NONE,                                \
-   .u8KeypressFinished         = KEYPRESS_NONE,                                \
-   .u8MinValue                 = 1,                                            \
-   .u8MaxValue                 = e_NumLedStripSetpoints,                       \
-   .u8NumberValuesTotalDefined = 1,                                            \
-   .au8Digit                   = {0, 0, 0},                                    \
-   .t_Index                    = {                                             \
-                                   .u8Row              = 0,                    \
-                                   .u8ValueOfRow       = 0,                    \
-                                   .u8DigitOfValue     = 0,                    \
-                                   .u8ValuesPrinted    = 0,                    \
-                                 },                                            \
-   .t_Cursor                   = {                                             \
-                                   .u8x = 0,                                   \
-                                   .u8y = 0,                                   \
-                                 },                                            \
+#define T_SETPOINTSSCREEN_DEFAULT(...)                                          \
+{                                                                               \
+    .bReprintScreen             = true,                                         \
+    .bDescription               = true,                                         \
+    .bPatternFill               = false,                                        \
+    .bValuesDefined             = false,                                        \
+    .eAlignment                 = e_Algn_LCenter,                               \
+    .u8KeypressHex              = KEYPRESS_NONE,                                \
+    .u8KeypressFinished         = KEYPRESS_NONE,                                \
+    .u8MinValue                 = 1,                                            \
+    .u8MaxValue                 = e_NumLedStripSetpoints,                       \
+    .u8DecimalPlaces            = 0,                                            \
+    .u8NumberValuesTotalDefined = 1,                                            \
+    .au8Digit                   = {0, 0, 0},                                    \
+    .t_Index                    = {                                             \
+                                   .u8Row              = 0,                     \
+                                   .u8ValueOfRow       = 0,                     \
+                                   .u8DigitOfValue     = 0,                     \
+                                   .u8ValuesPrinted    = 0,                     \
+                                  },                                            \
+    .t_Cursor                   = {                                             \
+                                   .u8x = 0,                                    \
+                                   .u8y = 0,                                    \
+                                  },                                            \
 }
 
 

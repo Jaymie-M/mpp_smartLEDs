@@ -194,6 +194,7 @@ typedef struct
     uint8               u8KeypressFinished;                             ///< Keypress to indicate that value input is finished
     uint8               u8MinValue;                                     ///< Minimum input value to get values function
     uint8               u8MaxValue;                                     ///< Maximum input value to get values function
+    uint8               u8DecimalPlaces;                                ///< Number of decimal places in defined values
     uint8               u8NumberValuesTotalDefined;                     ///< Number of values to be defined (total)
 
     /* Transient loop variables */

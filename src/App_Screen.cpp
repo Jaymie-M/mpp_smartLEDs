@@ -336,6 +336,24 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lc
                                                      uint8                  u8DigitsPerValue,   // [I, ] 
                                                      bool                   bReset)             // [I, ] Bool to determine if screen reset is required
 {
+    // Code shortening - default to unadjusted pt_Screen->t_Index.u8DigitOfValue and to not print decimal point
+    uint8   u8DigitOfValueAdjusted  = pt_Screen->t_Index.u8DigitOfValue;
+    bool    bPrintDecimalPoint      = false;
+
+    if (0 != pt_Screen->u8DecimalPlaces)
+    { // No. of decimal places other than '0' defined
+        if      (pt_Screen->u8DecimalPlaces == (MAX_DIGITS_PER_UINT8 - pt_Screen->t_Index.u8DigitOfValue))
+        { // Current digit equal to no. decimal places:
+            // Print decimal point
+            bPrintDecimalPoint      = true;
+        }
+        else if (pt_Screen->u8DecimalPlaces <  pt_Screen->t_Index.u8DigitOfValue)
+        { // Current digit greater than no. decimal places:
+            // Subtract one from adjusted digit of value to account for decimal point
+            u8DigitOfValueAdjusted -= 1;
+        }
+    }
+
     if ((pt_Screen->u8NumberValuesTotalDefined - pt_Screen->t_Index.u8ValuesPrinted) < u8ValuesPerRow)
     { // On last row - recalculate cursor position to align final values
 
@@ -357,14 +375,18 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lc
                             (u8DigitsPerValue + 1)  + pt_Screen->t_Index.u8DigitOfValue,
                             pt_Screen->t_Cursor.u8y + pt_Screen->t_Index.u8Row);
 
-            if (bReset) 
+            if (bPrintDecimalPoint)
+            { // Print decimal point instead of normal digit or 'blank'
+                j_Lcd.print(F("."));
+            }
+            else if (bReset)
             { // Reset mode - print underscore 'blank'
                 j_Lcd.print(F("_"));
             }
             else
             { // Else - get and print digit
                 if (pt_Screen->t_Index.u8DigitOfValue < LENGTHOF(pt_Screen->au8Digit)) // Array size check
-                    pt_Screen->au8Digit[pt_Screen->t_Index.u8DigitOfValue] = u8Digit;
+                    pt_Screen->au8Digit[u8DigitOfValueAdjusted] = u8Digit;
                 
                 v_AppTools_PrintHex(j_Lcd, u8Digit);
             }
@@ -544,7 +566,8 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
                                                bool                 bReset)     // [I, ] Bool to determine if screen reset is required
 {
     // Calculate number of digits per value
-    uint8   u8DigitsPerValue = 0;
+    bool    bDecimalPoint       = (0 != pt_Screen->u8DecimalPlaces); // Print decimal point if decimal places not equal to zero
+    uint8   u8DigitsPerValue    =  0;
 
     if (KEYPRESS_NONE == pt_Screen->u8KeypressHex)
     { // All values are in decimal
@@ -559,22 +582,24 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
         else                                                        u8DigitsPerValue = 3;
     }
 
+    if (bDecimalPoint)  u8DigitsPerValue += 1; // Add additional 'digit' for decimal point
+
     // Code-shortening steps
-    uint8   u8ValuesPerRow      = DISPLAY_WIDTH_X / (u8DigitsPerValue + 1);  // Total width divided by value width (rounded down)
+    uint8   u8ValuesPerRow      = DISPLAY_WIDTH_X  / (u8DigitsPerValue    + 1); // Total width divided by value width (rounded down)
     uint8   u8RowsAvailable     = DISPLAY_HEIGHT_Y - (DISPLAY_POS_TITLE_Y + 1); // Default: Display height minus title row
     uint8   u8FirstAvailableRow = DISPLAY_POS_TITLE_Y + 1;                      // Default: Row after title row
 
-    if (pt_Screen->bDescription) 
+    if (pt_Screen->bDescription)
     { // If description is included
         u8RowsAvailable         = DISPLAY_HEIGHT_Y - (DISPLAY_POS_DESCRIPTION_Y + 1); // Display height minus description row 
         u8FirstAvailableRow     = DISPLAY_POS_DESCRIPTION_Y + 1;                      // Row after description row
     }
 
-    uint8   u8RowsNeeded        = (pt_Screen->u8NumberValuesTotalDefined 
+    uint8   u8RowsNeeded        = (pt_Screen->u8NumberValuesTotalDefined
                                 + u8ValuesPerRow - 1) / u8ValuesPerRow;         // Number of values / values per row (rounded up)
     uint8   u8RowsUnused        = u8RowsAvailable - u8RowsNeeded;               // Rows available minus rows needed
-    uint8   u8DigitsUnused      = DISPLAY_WIDTH_X - u8ValuesPerRow 
-                                * (u8DigitsPerValue + 1);                    // Display width minus width of all values in row (width per value * no. values)
+    uint8   u8DigitsUnused      = DISPLAY_WIDTH_X - u8ValuesPerRow
+                                * (u8DigitsPerValue + 1);                       // Display width minus width of all values in row (width per value * no. values)
 
     /* Calculate starting cursor positions based on alignment */
     if (u8RowsNeeded <= u8RowsAvailable)
@@ -586,9 +611,9 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
         static  bool    sbHexSelectionActive            = false; // Hex selection variable
 
         // Calculate initial cursor position
-        _v_AppScreen_GetValues_GetCursorPosition(pt_Screen, 
-                                                 u8FirstAvailableRow, 
-                                                 u8RowsUnused, 
+        _v_AppScreen_GetValues_GetCursorPosition(pt_Screen,
+                                                 u8FirstAvailableRow,
+                                                 u8RowsUnused,
                                                  u8DigitsUnused);
 
         if (bReset)
@@ -597,10 +622,10 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
             while ((pt_Screen->t_Index.u8Row           < u8RowsNeeded                         ) &&  // Row index less than rows needed -AND-
                    (pt_Screen->t_Index.u8ValuesPrinted < pt_Screen->u8NumberValuesTotalDefined))    // Printed values still less than number of specified values
             {
-                _v_AppScreen_GetValues_SetCursorAndPrint(j_Lcd, 
+                _v_AppScreen_GetValues_SetCursorAndPrint(j_Lcd,
                                                          pt_Screen,
-                                                         0, 
-                                                         u8ValuesPerRow, 
+                                                         0,
+                                                         u8ValuesPerRow,
                                                          u8DigitsPerValue,
                                                          bReset);
             }
@@ -612,7 +637,9 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
         { // Print values on key press - Check each loop if a new value is submitted
             u8CurrentPress = u8_AppTools_GetKeypress(j_Keypad);
 
-            if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE)) // Falling edge of keypress
+            if ( b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE) || // Falling edge of keypress -OR-
+                (bDecimalPoint         && (pt_Screen->u8DecimalPlaces ==
+                 (MAX_DIGITS_PER_UINT8  -  pt_Screen->t_Index.u8DigitOfValue     ))) )  // Number is decimal and digit for decimal places has been reached
             { // New value - check row, value, and digit number for location to print value
                 T_IndexVariables    t_IndexTemp;                        // Temporary storage of loop count variables
                 uint8               au8Values[MAX_PATTERNED_SECTIONS];  // Array of stored values
@@ -622,11 +649,11 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
                     (KEYPRESS_NONE  != pt_Screen->u8KeypressHex) )  // Keypress for hex selection is defined
                 {
                     // Max u8 is 0xFF, so there is no case where a 3 nibble value will fit in a u8. However, due to complexity
-                    // of reprinting screen with 2-digit values, only one digit hex values are currently supported.
+                    // of reprinting screen with 2-digit values, only one digit hex values (with no decimal point) are currently supported.
                     bool    bHexSelectionValid  = (1 == u8DigitsPerValue) && (MAX_VALUE_ONE_DIGIT       < pt_Screen->u8MaxValue);
                             // bHexSelectionValid |= (2 == u8DigitsPerValue) && (MAX_VALUE_TWO_DIGITS      < pt_Screen->u8MaxValue);
                     
-                    if (bHexSelectionValid && !sbHexSelectionActive)  
+                    if (bHexSelectionValid && !sbHexSelectionActive)
                     { // Display screen if hex selection is valid and not yet displayed
                         v_AppScreen_TitleAndText(j_Lcd, &pt_Screen->acScreenTitle[0],
                                                         "(Select Hex Number)",
@@ -700,30 +727,29 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
                 { // Set values defined flag TRUE if exit key is pressed
                     pt_Screen->bValuesDefined = true;
                 }
-                else
-                { // Hex selection key not pressed, hex selection not active, -AND- exit key not pressed
+                else if (KEYPRESS_NONE != su8PrevPress)
+                { // Hex selection key not pressed, hex selection not active, exit key not pressed, -AND- previous keypress e
                     // Convert released keypress into digit
                     u8Digit = gc_au8DigitConv[su8PrevPress];
                 }
     
-                bool    bSetCursorAndPrint  = (pt_Screen->t_Index.u8Row        //       Row index less than rows needed   
-                                            < u8RowsNeeded);   
-                        bSetCursorAndPrint &= (pt_Screen->t_Index.u8ValuesPrinted   // -AND- Printed values still less than number of specified values      
-                                            < pt_Screen->u8NumberValuesTotalDefined);   
-                        bSetCursorAndPrint &= !pt_Screen->bValuesDefined;   // -AND- Values not already defined   
-                        bSetCursorAndPrint &= !sbHexSelectionActive;        // -AND- Hex selection not already active
+                bool    bSetCursorAndPrint  = (pt_Screen->t_Index.u8Row < u8RowsNeeded);    //       Row index less than rows needed
+                        bSetCursorAndPrint &= (pt_Screen->t_Index.u8ValuesPrinted           // -AND- Printed values still less than number of specified values
+                                            <  pt_Screen->u8NumberValuesTotalDefined);
+                        bSetCursorAndPrint &= !pt_Screen->bValuesDefined;   				// -AND- Values not already defined
+                        bSetCursorAndPrint &= !sbHexSelectionActive;        				// -AND- Hex selection not already active
 
                 if (bSetCursorAndPrint)
                 { // Print next value
-                    _v_AppScreen_GetValues_SetCursorAndPrint(j_Lcd, 
-                                                             pt_Screen, 
-                                                             u8Digit, 
-                                                             u8ValuesPerRow, 
+                    _v_AppScreen_GetValues_SetCursorAndPrint(j_Lcd,
+                                                             pt_Screen,
+                                                             u8Digit,
+                                                             u8ValuesPerRow,
                                                              u8DigitsPerValue,
                                                              bReset);
 
                     // Similar to HEX screen selection validity, due to complexity of reprinting screen with 2-digit
-                    // values, only one digit OR one nibble values are currently supported for pattern fill.
+                    // values, only one digit OR one nibble values (with no decimal point) are currently supported for pattern fill.
                     if (pt_Screen->bPatternFill && (1 == u8DigitsPerValue))
                     { // Continue printing until pattern is displayed
                         // Create a copy, then clear all values printed thus far

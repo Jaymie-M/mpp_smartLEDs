@@ -38,6 +38,7 @@
     .u8KeypressFinished         = KEYPRESS_NONE,                                \
     .u8MinValue                 = 0,                                            \
     .u8MaxValue                 = MAX_PATTERNED_SECTIONS,                       \
+    .u8DecimalPlaces            = 0,                                            \
     .u8NumberValuesTotalDefined = 1,                                            \
     .au8Digit                   = {0, 0, 0},                                    \
     .t_Index                    = {                                             \
@@ -125,6 +126,7 @@
     .u8KeypressFinished         = KEYPRESS_NONE,                                \
     .u8MinValue                 = 1,                                            \
     .u8MaxValue                 = MIN(0xFF, NUM_LEDS),                          \
+    .u8DecimalPlaces            = 0,                                            \
     .u8NumberValuesTotalDefined = 1,                                            \
     .au8Digit                   = {0, 0, 0},                                    \
     .t_Index                    = {                                             \
