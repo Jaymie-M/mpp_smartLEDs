@@ -244,7 +244,7 @@ static void _v_AppStillLights_GetLedColor_SectsChkpts  (T_LedStrip    * pt_LedSt
                     // Find the start LEDs (sum minus current section) and end LEDs (equal to sum)
                     u16StartLeds    = u16SumLeds - pt_LedStrip->n_Style.t_Unequal.au8NumberOfLeds[k];
                     u16EndLeds      = u16SumLeds;
-                    break;   
+                    break;
                 }
                 else if (k == (pt_LedStrip->t_SectionData.u8NumUniqueSections - 1))
                 { // Quick exit - sum is still less than current LED and on the last section
@@ -317,20 +317,22 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                                                      uint8			        u8Selection)
 {
     // Code-shortening
-    static  T_ScreenRGB st_ScreenPatternColor  = {.bReprintScreen = true,};
-            N_Section * pn_Section,
-                      * pn_PrevSection;
-            uint8       u8PrevSection          = 0;
-            uint8       u8CurrentPress         = KEYPRESS_NONE;
-    static  uint8       su8PrevPress           = KEYPRESS_NONE;
-            bool        bReturn                = false;
-            bool        bCheckpointStyle       = (e_StyleEqualCheckpoints       == pt_LedStrip->e_Style);
-                        bCheckpointStyle      |= (e_StyleUnequalCheckpoints     == pt_LedStrip->e_Style);
-                        bCheckpointStyle      |= (e_StylePatternedCheckpoints   == pt_LedStrip->e_Style);
-            bool        bShiftStyle            = (e_StyleEqualShift             == pt_LedStrip->e_Style);
-                        bShiftStyle           |= (e_StyleUnequalShift           == pt_LedStrip->e_Style);
-                        bShiftStyle           |= (e_StylePatternedShift         == pt_LedStrip->e_Style);
-            bool        bGradientDisplay       = bCheckpointStyle && (0 != pt_LedStrip->t_SectionData.u8SectionNumber);
+    static  T_ScreenRGB         st_ScreenPatternColor  = {.bReprintScreen = true,};
+    static  T_MenuSelection     st_ShiftDirectionMenu  = T_SHIFTDIRECTIONMENU_DEFAULT();
+    static  T_ScreenGetValues   st_ScreenShiftPeriod   = T_SHIFTPERIODSCREEN_DEFAULT();
+            N_Section         * pn_Section,
+                              * pn_PrevSection;
+            uint8               u8PrevSection          = 0;
+            uint8               u8CurrentPress         = KEYPRESS_NONE;
+    static  uint8               su8PrevPress           = KEYPRESS_NONE;
+            bool                bReturn                = false;
+            bool                bCheckpointStyle       = (e_StyleEqualCheckpoints       == pt_LedStrip->e_Style);
+                                bCheckpointStyle      |= (e_StyleUnequalCheckpoints     == pt_LedStrip->e_Style);
+                                bCheckpointStyle      |= (e_StylePatternedCheckpoints   == pt_LedStrip->e_Style);
+            bool                bShiftStyle            = (e_StyleEqualShift             == pt_LedStrip->e_Style);
+                                bShiftStyle           |= (e_StyleUnequalShift           == pt_LedStrip->e_Style);
+                                bShiftStyle           |= (e_StylePatternedShift         == pt_LedStrip->e_Style);
+            bool                bGradientDisplay       = bCheckpointStyle && (0 != pt_LedStrip->t_SectionData.u8SectionNumber);
 
     
     // Calculate previous section number
@@ -386,15 +388,77 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
             }
         }
 
-        if (!pn_Section->t_Color.bDefined)
-        { // Section color not yet defined
+        // Determine if section is defined
+        bool bSectionDefined = false;
+
+        if (bShiftStyle)    bSectionDefined = pn_Section->t_Shift.bDefined; // Shift section defined
+        else                bSectionDefined = pn_Section->t_Color.bDefined; // Color section defined
+
+        if (!bSectionDefined)
+        { // Section not yet defined
 
             if (bShiftStyle)
             { /* Print menu to select shift direction */
-                /// \todo
+                if (NO_SELECTION(st_ShiftDirectionMenu.u8Selection))
+                {
+                    if (st_ShiftDirectionMenu.bReprintMenu)
+                    {
+                        /* Title */
+                        v_AppScreen_MenuSelection_SetTitle (&st_ShiftDirectionMenu, "DIRECTION:");
 
-                /* Print menu to select shift period */
-                /// \todo
+                        /* Options */
+                        v_AppScreen_MenuSelection_SetOption(&st_ShiftDirectionMenu, "From Controller",  e_DirectionOut);
+                        v_AppScreen_MenuSelection_SetOption(&st_ShiftDirectionMenu, "To Controller",    e_DirectionIn );
+
+                        // Print first menu
+                        v_AppScreen_MenuSelection_Init(j_Lcd, &st_ShiftDirectionMenu);
+
+                        st_ShiftDirectionMenu.bReprintMenu = false; // Clear, so reprint only occurs once
+                    }
+
+                    // Receive selection commands and scroll menu options (if required)
+                    v_AppScreen_MenuSelection_TLU(j_Lcd, j_Keypad, &st_ShiftDirectionMenu);
+                }
+
+                /* Print get values screen to select shift period */
+                else if (!st_ScreenShiftPeriod.bValuesDefined)
+                {
+                    if (st_ScreenShiftPeriod.bReprintScreen)
+                    {
+                        /* Title */
+                        v_AppScreen_GetValues_SetTitle          (&st_ScreenSetptPeriod, "PERIOD:");
+
+                        /* Description */
+                        v_AppScreen_GetValues_SetDescription    (&st_ScreenSetptPeriod, "MAX 25.5s");
+
+                        /* Values Array */
+                        v_AppScreen_GetValues_SetValuesArray    (&st_ScreenSetptPeriod, &pn_Section->t_Shift.u16Period_ms);
+
+                        /* Total number of values */
+                        v_AppScreen_GetValues_SetNumValuesTotal (&st_ScreenSetptPeriod, pt_AnimatedLeds->u8NumberSetpoints);
+
+                        // Print first menu
+                        v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, &st_ScreenSetptPeriod);
+
+                        st_ScreenSetptPeriod.bReprintScreen = false; // Clear, so reprint only occurs once
+                    }
+
+                    // Run task loop update until values are defined
+                    v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenSetptPeriod);
+                }
+                else
+                { // Set shift section as defined
+                    pn_Section->t_Shift.bDefined    = true;
+                    pn_Section->t_Shift.u8Direction = st_ShiftDirectionMenu.u8Selection; // Copy direction selection
+
+                    // Reprint screens for next section
+                    st_ShiftDirectionMenu.bReprintMenu      = true;
+                    st_ScreenShiftPeriod .bReprintScreen    = true;
+
+                    // Set selections undefined for next section
+                    st_ShiftDirectionMenu.u8Selection       = SELECTION_NONE;
+                    st_ScreenShiftPeriod .bValuesDefined    = false;
+                }
             }
             else
             { /* Print menu to select RGB color */
@@ -466,6 +530,8 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                                     MIN(0xFF, NUM_LEDS - u16SumLeds),
                                     bUnequalSectsChkptsSelected);
 
+                // If color defined, allow reprint of solid color screen for next color when we return
+                if (pn_Section->t_Color.bDefined)   st_ScreenPatternColor.bReprintScreen = true;
             }
 
             if (bUnequalSectsChkptsSelected) // Store number of LEDs to array if unequal sections selected
@@ -473,9 +539,6 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
         }
         else
         {
-            // Color defined, allow reprint of solid color screen for next color when we return
-            st_ScreenPatternColor.bReprintScreen = true;
-
             // Default - for equal sect, starting point is num LEDs * section number
             uint16 u16StartLeds = (uint16) pt_LedStrip->t_SectionData.u8NumLeds *
                                   (uint16) pt_LedStrip->t_SectionData.u8SectionNumber;

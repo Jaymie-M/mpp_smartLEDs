@@ -38,11 +38,11 @@
 /***************************
  *   Function Prototypes   *
  ***************************/
-static void _v_AppAnimatedLights_Fade      (LiquidCrystal_I2C j_Lcd,            Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds, 
+static void _v_AppAnimatedLights_Fade      (LiquidCrystal_I2C j_Lcd,            Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds,
                                             CRGB            * pat_Leds,         T_LedStrip    * pat_LedStrip,   uint32              u32CycleTime_ms,
                                             uint8             u8Selection                                                                           );
-static void _v_AppAnimatedLights_ShiftSects(LiquidCrystal_I2C j_Lcd,            Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds, 
-                                            CRGB            * pat_Leds,         T_LedStrip    * pt_Setpoint,    T_LedStrip        * pt_Shift,   
+static void _v_AppAnimatedLights_ShiftSects(LiquidCrystal_I2C j_Lcd,            Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds,
+                                            CRGB            * pat_Leds,         T_LedStrip    * pt_Setpoint,    T_LedStrip        * pt_Shift,
                                             uint32            u32CycleTime_ms,  uint8           u8Selection                                         );
 /***************************
  *         Objects         *

@@ -142,6 +142,33 @@
 }
 
 
+#define T_SHIFTPERIODSCREEN_DEFAULT(...)                                        \
+{                                                                               \
+    .bReprintScreen             = true,                                         \
+    .bDescription               = true,                                         \
+    .bPatternFill               = false,                                        \
+    .bValuesDefined             = false,                                        \
+    .eAlignment                 = e_Algn_LCenter,                               \
+    .u8KeypressHex              = KEYPRESS_NONE,                                \
+    .u8KeypressFinished         = KEYPRESS_NONE,                                \
+    .u8MinValue                 = 0,                                            \
+    .u8MaxValue                 = 0xFF,                                         \
+    .u8DecimalPlaces            = 1,                                            \
+    .u8NumberValuesTotalDefined = 1,                                            \
+    .au8Digit                   = {0, 0, 0},                                    \
+    .t_Index                    = {                                             \
+                                    .u8Row              = 0,                    \
+                                    .u8ValueOfRow       = 0,                    \
+                                    .u8DigitOfValue     = 0,                    \
+                                    .u8ValuesPrinted    = 0,                    \
+                                  },                                            \
+    .t_Cursor                   = {                                             \
+                                    .u8x                = 0,                    \
+                                    .u8y                = 0,                    \
+                                  },                                            \
+}
+
+
 /**
  * \brief Default definition for sections method menu
  */
@@ -199,6 +226,21 @@
     .u8OptionOffset         = 0,                                                \
     .u8MaxOptionOffset      = e_MaxGradientLightsMenu - MAX_NUM_OPTIONS_DISP,   \
     .u8MaxOptions           = e_MaxGradientLightsMenu,                          \
+}
+
+
+/**
+ * \brief Default definition for shift direction menu
+ */
+#define T_SHIFTDIRECTIONMENU_DEFAULT(...)                                       \
+{                                                                               \
+    .bReprintMenu           = true,                                             \
+    .bBackToMainMenuEnabled = false,                                            \
+    .bPrintArrows           = false,                                            \
+    .u8Selection            = SELECTION_NONE,                                   \
+    .u8OptionOffset         = 0,                                                \
+    .u8MaxOptionOffset      = e_MaxShiftDirectionMenu - MAX_NUM_OPTIONS_DISP,   \
+    .u8MaxOptions           = e_MaxShiftDirectionMenu,                          \
 }
 
 /***************************
