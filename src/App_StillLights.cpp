@@ -398,7 +398,10 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
         { // Section not yet defined
 
             if (bShiftStyle)
-            { /* Print menu to select shift direction */
+            { 
+                static uint8 su8Period_01s = 0; // Shift period in 0.1s
+                
+                /* Print menu to select shift direction */
                 if (NO_SELECTION(st_ShiftDirectionMenu.u8Selection))
                 {
                     if (st_ShiftDirectionMenu.bReprintMenu)
@@ -426,30 +429,28 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                     if (st_ScreenShiftPeriod.bReprintScreen)
                     {
                         /* Title */
-                        v_AppScreen_GetValues_SetTitle          (&st_ScreenSetptPeriod, "PERIOD:");
+                        v_AppScreen_GetValues_SetTitle          (&st_ScreenShiftPeriod, "PERIOD:");
 
                         /* Description */
-                        v_AppScreen_GetValues_SetDescription    (&st_ScreenSetptPeriod, "MAX 25.5s");
+                        v_AppScreen_GetValues_SetDescription    (&st_ScreenShiftPeriod, "MAX 25.5s");
 
                         /* Values Array */
-                        v_AppScreen_GetValues_SetValuesArray    (&st_ScreenSetptPeriod, &pn_Section->t_Shift.u16Period_ms);
-
-                        /* Total number of values */
-                        v_AppScreen_GetValues_SetNumValuesTotal (&st_ScreenSetptPeriod, pt_AnimatedLeds->u8NumberSetpoints);
+                        v_AppScreen_GetValues_SetValuesArray    (&st_ScreenShiftPeriod, &su8Period_01s);
 
                         // Print first menu
-                        v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, &st_ScreenSetptPeriod);
+                        v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, &st_ScreenShiftPeriod);
 
-                        st_ScreenSetptPeriod.bReprintScreen = false; // Clear, so reprint only occurs once
+                        st_ScreenShiftPeriod.bReprintScreen = false; // Clear, so reprint only occurs once
                     }
 
                     // Run task loop update until values are defined
-                    v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenSetptPeriod);
+                    v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenShiftPeriod);
                 }
                 else
                 { // Set shift section as defined
-                    pn_Section->t_Shift.bDefined    = true;
-                    pn_Section->t_Shift.u8Direction = st_ShiftDirectionMenu.u8Selection; // Copy direction selection
+                    pn_Section->t_Shift.bDefined            = true;
+                    pn_Section->t_Shift.u8Direction         = st_ShiftDirectionMenu.u8Selection; // Copy direction selection
+                    pn_Section->t_Shift.u16Period_ms        = (uint16) su8Period_01s * 100;
 
                     // Reprint screens for next section
                     st_ShiftDirectionMenu.bReprintMenu      = true;

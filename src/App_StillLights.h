@@ -68,6 +68,7 @@
     .u8KeypressFinished         = KEYPRESS_NONE,                                \
     .u8MinValue                 = 1,                                            \
     .u8MaxValue                 = MAX_UNIQUE_SECTIONS,                          \
+    .u8DecimalPlaces            = 0,                                            \
     .u8NumberValuesTotalDefined = 1,                                            \
     .au8Digit                   = {0, 0, 0},                                    \
     .t_Index                    = {                                             \
@@ -97,6 +98,7 @@
     .u8KeypressFinished         = KEYPRESS_POUND,                               \
     .u8MinValue                 = 1,                                            \
     .u8MaxValue                 = MAX_UNIQUE_SECTIONS,                          \
+    .u8DecimalPlaces            = 0,                                            \
     .u8NumberValuesTotalDefined = 1,                                            \
     .au8Digit                   = {0, 0, 0},                                    \
     .t_Index                    = {                                             \
@@ -239,7 +241,7 @@
     .bPrintArrows           = false,                                            \
     .u8Selection            = SELECTION_NONE,                                   \
     .u8OptionOffset         = 0,                                                \
-    .u8MaxOptionOffset      = e_MaxShiftDirectionMenu - MAX_NUM_OPTIONS_DISP,   \
+    .u8MaxOptionOffset      = 0,                                                \
     .u8MaxOptions           = e_MaxShiftDirectionMenu,                          \
 }
 
