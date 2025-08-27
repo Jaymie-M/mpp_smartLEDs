@@ -44,16 +44,29 @@ const charn gc_macKeypadMap[NUM_ROWS][NUM_COLUMNS] =
     {':', ';', '<'},
 };
 
+#if defined(__AVR_ATmega2560__) || defined(ARDUINO_AVR_MEGA2560)
 const byte gc_mau8RowPins   [NUM_ROWS   ] = {PIN_DIN_KEYPAD_ROW1,
                                              PIN_DIN_KEYPAD_ROW2,
                                              PIN_DIN_KEYPAD_ROW3,
                                              PIN_DIN_KEYPAD_ROW4
                                             };
-                                           
-const byte gc_mau8ColumnPins[NUM_COLUMNS] = {PIN_DIN_KEYPAD_COL1, 
-                                             PIN_DIN_KEYPAD_COL2, 
+
+const byte gc_mau8ColumnPins[NUM_COLUMNS] = {PIN_DIN_KEYPAD_COL1,
+                                             PIN_DIN_KEYPAD_COL2,
                                              PIN_DIN_KEYPAD_COL3
                                             };
+#else
+const byte gc_mau8RowPins   [NUM_ROWS   ] = {gat_Module_TEENSY_IO[COMPONENT_DIN_KEYPAD_ROW1].u8Pin,
+                                             gat_Module_TEENSY_IO[COMPONENT_DIN_KEYPAD_ROW2].u8Pin,
+                                             gat_Module_TEENSY_IO[COMPONENT_DIN_KEYPAD_ROW3].u8Pin,
+                                             gat_Module_TEENSY_IO[COMPONENT_DIN_KEYPAD_ROW4].u8Pin,
+                                            };
+                                           
+const byte gc_mau8ColumnPins[NUM_COLUMNS] = {gat_Module_TEENSY_IO[COMPONENT_DIN_KEYPAD_COL1].u8Pin,
+                                             gat_Module_TEENSY_IO[COMPONENT_DIN_KEYPAD_COL2].u8Pin,
+                                             gat_Module_TEENSY_IO[COMPONENT_DIN_KEYPAD_COL3].u8Pin,
+                                            };
+#endif
 
 // Define module variables
 static bool   mbInitialized                 = false;
@@ -128,7 +141,11 @@ static uint8    u8_SearchMenu         (void);
 void v_AppMain_Init(void)
 {
     // Initialize FastLED object and clear LEDs to start
+#if defined(__AVR_ATmega2560__) || defined(ARDUINO_AVR_MEGA2560)
     FastLED.addLeds<LED_STRIP_DRIVER_CHIP, PIN_DOUT_LED_DATA, LED_STRIP_RGB_SEQUENCE>(mat_SmartDormLeds, NUM_LEDS);
+#else
+    FastLED.addLeds<LED_STRIP_DRIVER_CHIP, gat_Module_TEENSY_IO[COMPONENT_DOUT_LED_DATA].u8Pin, LED_STRIP_RGB_SEQUENCE>(mat_SmartDormLeds, NUM_LEDS);
+#endif
     FastLED.clear();
 
     // Start serial monitor
