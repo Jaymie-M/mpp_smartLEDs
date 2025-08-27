@@ -481,7 +481,7 @@
 
 #define IO_INIT_MODULE(name, io_table)                                                       \
     const T_ModuleIO gat_Module_##name##_IO[NUMBER_COMPONENTS] = {io_table(IO_LIST_EXPAND)}; \
-    const uint8      gu8_Module_##name##_ComponentList[]       = {TEENSY_IO_CONFIG(IO_LIST_EXPAND_AS_COMPONENT_ARRAY)};
+    const uint8      gu8_Module_##name##_ComponentList[]       = {##name##_IO_CONFIG(IO_LIST_EXPAND_AS_COMPONENT_ARRAY)};
 
 #define TEENSY_IO_CONFIG(ENTRY)                                                  \
     /* Serial monitor */                                                         \
