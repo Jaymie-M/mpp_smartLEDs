@@ -79,7 +79,7 @@ void _v_ConfigurePin(uint8 u8PinNumber, uint8 u8PinType)
 
         default:
             // Do nothing - Invalid pintype
-            break;   
+            break;
     }
 }
 #else
@@ -117,7 +117,7 @@ void v_AppIO_GetIOData(T_ModuleIO * pt_IO)
     switch(pt_IO->u8PinType)
     {
         case PINTYPE_AIN:           // Analog   input - returns value in mV
-            pt_IO->u16Value = (uint16) (((float32) analogRead(pt_IO->u8Pin) * 5000.0f) / 1024.0f);
+            pt_IO->u16Value = analogRead(pt_IO->u8Pin);
             break;
 
         case PINTYPE_DIN:           // Digital  input - returns 1 for HIGH and 0 for LOW
@@ -141,18 +141,18 @@ void v_AppIO_GetIOData(T_ModuleIO * pt_IO)
  * \brief  This function writes data to an IO pin
  * \return none
  */
-void v_AppIO_SetIOData(T_ModuleIO * pt_IO, uint16 u16SetpointValue)
+void v_AppIO_SetIOData(T_ModuleIO * pt_IO, uint8 u8Value)
 {
     switch(pt_IO->u8PinType)
     {
         case PINTYPE_DOUT:          // Digital  output
-            pt_IO->u16Value = u16SetpointValue;
+            pt_IO->u16Value = u8Value;
             digitalWrite(pt_IO->u8Pin, (1 == pt_IO->u16Value));
             break;
 
         case PINTYPE_PWM:           // PWM      output
-            pt_IO->u16Value = u16SetpointValue; // Writes duty cycle of setpoint value 0.1pct to specified pin
-            analogWrite(pt_IO->u8Pin, (uint8) (((float32) pt_IO->u16Value * 255.0f) / 1000.0f));
+            pt_IO->u16Value = u8Value; // Writes duty cycle of setpoint value 0.1pct to specified pin
+            analogWrite(pt_IO->u8Pin, (uint16) pt_IO->u16Value);
             break;
 
         case PINTYPE_AIN:           // Analog   input
@@ -162,6 +162,34 @@ void v_AppIO_SetIOData(T_ModuleIO * pt_IO, uint16 u16SetpointValue)
             // Do nothing - Invalid pin type
             break;
     }
+}
+
+
+/**
+ * \brief  This function writes duty cycle in 0.1 pct to a PWM pin
+ * \return none
+ */
+void v_AppIO_SetPWM_01pct(T_ModuleIO * pt_IO, uint16 u16SetpointValue_01pct)
+{
+    if (PINTYPE_PWM == pt_IO->u8PinType) // Only write setpoint value if a PWM pin
+        v_AppIO_SetIOData(pt_IO, MAX(255, (uint8) (((float32) u16SetpointValue_01pct * 255.0f) / 1000.0f)));
+}
+
+
+/**
+ * \brief  This function reads voltage from analog input in mV
+ * \return none
+ */
+uint16 u16_AppIO_GetAnalogVoltage_mV(T_ModuleIO * pt_IO)
+{
+    uint16 u16Voltage_mV = 0; // Return 0 by default
+
+    v_AppIO_GetIOData(pt_IO); // Get the IO data
+
+    if (PINTYPE_AIN == pt_IO->u8PinType) // Only calculate voltage from ADC if it is an analog pin
+        u16Voltage_mV = (uint16) (((float32) pt_IO->u16Value * 5000.0f) / 1024.0f);
+
+    return u16Voltage_mV; // Return voltage
 }
 
 

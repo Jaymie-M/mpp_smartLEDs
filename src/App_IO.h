@@ -521,7 +521,7 @@ typedef struct
 {
     uint8   u8Pin;
     uint8   u8PinType;
-    uint16  u16Value;
+    uint8   u16Value;
 
 } T_ModuleIO;
 
@@ -533,10 +533,12 @@ typedef struct
 #if defined(__AVR_ATmega2560__) || defined(ARDUINO_AVR_MEGA2560)
 void v_ConfigurePins(void);
 #else
-void v_AppIO_Init           (void);
-void v_AppIO_InitComponent  (T_ModuleIO * pt_IO, uint16 u16Component);
-void v_AppIO_GetIOData      (T_ModuleIO * pt_IO);
-void v_AppIO_SetIOData      (T_ModuleIO * pt_IO, uint16 u16SetpointValue);
+void    v_AppIO_Init                    (void);
+void    v_AppIO_InitComponent           (T_ModuleIO * pt_IO, uint16 u16Component);
+void    v_AppIO_GetIOData               (T_ModuleIO * pt_IO);
+void    v_AppIO_SetIOData               (T_ModuleIO * pt_IO, uint8 u8Value);
+void    v_AppIO_SetPWM_01pct            (T_ModuleIO * pt_IO, uint16 u16SetpointValue_01pct);
+uint16  u16_AppIO_GetAnalogVoltage_mV   (T_ModuleIO * pt_IO);
 #endif
 
 #endif /* APP_IO_H */
