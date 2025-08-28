@@ -151,14 +151,18 @@ uint8 u8_AppTools_uint32_to_Digit(uint32 u32Integer,  // [I, ] Integer to conver
  * \return 32-bit unsigned intger
  */
 uint32 u32_AppTools_BaseExponent_to_uint32(uint32    u32Base,    // [I, ] Base:      Number which is repeatedly multiplied
-                                  uint8     u8Exponent) // [I, ] Exponent:  Number of times by which the base should be multiplied
+                                           uint8     u8Exponent) // [I, ] Exponent:  Number of times by which the base should be multiplied
 {
     // Local variables
     uint32_t u32Return = 1;
     
-    for(uint8_t i = 0; i < u8Exponent; i++)
-    {
-        u32Return *= u32Base;
+    if (2 == u32Base)
+    { // Faster bit shift calculation for 2^n
+        u32Return << u8Exponent;
+    }
+    else
+    { // Calculation for different base
+        for (uint8_t i = 0; i < u8Exponent; i++)    u32Return *= u32Base;
     }
 
     return u32Return;
