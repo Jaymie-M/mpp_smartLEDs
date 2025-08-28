@@ -23,7 +23,10 @@
 /***************************
  * Module Global Variables *
  ***************************/
-#if !defined(__AVR_ATmega2560__) || !defined(ARDUINO_AVR_MEGA2560)
+#if !defined(__AVR_ATmega2560__) && !defined(ARDUINO_AVR_MEGA2560)
+
+static const uint8 c_mu8AnalogResolution_bits = 10; // Set analog resolution to 10 bits
+static       uint8 mu8AnalogResolution_cnt;
 
 IO_INIT_MODULE(TEENSY, TEENSY_IO_CONFIG);
 
@@ -90,6 +93,12 @@ void _v_ConfigurePin(uint8 u8PinNumber, uint8 u8PinType)
  */
 void v_AppIO_Init(void)
 {
+    // Set ADC resolution to 10 bits
+    analogReadResolution(c_mu8AnalogResolution_bits);
+
+    // Calculate analog resolution count once
+    mu8AnalogResolution_cnt = u32_AppTools_BaseExponent_to_uint32(2, c_mu8AnalogResolution_bits);
+
     /* Initialize TEENSY module components */
     for (size_t i = 0; i < LENGTHOF(gu8_Module_TEENSY_ComponentList); i++)
     {
@@ -187,7 +196,7 @@ uint16 u16_AppIO_GetAnalogVoltage_mV(T_ModuleIO * pt_IO)
     v_AppIO_GetIOData(pt_IO); // Get the IO data
 
     if (PINTYPE_AIN == pt_IO->u8PinType) // Only calculate voltage from ADC if it is an analog pin
-        u16Voltage_mV = (uint16) (((float32) pt_IO->u16Value * 5000.0f) / 1024.0f);
+        u16Voltage_mV = (uint16) (((float32) pt_IO->u16Value * VOLTAGE_REF_MV) / mu8AnalogResolution_cnt);
 
     return u16Voltage_mV; // Return voltage
 }

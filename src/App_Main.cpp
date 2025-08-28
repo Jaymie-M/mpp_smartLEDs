@@ -109,7 +109,7 @@ LiquidCrystal_I2C mj_SmartDormLcd(DEFAULT_ADDRESS_LCD, 20, 4); // 0x27 is the de
  *   Function Prototypes   *
  ***************************/
 static void     v_AppMain_Reset       (void);
-static void     v_ConfigureLcd        (void);
+static void     v_SmartDormLcd_Init   (void);
 static void     v_ResetMenuSelections (void);
 
 static void     v_MainMenu            (LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, T_MenuSelection * pt_Menu);
@@ -140,20 +140,27 @@ static uint8    u8_SearchMenu         (void);
  */
 void v_AppMain_Init(void)
 {
-    // Initialize FastLED object and clear LEDs to start
-#if defined(__AVR_ATmega2560__) || defined(ARDUINO_AVR_MEGA2560)
-    FastLED.addLeds<LED_STRIP_DRIVER_CHIP, PIN_DOUT_LED_DATA, LED_STRIP_RGB_SEQUENCE>(mat_SmartDormLeds, NUM_LEDS);
-#else
-    FastLED.addLeds<LED_STRIP_DRIVER_CHIP, gat_Module_TEENSY_IO[COMPONENT_DOUT_LED_DATA].u8Pin, LED_STRIP_RGB_SEQUENCE>(mat_SmartDormLeds, NUM_LEDS);
-#endif
-    FastLED.clear();
-
     // Start serial monitor
     Serial.begin(250000); // 250 Kbits/s to avoid consuming excessive CPU time. Can lower if data not coming through OK
 
+#if defined(__AVR_ATmega2560__) || defined(ARDUINO_AVR_MEGA2560)
+    // Initialize FastLED object and clear LEDs to start
+    FastLED.addLeds<LED_STRIP_DRIVER_CHIP, PIN_DOUT_LED_DATA, LED_STRIP_RGB_SEQUENCE>(mat_SmartDormLeds, NUM_LEDS);
+    FastLED.clear();
+
     // Configure pins and modules
     v_ConfigurePins();
-    v_ConfigureLcd();
+#else
+    // Initialize FastLED object and clear LEDs to start
+    FastLED.addLeds<LED_STRIP_DRIVER_CHIP, gat_Module_TEENSY_IO[COMPONENT_DOUT_LED_DATA].u8Pin, LED_STRIP_RGB_SEQUENCE>(mat_SmartDormLeds, NUM_LEDS);
+    FastLED.clear();
+
+    // Configure pins and modules
+    v_AppIO_Init();
+#endif
+
+    // Init LCD
+    v_SmartDormLcd_Init();
 }
 
 
@@ -516,7 +523,7 @@ static void v_AppMain_Reset(void)
  * \brief  This function initializes the LCD display and prints the starting menu
  * \return none
  */
-static void v_ConfigureLcd(void)
+static void v_SmartDormLcd_Init(void)
 {
     mj_SmartDormLcd.init();
     mj_SmartDormLcd.backlight();

@@ -60,6 +60,8 @@
 
 #if defined(__AVR_ATmega2560__) || defined(ARDUINO_AVR_MEGA2560)
 /*--- Pin definitions for Arduino Mega ---*/
+#define VOLTAGE_REF_MV           5000.0f
+
 #define PIN_DIN_RX_0                   0
 #define PIN_DIN_RX_1                   1
 
@@ -113,6 +115,7 @@
 #else
 
 /*--- Pin definitions for Teensy 4.1 ---*/
+#define VOLTAGE_REF_MV     3300.0f
 
 /* NATIVE PIN NAMES */
 // Accessible from header pins
@@ -448,10 +451,12 @@
 /* GPIO PINS */
 
 /* COMPONENT DEFINITIONS */
-#define COMPONENT_SERIAL_RX_MONITOR    0
-#define COMPONENT_SERIAL_TX_MONITOR    1
+#define COMPONENT_SERIAL_RX_MONITOR    1
+#define COMPONENT_SERIAL_TX_MONITOR    2
 
 #define COMPONENT_DOUT_LED_DATA       10
+
+#define COMPONENT_AIN_TEMPSENSOR      15
 
 #define COMPONENT_DOUT_PIEZO1         20
 #define COMPONENT_DOUT_PIEZO2         21
@@ -504,7 +509,9 @@
     ENTRY(TEENSY_DIG_29,        PINTYPE_DIN,        COMPONENT_DIN_KEYPAD_ROW3  ) \
     ENTRY(TEENSY_DIG_28,        PINTYPE_DIN,        COMPONENT_DIN_KEYPAD_ROW4  ) \
     /* DIN - Alarm */                                                            \
-    ENTRY(TEENSY_DIG_32,        PINTYPE_DIN,        COMPONENT_DIN_ALARM        )
+    ENTRY(TEENSY_DIG_32,        PINTYPE_DIN,        COMPONENT_DIN_ALARM        ) \
+    /* AIN - Temp sensor */                                                      \
+    ENTRY(TEENSY_ANA_A0,        PINTYPE_AIN,        COMPONENT_AIN_TEMPSENSOR   )
 
 /***************************
  *          Enums          *
