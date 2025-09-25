@@ -25,8 +25,8 @@
  ***************************/
 #if !defined(__AVR_ATmega2560__) && !defined(ARDUINO_AVR_MEGA2560)
 
-static const uint8 c_mu8AnalogResolution_bits = 10; // Set analog resolution to 10 bits
-static       uint8 mu8AnalogResolution_cnt;
+static const uint8      c_mu8AnalogResolution_bits = 10; // Set analog resolution to 10 bits
+static       float32    mf32AnalogResolution_cnt;
 
 IO_INIT_MODULE(TEENSY, TEENSY_IO_CONFIG);
 
@@ -97,7 +97,7 @@ void v_AppIO_Init(void)
     analogReadResolution(c_mu8AnalogResolution_bits);
 
     // Calculate analog resolution count once
-    mu8AnalogResolution_cnt = u32_AppTools_BaseExponent_to_uint32(2, c_mu8AnalogResolution_bits);
+    mf32AnalogResolution_cnt = (float32) u32_AppTools_BaseExponent_to_uint32(2, c_mu8AnalogResolution_bits);
 
     /* Initialize TEENSY module components */
     for (size_t i = 0; i < LENGTHOF(gu8_Module_TEENSY_ComponentList); i++)
@@ -181,7 +181,7 @@ void v_AppIO_SetIOData(T_ModuleIO * pt_IO, uint8 u8Value)
 void v_AppIO_SetPWM_01pct(T_ModuleIO * pt_IO, uint16 u16SetpointValue_01pct)
 {
     if (PINTYPE_PWM == pt_IO->u8PinType) // Only write setpoint value if a PWM pin
-        v_AppIO_SetIOData(pt_IO, MAX(255, (uint8) (((float32) u16SetpointValue_01pct * 255.0f) / 1000.0f)));
+        v_AppIO_SetIOData(pt_IO, MAX(0xFF, (uint8) (((float32) u16SetpointValue_01pct * (float32) 0xFF) / 1000.0f)));
 }
 
 
@@ -196,7 +196,7 @@ uint16 u16_AppIO_GetAnalogVoltage_mV(T_ModuleIO * pt_IO)
     v_AppIO_GetIOData(pt_IO); // Get the IO data
 
     if (PINTYPE_AIN == pt_IO->u8PinType) // Only calculate voltage from ADC if it is an analog pin
-        u16Voltage_mV = (uint16) (((float32) pt_IO->u16Value * VOLTAGE_REF_MV) / mu8AnalogResolution_cnt);
+        u16Voltage_mV = (uint16) (((float32) pt_IO->u16Value * VOLTAGE_REF_MV) / mf32AnalogResolution_cnt);
 
     return u16Voltage_mV; // Return voltage
 }
