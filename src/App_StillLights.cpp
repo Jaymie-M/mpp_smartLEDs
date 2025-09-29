@@ -261,7 +261,32 @@ static void _v_AppStillLights_GetLedColor_SectsChkpts  (T_LedStrip    * pt_LedSt
             break;
 #ifdef PRINT_ERROR_STATEMENTS
         default: // Invalid case
-            Serial.println("I'M JUST KEN!"); // Error print statement
+
+            static uint16 su16Counter = 0;
+
+            su16Counter++;
+
+            if (2000 < su16Counter)
+            { // Every 2000 counts, publish data
+                su16Counter = 0;
+
+                Serial.println("I'M JUST KEN!"); // Error print statement
+
+                Serial.println("");
+                Serial.println("");
+
+                Serial.println("/*-------------------------------------------------*/");
+                Serial.println("/*--              LED STRIP STYLE:               --*/");
+                Serial.println("/*-------------------------------------------------*/");
+
+                Serial.println("");
+                Serial.print  ("Enum value: ");
+                Serial.println(pt_LedStrip->e_Style);
+
+                Serial.println("");
+                Serial.println("");
+            }
+
             break;
 #endif
     }

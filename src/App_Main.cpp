@@ -598,6 +598,7 @@ static uint32 u32_RequestPassword(void)
         { // Store digit
             sau8Digit[su8InputDigit] = gc_au8DigitConv[su8PrevPress];
 
+            /// \todo - create constants - remove 'magic numbers'
             // Display key press
             mj_SmartDormLcd.setCursor(su8InputDigit + 7, 2);
             mj_SmartDormLcd.print(String(gc_acKeyNumberRep[su8PrevPress]));

@@ -337,7 +337,10 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lc
                                                      bool                   bReset)             // [I, ] Bool to determine if screen reset is required
 {
     // Code shortening - default to unadjusted pt_Screen->t_Index.u8DigitOfValue and to not print decimal point
-    uint8   u8DigitOfValueAdjusted  = pt_Screen->t_Index.u8DigitOfValue;
+    uint8   u8DigitOfValueAdjusted  =  pt_Screen->t_Index.u8DigitOfValue;
+    /// \todo - create function that calculates remainder
+    uint8   u8NumberValuesLastRow   =  pt_Screen->u8NumberValuesTotalDefined 
+                                    - (pt_Screen->u8NumberValuesTotalDefined / u8ValuesPerRow) * u8ValuesPerRow;
     bool    bPrintDecimalPoint      = false;
 
     if (0 != pt_Screen->u8DecimalPlaces)
@@ -354,13 +357,17 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lc
         }
     }
 
-    if ((pt_Screen->u8NumberValuesTotalDefined - pt_Screen->t_Index.u8ValuesPrinted) < u8ValuesPerRow)
+    /// \todo - This cursor position should only be recalculated once values left to be printed becomes less than values per row
+    ///         Either need to pass in number of available rows and first row, add those parameters to pt_Screen struct,
+    ///         or calculate if this is the last row some other way.
+    ///         BEST OPTION SO FAR: Try using the remainder of total values divided by values per row rather than total values minus values printed
+    if (((pt_Screen->u8NumberValuesTotalDefined - 
+          pt_Screen->t_Index.u8ValuesPrinted)   < u8ValuesPerRow) && 
+        ( 0 != u8NumberValuesLastRow                            ) )
     { // On last row - recalculate cursor position to align final values
 
         // Re-calculate number of unused digits based on remaining values to print
-        uint8 u8DigitsUnused = DISPLAY_WIDTH_X 
-                             - (pt_Screen->u8NumberValuesTotalDefined 
-                             -  pt_Screen->t_Index.u8ValuesPrinted) * (u8DigitsPerValue + 1);
+        uint8 u8DigitsUnused = DISPLAY_WIDTH_X - u8NumberValuesLastRow * (u8DigitsPerValue + 1);
 
         // Re-calculate cursor positions based on number of digits used
         if      (ALIGN_CENTER_X & pt_Screen->eAlignment)    pt_Screen->t_Cursor.u8x = u8DigitsUnused / 2;   // Center aligned case
@@ -436,7 +443,12 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lc
                 { // Set cursor to each digit in last printed value and replace with underscores
                     j_Lcd.setCursor(pt_Screen->t_Cursor.u8x + pt_Screen->t_Index.u8ValueOfRow * (u8DigitsPerValue + 1) + i, 
                                     pt_Screen->t_Cursor.u8y + pt_Screen->t_Index.u8Row);
-                    j_Lcd.print    (F("_"));
+
+                    if ((0 != pt_Screen->u8DecimalPlaces    ) && //       No. of decimal places other than '0' defined
+                        (pt_Screen->u8DecimalPlaces           == // -AND- Current digit equal to no. decimal places
+                         (MAX_DIGITS_PER_UINT8                - 
+                          pt_Screen->t_Index.u8DigitOfValue)) )     j_Lcd.print(F(".")); // Print decimal point
+                    else                                            j_Lcd.print(F("_")); // Print underscore
                 }
             }
         }
@@ -616,6 +628,8 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
                                                  u8RowsUnused,
                                                  u8DigitsUnused);
 
+        bool bDebugSerialPrint = false;
+
         if (bReset)
         { // Print blanks on first loop
 
@@ -632,6 +646,8 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
 
             // Set back to zero since all placeholders for values are now printed
             _v_AppScreen_GetValues_Clr_IndexVars(&pt_Screen->t_Index);
+
+            bDebugSerialPrint = true;
         }
         else
         { // Print values on key press - Check each loop if a new value is submitted
@@ -794,6 +810,55 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
                 pt_Screen->bValuesDefined = true;
                 _v_AppScreen_GetValues_Clr_IndexVars(&pt_Screen->t_Index); // Clear index variables
             }
+
+            bDebugSerialPrint = true;
+
+        }
+
+        if (bDebugSerialPrint)
+        {
+            Serial.println("");
+            Serial.println("");
+            Serial.println("/*-------------------------------------*/");
+            Serial.println("/*--          SCREEN DATA:           --*/");
+            Serial.println("/*-------------------------------------*/");
+
+            Serial.println("");
+            Serial.print  ("Decimal point? ");
+            if (bDecimalPoint)  Serial.println("TRUE");
+            else                Serial.println("FALSE");
+
+            Serial.println("");
+            Serial.print  ("Digits per value: ");
+            Serial.println(u8DigitsPerValue);
+
+            Serial.println("");
+            Serial.print  ("Values per row: ");
+            Serial.println(u8ValuesPerRow);
+
+            Serial.println("");
+            Serial.print  ("Rows available: ");
+            Serial.println(u8RowsAvailable);
+
+            Serial.println("");
+            Serial.print  ("First available row: ");
+            Serial.println(u8FirstAvailableRow);
+
+            Serial.println("");
+            Serial.print  ("Rows Needed: ");
+            Serial.println(u8RowsNeeded);
+
+            Serial.println("");
+            Serial.print  ("Rows Unused: ");
+            Serial.println(u8RowsUnused);
+
+            Serial.println("");
+            Serial.print  ("Digits Unused: ");
+            Serial.println(u8DigitsUnused);
+
+            Serial.println();
+            Serial.println("");
+            Serial.println("");
         }
     }
 }

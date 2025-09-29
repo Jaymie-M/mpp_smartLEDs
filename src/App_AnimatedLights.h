@@ -33,7 +33,7 @@
     .eAlignment                 = e_Algn_LCenter,                               \
     .u8KeypressHex              = KEYPRESS_NONE,                                \
     .u8KeypressFinished         = KEYPRESS_NONE,                                \
-    .u8MinValue                 = 0,                                            \
+    .u8MinValue                 = 1,                                            \
     .u8MaxValue                 = 0xFF,                                         \
     .u8DecimalPlaces            = 1,                                            \
     .u8NumberValuesTotalDefined = 1,                                            \
@@ -75,8 +75,8 @@
                                    .u8ValuesPrinted    = 0,                     \
                                   },                                            \
     .t_Cursor                   = {                                             \
-                                   .u8x = 0,                                    \
-                                   .u8y = 0,                                    \
+                                   .u8x                = 0,                     \
+                                   .u8y                = 0,                     \
                                   },                                            \
 }
 
