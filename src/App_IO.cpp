@@ -35,8 +35,8 @@ IO_INIT_MODULE(TEENSY, TEENSY_IO_CONFIG);
 /***************************
  *   Function Prototypes   *
  ***************************/
-void _v_ConfigurePin(uint8 u8PinNumber, uint8 u8PinType);
-
+void _v_ConfigurePin  (uint8 u8PinNumber, uint8 u8PinType);
+void _v_AppIO_Pin_Init(T_ModuleIO * pt_Pin);
 
 /***************************
  *         Objects         *
@@ -215,15 +215,15 @@ void _v_AppIO_Pin_Init(T_ModuleIO * pt_Pin)
             break;
 
         case PINTYPE_DIN:           // Digital input
-            pinMode(u8PinNumber, INPUT );
+            pinMode(pt_Pin->u8Pin, INPUT );
             break;
 
         case PINTYPE_DIN_PULLUP:    // Digital input (configured with internal pull-up resistor)
-            pinMode(u8PinNumber, INPUT_PULLUP );
+            pinMode(pt_Pin->u8Pin, INPUT_PULLUP );
             break;
 
         case PINTYPE_DOUT: // Digital output
-            pinMode(u8PinNumber, OUTPUT);
+            pinMode(pt_Pin->u8Pin, OUTPUT);
             break;
 
         default:

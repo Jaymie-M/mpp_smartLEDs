@@ -14,6 +14,9 @@
 // Arduino Core file
 #include <Arduino.h>
 
+// Application
+#include "App_Tools.h"
+
 /***************************
  *         Defines         *
  ***************************/
@@ -485,8 +488,8 @@
                 },
 
 #define IO_INIT_MODULE(name, io_table)                                                       \
-    const T_ModuleIO gat_Module_##name##_IO[NUMBER_COMPONENTS] = {io_table(IO_LIST_EXPAND)}; \
-    const uint8      gu8_Module_##name##_ComponentList[]       = {##name##_IO_CONFIG(IO_LIST_EXPAND_AS_COMPONENT_ARRAY)};
+          T_ModuleIO gat_Module_##name##_IO[NUMBER_COMPONENTS] = {io_table(IO_LIST_EXPAND)}; \
+    const uint8      gu8_Module_##name##_ComponentList[]       = {io_table(IO_LIST_EXPAND_AS_COMPONENT_ARRAY)};
 
 #define TEENSY_IO_CONFIG(ENTRY)                                                  \
     /* Serial monitor */                                                         \
@@ -546,6 +549,8 @@ void    v_AppIO_GetIOData               (T_ModuleIO * pt_IO);
 void    v_AppIO_SetIOData               (T_ModuleIO * pt_IO, uint8 u8Value);
 void    v_AppIO_SetPWM_01pct            (T_ModuleIO * pt_IO, uint16 u16SetpointValue_01pct);
 uint16  u16_AppIO_GetAnalogVoltage_mV   (T_ModuleIO * pt_IO);
+
+extern T_ModuleIO gat_Module_TEENSY_IO[NUMBER_COMPONENTS];
 #endif
 
 #endif /* APP_IO_H */
