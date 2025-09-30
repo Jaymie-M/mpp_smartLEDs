@@ -68,7 +68,11 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
     static  float32             sf32_Period_100pct      = 0.0f; // Percentage of period completed thus far
     static  uint8               su8PrevPress            = KEYPRESS_NONE;
             uint8               u8CurrentPress          = KEYPRESS_NONE;
+
+    // Local variables to keep track of current setpoint and number of setpoints for active animation.
+    // This allows another animation to be configured without affecting the current running animation.
     static  uint8               su8CurrentFadeSetpoint  = 0;
+    static  uint8               su8NumberFadeSetpoints  = 0;
     
     switch (pt_AnimatedLeds->e_FadeAnimationStep)
     {
@@ -77,6 +81,7 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
             st_ScreenSetptPeriod.bValuesDefined = false;
             st_ScreenSetptPeriod.bReprintScreen = true;
             su8CurrentFadeSetpoint              = 0;
+            su8NumberFadeSetpoints              = pt_AnimatedLeds->u8NumberSetpoints;
             sf32_Period_100pct                  = 0.0f;
 
             pt_AnimatedLeds->e_FadeAnimationStep = e_FadeAnimationSetpointPeriod; // Next step
@@ -93,7 +98,7 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
                 charn c_Number     [MAX_DIGITS_PER_UINT8  ];
         
                 // Convert number of LED strip setpoints into string
-                itoa(pt_AnimatedLeds->u8NumberSetpoints, &c_Number[0], 10);
+                itoa(su8NumberFadeSetpoints, &c_Number[0], 10);
         
                 strncat(&c_Description[0], &c_Number[0], CONCAT_LENGTH(c_Description)); // Concat number of setpoints
                 strncat(&c_Description[0], " SPT)",      CONCAT_LENGTH(c_Description)); // Concat " SETPOINTS"
@@ -104,7 +109,7 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
                 v_AppScreen_GetValues_SetValuesArray    (&st_ScreenSetptPeriod, &pt_AnimatedLeds->au8Period_01s[0]);
 
                 /* Total number of values */
-                v_AppScreen_GetValues_SetNumValuesTotal (&st_ScreenSetptPeriod, pt_AnimatedLeds->u8NumberSetpoints);
+                v_AppScreen_GetValues_SetNumValuesTotal (&st_ScreenSetptPeriod, su8NumberFadeSetpoints);
         
                 // Print first menu
                 v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, &st_ScreenSetptPeriod);
@@ -135,7 +140,7 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
                 // but set to while loop in case of excessively long loop time or fairly small period
                 sf32_Period_100pct -= 1.0f; // Subtract 100% from period
 
-                if ((su8CurrentFadeSetpoint + 1) < pt_AnimatedLeds->u8NumberSetpoints)
+                if ((su8CurrentFadeSetpoint + 1) < su8NumberFadeSetpoints)
                 { // Move to next setpoint if next in order is less than total
                     su8CurrentFadeSetpoint++;
                 }
@@ -149,7 +154,7 @@ static void _v_AppAnimatedLights_Fade  (LiquidCrystal_I2C   j_Lcd,
             // Default to initial in case greater than or equal to total setpoints
             uint8 u8NextSetpoint = e_InitialSetpoint;
 
-            if ((su8CurrentFadeSetpoint + 1) < pt_AnimatedLeds->u8NumberSetpoints)
+            if ((su8CurrentFadeSetpoint + 1) < su8NumberFadeSetpoints)
             { // If next in order is less than total, set to next in order
                 u8NextSetpoint = su8CurrentFadeSetpoint + 1;
             }
