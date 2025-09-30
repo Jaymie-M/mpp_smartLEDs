@@ -30,10 +30,10 @@
  ***************************/
 
 // Constants
-#define DEFAULT_ADDRESS_LCD   0x27
-#define DEFAULT_PASSWORD    529643UL
-#define DEFAULT_GUESS   0xFFFFFFFFUL
-#define NUM_DIGITS_PASSWORD      6
+#define DEFAULT_ADDRESS_LCD             0x27
+#define DEFAULT_PASSWORD            529643UL
+#define DEFAULT_GUESS           0xFFFFFFFFUL
+#define NUM_DIGITS_PASSWORD                6
 
 /**
  * \brief This macro verifies that the selection variable does not indicate going back to the main menu

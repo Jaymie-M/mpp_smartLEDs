@@ -138,16 +138,16 @@ typedef char            charn;
  */
 typedef enum
 {
-    e_SetpointA                 = 0,
-    e_SetpointB	    			= 1,
-    e_SetpointC     			= 2,
+    e_FrameA                    = 0,
+    e_FrameB	    			= 1,
+    e_FrameC     			    = 2,
     e_Shift          			= 3,
     e_NumLedStripDefinitions,
-    e_NumLedStripSetpoints      = e_NumLedStripDefinitions
+    e_NumLedStripFrames         = e_NumLedStripDefinitions
                                 - POS1_MINUS_ZERO,
-    e_InitialSetpoint           = e_SetpointA,
+    e_InitialFrame              = e_FrameA,
 
-} E_LedStripSetpoints;
+} E_LedStripFrames;
 
 
 /**

@@ -24,7 +24,7 @@
 /***************************
  *         Defines         *
  ***************************/
-#define T_SETPOINTPERIODSCREEN_DEFAULT(...)                                     \
+#define T_TRANSITIONPERIODSCREEN_DEFAULT(...)                                   \
 {                                                                               \
     .bReprintScreen             = true,                                         \
     .bDescription               = true,                                         \
@@ -54,7 +54,7 @@
  /**
 * \brief Default definition for unique sections 'Get Values' screen
 */
-#define T_SETPOINTSSCREEN_DEFAULT(...)                                          \
+#define T_FRAMESSCREEN_DEFAULT(...)                                             \
 {                                                                               \
     .bReprintScreen             = true,                                         \
     .bDescription               = true,                                         \
@@ -63,8 +63,8 @@
     .eAlignment                 = e_Algn_LCenter,                               \
     .u8KeypressHex              = KEYPRESS_NONE,                                \
     .u8KeypressFinished         = KEYPRESS_NONE,                                \
-    .u8MinValue                 = 1,                                            \
-    .u8MaxValue                 = e_NumLedStripSetpoints,                       \
+    .u8MinValue                 = 2,                                            \
+    .u8MaxValue                 = e_NumLedStripFrames,                          \
     .u8DecimalPlaces            = 0,                                            \
     .u8NumberValuesTotalDefined = 1,                                            \
     .au8Digit                   = {0, 0, 0},                                    \
@@ -103,12 +103,12 @@
  */
 typedef enum
 {
-    e_FadeAnimationInit 					= 0,
-    e_FadeAnimationSetpointPeriod 		    = 1,
-    e_FadeAnimationLoop		                = 2,
-    e_FadeAnimationNumberofSteps,
+    e_FrameTransitionInit               = 0,
+    e_FrameTransitionPeriod 		    = 1,
+    e_FrameTransitionLoop		        = 2,
+    e_FrameTransitionNumberofSteps,
     
-} E_FadeAnimationStep;
+} E_FrameTransitionStep;
 
 
  /**
@@ -117,9 +117,9 @@ typedef enum
 typedef enum
 {
     e_AnimatedLightsMenuUnd            = 0,
-    e_AnimatedPresets                  = 1, 
-    e_AnimatedFadeLoop                 = 2,
-    e_AnimatedFadeSetpoint             = 3,
+    e_AnimatedPresets                  = 1,
+    e_AnimatedCutFrames                = 2,
+    e_AnimatedFadeFrames               = 3,
     e_AnimatedShiftWhole               = 4,
     e_AnimatedShiftHalfAndHalf         = 5,
     e_AnimatedShiftUnequalSections     = 6,
@@ -139,7 +139,7 @@ typedef enum
 typedef enum
 {
     e_AnimationStyleUndefined   = 0,
-    e_AnimationStyleFade        = 1,
+    e_AnimationStyleFrames      = 1,
     e_AnimationStyleShift       = 2,
     e_NumAnimationStyles,
 
@@ -153,13 +153,13 @@ typedef enum
  */
 typedef struct
 {
-    uint8                   au8Period_01s[e_NumLedStripSetpoints];  // Fade time between setpoints
-    E_AnimationStyle        e_Style;                                // Animation style
-    E_FadeAnimationStep     e_FadeAnimationStep;                    // Fade animations step
-    uint8                   u8NumberSetpoints;                      // Number of setpoints to be defined
-    uint8                   u8CurrentSetpoint;                      // Current setpoint being defined
-    bool                    bSetpointsDefined;                      // Setpoints defined
-    bool                    bDefined;                               // Animation style defined
+    uint8                   au8Period_01s[e_NumLedStripFrames];  // Period between frames
+    E_AnimationStyle        e_Style;                             // Animation style
+    E_FrameTransitionStep   e_FrameTransitionStep;               // Frame transition step
+    uint8                   u8NumberFrames;                      // Number of frames to be defined
+    uint8                   u8CurrentFrame;                      // Current frame being defined
+    bool                    bFramesDefined;                      // Frames defined
+    bool                    bDefined;                            // Animation style defined
 
 } T_AnimatedLeds;
 
@@ -168,10 +168,10 @@ typedef struct
  ***************************/
 void v_AppAnimatedLights_MainMenu               (LiquidCrystal_I2C  j_Lcd,      Keypad              j_Keypad,           T_MenuSelection   * pt_Menu           );
 void v_AppAnimatedLights_Main_TLU               (LiquidCrystal_I2C  j_Lcd,      Keypad              j_Keypad,           T_AnimatedLeds    * pt_AnimatedLeds,
-                                                 CRGB             * pat_Leds,   T_LedStrip        * pat_LedStrip,       uint32              u32CycleTime_ms, 
+                                                 CRGB             * pat_Leds,   T_LedStrip        * pat_LedStrip,       uint32              u32CycleTime_ms,
                                                  uint8              u8Selection                                                                               );
 void v_AppAnimatedLights_Reset                  (                                                                       T_AnimatedLeds    * pt_AnimatedLeds   );
-void v_AppAnimatedLights_SetpointsScreenReset   (                               T_ScreenGetValues * pt_SetpointsScreen, T_AnimatedLeds    * pt_AnimatedLeds   );
-void v_AppAnimatedLights_ChooseNumberOfSetpoints(LiquidCrystal_I2C  j_Lcd,      Keypad              j_Keypad,           T_AnimatedLeds    * pt_AnimatedLeds, 
-                                                                                                                        T_ScreenGetValues * pt_ScreenSetpoints);
+void v_AppAnimatedLights_FramesScreenReset      (                               T_ScreenGetValues * pt_FramesScreen,    T_AnimatedLeds    * pt_AnimatedLeds   );
+void v_AppAnimatedLights_ChooseNumberOfFrames   (LiquidCrystal_I2C  j_Lcd,      Keypad              j_Keypad,           T_AnimatedLeds    * pt_AnimatedLeds,
+                                                                                                                        T_ScreenGetValues * pt_ScreenFrames   );
 #endif /* APP_ANIMATEDLIGHTS_H */
