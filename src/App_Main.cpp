@@ -59,8 +59,8 @@ const byte gc_mau8ColumnPins[NUM_COLUMNS] = {PIN_DIN_KEYPAD_COL1,
 static bool   mbInitialized                 = false;
 static bool   mbUnlocked                    = false;
 
-static uint32 mu32SmartDormLedsCycleTime_ms = 0;
-static uint32 mu32PrevLoopTime_ms           = 0;
+static uint32 mu32SmartDormLedsCycleTime_us = 0;
+static uint32 mu32PrevLoopTime_us           = 0;
 
 // Animations menus
 #ifdef OLD_ANIMATIONS_MENUS
@@ -397,8 +397,9 @@ void v_AppMain_TLU(void)
             }
         }
 
-        mu32SmartDormLedsCycleTime_ms = millis() - mu32PrevLoopTime_ms; // Calculate cycle time
-        mu32PrevLoopTime_ms           = millis();                       // Store previous loop time
+        /// \todo - need to handle case where overflow occurs after 71 minutes
+        mu32SmartDormLedsCycleTime_us = micros() - mu32PrevLoopTime_us; // Calculate cycle time
+        mu32PrevLoopTime_us           = micros();                       // Store previous loop time
 
         /* Updates done outside of main menu selection */
         if (b_AppStillsLights_AnimationsEnabled() )
@@ -408,7 +409,7 @@ void v_AppMain_TLU(void)
                                          &mt_AnimatedLeds,
                                          &mat_SmartDormLeds[0],
                                          &mat_SmartDormLedStrip[0],
-                                         mu32SmartDormLedsCycleTime_ms,
+                                         mu32SmartDormLedsCycleTime_us,
                                          mt_AnimatedLightsMenu.u8Selection);
         }
         else if (mt_AnimatedLeds.bDefined)

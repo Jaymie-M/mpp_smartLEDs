@@ -39,11 +39,11 @@
  *   Function Prototypes   *
  ***************************/
 static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C j_Lcd,            Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds,
-                                                    CRGB            * pat_Leds,         T_LedStrip    * pat_LedStrip,   uint32              u32CycleTime_ms,
+                                                    CRGB            * pat_Leds,         T_LedStrip    * pat_LedStrip,   uint32              u32CycleTime_us,
                                                     uint8             u8Selection                                                                           );
 static void _v_AppAnimatedLights_ShiftSects        (LiquidCrystal_I2C j_Lcd,            Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds,
                                                     CRGB            * pat_Leds,         T_LedStrip    * pt_Frame,       T_LedStrip        * pt_Shift,
-                                                    uint32            u32CycleTime_ms,  uint8           u8Selection                                         );
+                                                    uint32            u32CycleTime_us,  uint8           u8Selection                                         );
 /***************************
  *         Objects         *
  ***************************/
@@ -61,7 +61,7 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
                                                     T_AnimatedLeds    * pt_AnimatedLeds,
                                                     CRGB              * pat_Leds,
                                                     T_LedStrip        * pat_LedStrip,
-                                                    uint32              u32CycleTime_ms,
+                                                    uint32              u32CycleTime_us,
                                                     uint8               u8Selection)
 {
     static  T_ScreenGetValues   st_ScreenTransitionPeriod   = T_TRANSITIONPERIODSCREEN_DEFAULT();
@@ -133,9 +133,9 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
 
         case e_FrameTransitionLoop:
 
-            /* Calculate percentage of period elapsed - cycle time (ms) divided by period (ms) */
-            sf32_Period_100pct += (float32) u32CycleTime_ms 
-                                / (100.0f * (float32) (pt_AnimatedLeds->au8Period_01s[su8CurrentFrame]));
+            /* Calculate percentage of period elapsed - cycle time (us) divided by period (us) */
+            sf32_Period_100pct += (float32) u32CycleTime_us
+                                / (100000.0f * (float32) (pt_AnimatedLeds->au8Period_01s[su8CurrentFrame]));
             
             while (1.0f <= sf32_Period_100pct)
             { // Full period has elapsed - should only come in here once every several loops,
@@ -150,6 +150,28 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
                 { // Otherwise, reset to initial starting frame
                     su8CurrentFrame = e_InitialFrame;
                 }
+
+                Serial.println("");
+                Serial.println("");
+
+                Serial.println("/*------------------------------------------*/");
+                Serial.println("/*---             CYCLE DATA             ---*/");
+                Serial.println("/*------------------------------------------*/");
+
+                Serial.println("");
+                Serial.print  ("Cycle time (us): ");
+                Serial.println((float32) u32CycleTime_us);
+
+                Serial.println("");
+                Serial.print  ("Period (us): ");
+                Serial.println(100000.0f * (float32) (pt_AnimatedLeds->au8Period_01s[su8CurrentFrame]));
+
+                Serial.println("");
+                Serial.print  ("Period (%): ");
+                Serial.println(100.0f * sf32_Period_100pct);
+
+                Serial.println("");
+                Serial.println("");
             }
 
             // Default to initial in case greater than or equal to total number of frames
@@ -235,7 +257,7 @@ static void _v_AppAnimatedLights_ShiftSects(LiquidCrystal_I2C   j_Lcd,
                                             CRGB              * pat_Leds,
                                             T_LedStrip        * pt_Frame,    
                                             T_LedStrip        * pt_Shift,   
-                                            uint32              u32CycleTime_ms,
+                                            uint32              u32CycleTime_us,
                                             uint8               u8Selection)
 {
     if ((e_AnimatedLightsMenuUnd != u8Selection) && (e_MaxAnimatedLightsMenu >= u8Selection))
@@ -300,7 +322,7 @@ void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,              // [
                                     T_AnimatedLeds    * pt_AnimatedLeds,    // [I,O] Animated LED data
                                     CRGB              * pat_Leds,           // [I,O] LED struct array
                                     T_LedStrip        * pat_LedStrip,       // [I, ] LED strip struct array
-                                    uint32              u32CycleTime_ms,    // [I, ] Cycle time
+                                    uint32              u32CycleTime_us,    // [I, ] Cycle time
                                     uint8               u8Selection)        // [I, ] Animations selection
 {
     switch (u8Selection)
@@ -335,7 +357,7 @@ void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,              // [
                                                     pt_AnimatedLeds,
                                                     pat_Leds,
                                                     pat_LedStrip,
-                                                    u32CycleTime_ms,
+                                                    u32CycleTime_us,
                                                     u8Selection);
             break;
         case e_AnimationStyleShift:
@@ -345,7 +367,7 @@ void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,              // [
                                                     pat_Leds,
                                                     &pat_LedStrip[e_InitialFrame],
                                                     &pat_LedStrip[e_Shift],
-                                                    u32CycleTime_ms,
+                                                    u32CycleTime_us,
                                                     u8Selection - SHIFT_OPTION_OFFSET);
             break;
 #ifdef PRINT_ERROR_STATEMENTS

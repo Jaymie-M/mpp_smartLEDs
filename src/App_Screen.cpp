@@ -44,7 +44,7 @@ static void _v_AppScreen_RGB_SetValue                   (LiquidCrystal_I2C      
                                                          T_RGB                * pt_RGB,                 uint8			    u8MaxValue,
                                                          uint8                  u8DisplayPosition_x,    uint8               u8DisplayPosition_y );
 static void _v_AppScreen_RGB_Reset                      (LiquidCrystal_I2C      j_Lcd,                  T_ScreenRGB       * pt_Screen,
-																									    bool				bSelectNumLeds		);
+                                                                                                        bool				bSelectNumLeds		);
 
 // 'Get Values' screen
 static void _v_AppScreen_GetValues_GetCursorPosition    (T_ScreenGetValues    * pt_Screen,              uint8               u8FirstAvailableRow,
@@ -241,7 +241,7 @@ static void _v_AppScreen_MenuSelection_Reset(LiquidCrystal_I2C  j_Lcd,      // [
  */
 static void _v_AppScreen_RGB_Reset(LiquidCrystal_I2C  j_Lcd,      		// [I, ] Lcd object
                                    T_ScreenRGB      * pt_Screen,  		// [I, ] Screen data
-								   bool				  bSelectNumLeds)	// [I, ] TRUE = select the number of LEDs for this section
+                                   bool				  bSelectNumLeds)	// [I, ] TRUE = select the number of LEDs for this section
 {
     // Clear display and reset cursor to top left corner
     j_Lcd.clear();
@@ -256,23 +256,21 @@ static void _v_AppScreen_RGB_Reset(LiquidCrystal_I2C  j_Lcd,      		// [I, ] Lcd
     // Print description
     j_Lcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_2ND_LINE_Y);
     j_Lcd.print(String(&pt_Screen->acScreenDescription[0]));
-	
-	if (bSelectNumLeds)
-	{ // Print RGB and blanks for input values on 3rd line
-		j_Lcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_3RD_LINE_Y);
-		j_Lcd.print(F("R: ___ G: ___ B: ___"));
-		
-		// Print num LEDs and blank for input values on 4th line
-		j_Lcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_4TH_LINE_Y);
-		j_Lcd.print(F("Number of LEDs: ___"));
-	}
-	else
-	{ // Print RGB and blanks for input values on 4th line
-		j_Lcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_4TH_LINE_Y);
-		j_Lcd.print(F("R: ___ G: ___ B: ___"));
-	}
 
+    if (bSelectNumLeds)
+    { // Print RGB and blanks for input values on 3rd line
+        j_Lcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_3RD_LINE_Y);
+        j_Lcd.print(F("R: ___ G: ___ B: ___"));
 
+        // Print num LEDs and blank for input values on 4th line
+        j_Lcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_4TH_LINE_Y);
+        j_Lcd.print(F("Number of LEDs: ___"));
+    }
+    else
+    { // Print RGB and blanks for input values on 4th line
+        j_Lcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_4TH_LINE_Y);
+        j_Lcd.print(F("R: ___ G: ___ B: ___"));
+    }
 }
 
 /**
@@ -336,15 +334,19 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lc
                                                      uint8                  u8DigitsPerValue,   // [I, ] 
                                                      bool                   bReset)             // [I, ] Bool to determine if screen reset is required
 {
-    // Code shortening - default to unadjusted pt_Screen->t_Index.u8DigitOfValue and to not print decimal point
-    uint8   u8DigitOfValueAdjusted  =  pt_Screen->t_Index.u8DigitOfValue;
+    // Code shortening - default to unadjusted pt_Screen->t_Index.u8DigitOfValue, u8DigitsPerValue and to not print decimal point
+    uint8   u8DigitOfValueAdjusted      =  pt_Screen->t_Index.u8DigitOfValue;
+    uint8   u8DigitsPerValueAdjusted    =  u8DigitsPerValue;
     /// \todo - create function that calculates remainder
-    uint8   u8NumberValuesLastRow   =  pt_Screen->u8NumberValuesTotalDefined 
-                                    - (pt_Screen->u8NumberValuesTotalDefined / u8ValuesPerRow) * u8ValuesPerRow;
-    bool    bPrintDecimalPoint      = false;
+    uint8   u8NumberValuesLastRow       =  pt_Screen->u8NumberValuesTotalDefined
+                                        - (pt_Screen->u8NumberValuesTotalDefined / u8ValuesPerRow) * u8ValuesPerRow;
+    bool    bPrintDecimalPoint          = false;
 
     if (0 != pt_Screen->u8DecimalPlaces)
     { // No. of decimal places other than '0' defined
+        // Subtract one from adjusted digits per value to account for decimal point
+        u8DigitsPerValueAdjusted   -= 1;
+
         if      (pt_Screen->u8DecimalPlaces == (MAX_DIGITS_PER_UINT8 - pt_Screen->t_Index.u8DigitOfValue))
         { // Current digit equal to no. decimal places:
             // Print decimal point
@@ -413,11 +415,11 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lc
 
             if (KEYPRESS_NONE == pt_Screen->u8KeypressHex)
             { // All values are in decimal
-                u32LatestValue = u32_AppTools_DigitArray_to_uint32 (&pt_Screen->au8Digit[0], MIN(u8DigitsPerValue, LENGTHOF(pt_Screen->au8Digit)));
+                u32LatestValue = u32_AppTools_DigitArray_to_uint32 (&pt_Screen->au8Digit[0], MIN(u8DigitsPerValueAdjusted, LENGTHOF(pt_Screen->au8Digit)));
             }
             else
             { // All values are in hex
-                u32LatestValue = u32_AppTools_NibbleArray_to_uint32(&pt_Screen->au8Digit[0], MIN(u8DigitsPerValue, LENGTHOF(pt_Screen->au8Digit)));
+                u32LatestValue = u32_AppTools_NibbleArray_to_uint32(&pt_Screen->au8Digit[0], MIN(u8DigitsPerValueAdjusted, LENGTHOF(pt_Screen->au8Digit)));
             }
 
             if ((u32LatestValue <= pt_Screen->u8MaxValue) && (u32LatestValue >= pt_Screen->u8MinValue))
@@ -444,11 +446,10 @@ static void _v_AppScreen_GetValues_SetCursorAndPrint(LiquidCrystal_I2C      j_Lc
                     j_Lcd.setCursor(pt_Screen->t_Cursor.u8x + pt_Screen->t_Index.u8ValueOfRow * (u8DigitsPerValue + 1) + i, 
                                     pt_Screen->t_Cursor.u8y + pt_Screen->t_Index.u8Row);
 
-                    if ((0 != pt_Screen->u8DecimalPlaces    ) && //       No. of decimal places other than '0' defined
-                        (pt_Screen->u8DecimalPlaces           == // -AND- Current digit equal to no. decimal places
-                         (MAX_DIGITS_PER_UINT8                - 
-                          pt_Screen->t_Index.u8DigitOfValue)) )     j_Lcd.print(F(".")); // Print decimal point
-                    else                                            j_Lcd.print(F("_")); // Print underscore
+                    if ((0 != pt_Screen->u8DecimalPlaces) && //       No. of decimal places other than '0' defined
+                        (pt_Screen->u8DecimalPlaces       == // -AND- Current digit equal to no. decimal places
+                         (MAX_DIGITS_PER_UINT8 - i     )) ) j_Lcd.print(F(".")); // Print decimal point
+                    else                                    j_Lcd.print(F("_")); // Print underscore
                 }
             }
         }

@@ -168,7 +168,7 @@ typedef struct
  ***************************/
 void v_AppAnimatedLights_MainMenu               (LiquidCrystal_I2C  j_Lcd,      Keypad              j_Keypad,           T_MenuSelection   * pt_Menu           );
 void v_AppAnimatedLights_Main_TLU               (LiquidCrystal_I2C  j_Lcd,      Keypad              j_Keypad,           T_AnimatedLeds    * pt_AnimatedLeds,
-                                                 CRGB             * pat_Leds,   T_LedStrip        * pat_LedStrip,       uint32              u32CycleTime_ms,
+                                                 CRGB             * pat_Leds,   T_LedStrip        * pat_LedStrip,       uint32              u32CycleTime_us,
                                                  uint8              u8Selection                                                                               );
 void v_AppAnimatedLights_Reset                  (                                                                       T_AnimatedLeds    * pt_AnimatedLeds   );
 void v_AppAnimatedLights_FramesScreenReset      (                               T_ScreenGetValues * pt_FramesScreen,    T_AnimatedLeds    * pt_AnimatedLeds   );
