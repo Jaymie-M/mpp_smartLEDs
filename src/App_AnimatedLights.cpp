@@ -66,6 +66,7 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
 {
     static  T_ScreenGetValues   st_ScreenTransitionPeriod   = T_TRANSITIONPERIODSCREEN_DEFAULT();
     static  float32             sf32_Period_100pct          = 0.0f; // Percentage of period completed thus far
+    static  bool                sbFadeTransition            = false;
     static  uint8               su8PrevPress                = KEYPRESS_NONE;
             uint8               u8CurrentPress              = KEYPRESS_NONE;
 
@@ -73,7 +74,6 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
     // This allows another animation to be configured without affecting the current running animation.
     static  uint8               su8CurrentFrame             = 0;
     static  uint8               su8NumberFrames             = 0;
-            bool                bFadeTransition             = (e_AnimatedFadeFrames == u8Selection);
 
     switch (pt_AnimatedLeds->e_FrameTransitionStep)
     {
@@ -83,6 +83,7 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
             st_ScreenTransitionPeriod.bReprintScreen    = true;
             su8CurrentFrame                             = e_InitialFrame;
             su8NumberFrames                             = pt_AnimatedLeds->u8NumberFrames;
+            sbFadeTransition                            = (e_AnimatedFadeFrames == u8Selection);
             sf32_Period_100pct                          = 0.0f;
 
             pt_AnimatedLeds->e_FrameTransitionStep      = e_FrameTransitionPeriod; // Next step
@@ -154,7 +155,7 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
             // Default to initial in case greater than or equal to total number of frames
             uint8 u8NextFrame = e_InitialFrame;
 
-            if (bFadeTransition && ((su8CurrentFrame + 1) < su8NumberFrames))
+            if (sbFadeTransition && ((su8CurrentFrame + 1) < su8NumberFrames))
             { // If next in order is less than total, set to next in order
                 u8NextFrame = su8CurrentFrame + 1;
             }
@@ -172,7 +173,7 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
                 { // Get current color
                     v_AppStillLights_GetLedColor(pt_Frame, &t_Color, i);
 
-                    if (bFadeTransition)
+                    if (sbFadeTransition)
                     { // Get next color if fade transition active
                         v_AppStillLights_GetLedColor(pt_NextFrame, &t_NextColor, i);
 

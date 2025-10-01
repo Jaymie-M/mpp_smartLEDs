@@ -246,7 +246,7 @@ static void _v_AppStillLights_GetLedColor_SectsChkpts  (T_LedStrip    * pt_LedSt
                     u16EndLeds      = u16SumLeds;
                     break;
                 }
-                else if (k == (pt_LedStrip->t_SectionData.u8NumUniqueSections - 1))
+                else if ((sint8) k == (pt_LedStrip->t_SectionData.u8NumUniqueSections - 1))
                 { // Quick exit - sum is still less than current LED and on the last section
                     *pt_Color = ct_ColorClear; // Set color to clear
                     return;
