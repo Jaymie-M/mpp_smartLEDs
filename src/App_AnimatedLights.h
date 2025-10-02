@@ -82,6 +82,35 @@
 
 
 /**
+ * \brief Default definition for frame transition data
+ */
+#define T_FRAMETRANSITION_DEFAULT(...)                                          \
+{                                                                               \
+    .t_ScreenPeriod   = T_TRANSITIONPERIODSCREEN_DEFAULT(),           \
+    .f32Period_100pct           = 0.0f,                                         \
+    .u8CurrentFrame             = 0,                                            \
+    .u8NumberFrames             = 0,                                            \
+    .bFadeTransition            = false,                                        \
+}
+
+
+/**
+ * \brief Default definition animated LEDs
+ */
+#define T_ANIMATEDLEDS_DEFAULT(...)                                             \
+{                                                                               \
+    .t_Frame                    = T_FRAMETRANSITION_DEFAULT(),                  \
+    .e_Style                    = e_AnimationStyleUndefined,                    \
+    .e_FrameTransitionStep      = e_FrameTransitionInit,                        \
+    .au8Period_01s              = {0, 0, 0},                                    \
+    .u8NumberFrames             = 0,                                            \
+    .u8CurrentFrame             = e_InitialFrame,                               \
+    .bFramesDefined             = false,                                        \
+    .bDefined                   = false,                                        \
+}
+
+
+/**
  * \brief Default definition for animated lights menu
  */
 #define T_ANIMATEDLIGHTSMENU_DEFAULT(...)                                       \
@@ -148,14 +177,30 @@ typedef enum
 /***************************
  *         Structs         *
  ***************************/
+
 /**
- * \brief - Information needed to describe LED animations
+ * \brief - Data needed to run animated frame transitions
  */
 typedef struct
 {
-    uint8                   au8Period_01s[e_NumLedStripFrames];  // Period between frames
+    T_ScreenGetValues   t_ScreenPeriod;     // Screen where frame transition period is defined
+    float32             f32Period_100pct;   // Percentage of period completed thus far
+    uint8               u8CurrentFrame;     // Current frame in this animation
+    uint8               u8NumberFrames;     // Number of frames in this animation
+    bool                bFadeTransition     // Fade transition enabled
+
+} T_FrameTransition;
+
+
+/**
+ * \brief - Data needed to run LED animations
+ */
+typedef struct
+{
+    T_FrameTransition       t_Frame;                             // Data needed to run animated frame transitions
     E_AnimationStyle        e_Style;                             // Animation style
     E_FrameTransitionStep   e_FrameTransitionStep;               // Frame transition step
+    uint8                   au8Period_01s[e_NumLedStripFrames];  // Period between frames
     uint8                   u8NumberFrames;                      // Number of frames to be defined
     uint8                   u8CurrentFrame;                      // Current frame being defined
     bool                    bFramesDefined;                      // Frames defined

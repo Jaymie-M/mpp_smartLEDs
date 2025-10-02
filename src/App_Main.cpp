@@ -70,9 +70,9 @@ static uint8  mu8SettingsMenuSelect         = 0;
 static uint8  mu8SearchMenuSelect           = 0;
 
 // Structs
-static T_AnimatedLeds   mt_AnimatedLeds;
 static T_LedStrip       mat_SmartDormLedStrip[e_NumLedStripDefinitions]; /// \todo - define default struct
 static CRGB             mat_SmartDormLeds    [NUM_LEDS];
+static T_AnimatedLeds   mt_AnimatedLeds         = T_ANIMATEDLEDS_DEFAULT();
 static T_MenuSelection  mt_MainMenu             = T_MAINMENU_DEFAULT(),
                         mt_LightsMenu           = T_LIGHTSMENU_DEFAULT(),
                         mt_StillLightsMenu      = T_STILLLIGHTSMENU_DEFAULT(),

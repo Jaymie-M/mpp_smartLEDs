@@ -64,66 +64,58 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
                                                     uint32              u32CycleTime_us,
                                                     uint8               u8Selection)
 {
-    static  T_ScreenGetValues   st_ScreenTransitionPeriod   = T_TRANSITIONPERIODSCREEN_DEFAULT();
-    static  float32             sf32_Period_100pct          = 0.0f; // Percentage of period completed thus far
-    static  bool                sbFadeTransition            = false;
-    static  uint8               su8PrevPress                = KEYPRESS_NONE;
-            uint8               u8CurrentPress              = KEYPRESS_NONE;
-
-    // Local variables to keep track of current frame and number of frames for active animation.
-    // This allows another animation to be configured without affecting the current running animation.
-    static  uint8               su8CurrentFrame             = 0;
-    static  uint8               su8NumberFrames             = 0;
+    static uint8 su8PrevPress   = KEYPRESS_NONE;
+           uint8 u8CurrentPress = KEYPRESS_NONE;
 
     switch (pt_AnimatedLeds->e_FrameTransitionStep)
     {
         case e_FrameTransitionInit:
             // Set defaults
-            st_ScreenTransitionPeriod.bValuesDefined    = false;
-            st_ScreenTransitionPeriod.bReprintScreen    = true;
-            su8CurrentFrame                             = e_InitialFrame;
-            su8NumberFrames                             = pt_AnimatedLeds->u8NumberFrames;
-            sbFadeTransition                            = (e_AnimatedFadeFrames == u8Selection);
-            sf32_Period_100pct                          = 0.0f;
+            pt_AnimatedLeds->t_Frame.t_ScreenPeriod.bValuesDefined  = false;
+            pt_AnimatedLeds->t_Frame.t_ScreenPeriod.bReprintScreen  = true;
+            pt_AnimatedLeds->t_Frame.u8CurrentFrame                 = e_InitialFrame;
+            pt_AnimatedLeds->t_Frame.u8NumberFrames                 = pt_AnimatedLeds->u8NumberFrames;
+            pt_AnimatedLeds->t_Frame.bFadeTransition                = (e_AnimatedFadeFrames == u8Selection);
+            pt_AnimatedLeds->t_Frame.f32Period_100pct               = 0.0f;
 
-            pt_AnimatedLeds->e_FrameTransitionStep      = e_FrameTransitionPeriod; // Next step
+            pt_AnimatedLeds->e_FrameTransitionStep                  = e_FrameTransitionPeriod; // Next step
             break;
 
         case e_FrameTransitionPeriod:
-            if (st_ScreenTransitionPeriod.bReprintScreen)
+            if (pt_AnimatedLeds->t_Frame.t_ScreenPeriod.bReprintScreen)
             {
                 /* Title */
-                v_AppScreen_GetValues_SetTitle          (&st_ScreenTransitionPeriod, "PERIOD:");
+                v_AppScreen_GetValues_SetTitle          (&pt_AnimatedLeds->t_Frame.t_ScreenPeriod, "PERIOD:");
         
                 /* Description */
                 charn c_Description[MAX_LENGTH_DESCRIPTION] = "MAX 25.5s (";
                 charn c_Number     [MAX_DIGITS_PER_UINT8  ];
         
                 // Convert number of LED strip frames into string
-                itoa(su8NumberFrames, &c_Number[0], 10);
+                itoa(pt_AnimatedLeds->t_Frame.u8NumberFrames, &c_Number[0], 10);
         
                 strncat(&c_Description[0], &c_Number[0], CONCAT_LENGTH(c_Description)); // Concat number of frames
                 strncat(&c_Description[0], " FRMS)",     CONCAT_LENGTH(c_Description)); // Concat " FRMS"
         
-                v_AppScreen_GetValues_SetDescription    (&st_ScreenTransitionPeriod, &c_Description[0]);
+                v_AppScreen_GetValues_SetDescription    (&pt_AnimatedLeds->t_Frame.t_ScreenPeriod, &c_Description[0]);
         
                 /* Values Array */
-                v_AppScreen_GetValues_SetValuesArray    (&st_ScreenTransitionPeriod, &pt_AnimatedLeds->au8Period_01s[0]);
+                v_AppScreen_GetValues_SetValuesArray    (&pt_AnimatedLeds->t_Frame.t_ScreenPeriod, &pt_AnimatedLeds->au8Period_01s[0]);
 
                 /* Total number of values */
-                v_AppScreen_GetValues_SetNumValuesTotal (&st_ScreenTransitionPeriod, su8NumberFrames);
+                v_AppScreen_GetValues_SetNumValuesTotal (&pt_AnimatedLeds->t_Frame.t_ScreenPeriod, pt_AnimatedLeds->t_Frame.u8NumberFrames);
         
                 // Print first menu
-                v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, &st_ScreenTransitionPeriod);
+                v_AppScreen_GetValues_Init(j_Lcd, j_Keypad, &pt_AnimatedLeds->t_Frame.t_ScreenPeriod);
         
-                st_ScreenTransitionPeriod.bReprintScreen = false; // Clear, so reprint only occurs once
+                pt_AnimatedLeds->t_Frame.t_ScreenPeriod.bReprintScreen = false; // Clear, so reprint only occurs once
             }
         
             // Run task loop update until values are defined
-            v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &st_ScreenTransitionPeriod);
+            v_AppScreen_GetValues_TLU(j_Lcd, j_Keypad, &pt_AnimatedLeds->t_Frame.t_ScreenPeriod);
 
             // Go to next step when values are defined
-            if (st_ScreenTransitionPeriod.bValuesDefined)
+            if (pt_AnimatedLeds->t_Frame.t_ScreenPeriod.bValuesDefined)
             {
                 pt_AnimatedLeds->e_FrameTransitionStep = e_FrameTransitionLoop;
 
@@ -134,21 +126,22 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
         case e_FrameTransitionLoop:
 
             /* Calculate percentage of period elapsed - cycle time (us) divided by period (us) */
-            sf32_Period_100pct += (float32) u32CycleTime_us
-                                / (100000.0f * (float32) (pt_AnimatedLeds->au8Period_01s[su8CurrentFrame]));
+            pt_AnimatedLeds->t_Frame.f32Period_100pct += (float32) u32CycleTime_us
+                                                       / (100000.0f * (float32) (pt_AnimatedLeds->au8Period_01s[
+                                                                                 pt_AnimatedLeds->t_Frame.u8CurrentFrame]));
             
-            while (1.0f <= sf32_Period_100pct)
+            while (1.0f <= pt_AnimatedLeds->t_Frame.f32Period_100pct)
             { // Full period has elapsed - should only come in here once every several loops,
                 // but set to while loop in case of excessively long loop time or fairly small period
-                sf32_Period_100pct -= 1.0f; // Subtract 100% from period
+                pt_AnimatedLeds->t_Frame.f32Period_100pct -= 1.0f; // Subtract 100% from period
 
-                if ((su8CurrentFrame + 1) < su8NumberFrames)
+                if ((pt_AnimatedLeds->t_Frame.u8CurrentFrame + 1) < pt_AnimatedLeds->t_Frame.u8NumberFrames)
                 { // Move to next frame if next in order is less than total
-                    su8CurrentFrame++;
+                    pt_AnimatedLeds->t_Frame.u8CurrentFrame++;
                 }
                 else
                 { // Otherwise, reset to initial starting frame
-                    su8CurrentFrame = e_InitialFrame;
+                    pt_AnimatedLeds->t_Frame.u8CurrentFrame = e_InitialFrame;
                 }
 
                 Serial.println("");
@@ -164,11 +157,12 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
 
                 Serial.println("");
                 Serial.print  ("Period (us): ");
-                Serial.println(100000.0f * (float32) (pt_AnimatedLeds->au8Period_01s[su8CurrentFrame]));
+                Serial.println(100000.0f * (float32) (pt_AnimatedLeds->au8Period_01s[
+                                                      pt_AnimatedLeds->t_Frame.u8CurrentFrame]));
 
                 Serial.println("");
                 Serial.print  ("Period (%): ");
-                Serial.println(100.0f * sf32_Period_100pct);
+                Serial.println(100.0f * pt_AnimatedLeds->t_Frame.f32Period_100pct);
 
                 Serial.println("");
                 Serial.println("");
@@ -177,14 +171,16 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
             // Default to initial in case greater than or equal to total number of frames
             uint8 u8NextFrame = e_InitialFrame;
 
-            if (sbFadeTransition && ((su8CurrentFrame + 1) < su8NumberFrames))
+            if (  pt_AnimatedLeds->t_Frame.bFadeTransition      &&
+                ((pt_AnimatedLeds->t_Frame.u8CurrentFrame + 1)  <
+                  pt_AnimatedLeds->t_Frame.u8NumberFrames     ) )
             { // If next in order is less than total, set to next in order
-                u8NextFrame = su8CurrentFrame + 1;
+                u8NextFrame = pt_AnimatedLeds->t_Frame.u8CurrentFrame + 1;
             }
 
             /* Code shortening */
-            T_LedStrip * pt_Frame       = &pat_LedStrip[su8CurrentFrame],
-                       * pt_NextFrame   = &pat_LedStrip[u8NextFrame    ];
+            T_LedStrip * pt_Frame       = &pat_LedStrip[pt_AnimatedLeds->t_Frame.u8CurrentFrame],
+                       * pt_NextFrame   = &pat_LedStrip[u8NextFrame];
             T_Color      t_Color        = T_COLOR_CLEAR(),  // Default color
                          t_NextColor    = T_COLOR_CLEAR();
 
@@ -195,21 +191,21 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
                 { // Get current color
                     v_AppStillLights_GetLedColor(pt_Frame, &t_Color, i);
 
-                    if (sbFadeTransition)
+                    if (pt_AnimatedLeds->t_Frame.bFadeTransition)
                     { // Get next color if fade transition active
                         v_AppStillLights_GetLedColor(pt_NextFrame, &t_NextColor, i);
 
                         // Set LED color
                                             /* Red   */
-                        pat_Leds[i].setRGB ((uint8)   (sf32_Period_100pct *
+                        pat_Leds[i].setRGB ((uint8)   (pt_AnimatedLeds->t_Frame.f32Period_100pct *
                                             (float32) (t_NextColor.u8Red    - t_Color.u8Red  )) +
                                                        t_Color    .u8Red,
                                             /* Green */
-                                            (uint8)   (sf32_Period_100pct *
+                                            (uint8)   (pt_AnimatedLeds->t_Frame.f32Period_100pct *
                                             (float32) (t_NextColor.u8Green  - t_Color.u8Green)) +
                                                        t_Color    .u8Green,
                                             /* Blue  */
-                                            (uint8)   (sf32_Period_100pct *
+                                            (uint8)   (pt_AnimatedLeds->t_Frame.f32Period_100pct *
                                             (float32) (t_NextColor.u8Blue   - t_Color.u8Blue )) +
                                                        t_Color    .u8Blue
                                            );
