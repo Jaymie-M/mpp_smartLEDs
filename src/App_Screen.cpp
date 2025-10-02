@@ -629,8 +629,6 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
                                                  u8RowsUnused,
                                                  u8DigitsUnused);
 
-        bool bDebugSerialPrint = false;
-
         if (bReset)
         { // Print blanks on first loop
 
@@ -647,8 +645,6 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
 
             // Set back to zero since all placeholders for values are now printed
             _v_AppScreen_GetValues_Clr_IndexVars(&pt_Screen->t_Index);
-
-            bDebugSerialPrint = true;
         }
         else
         { // Print values on key press - Check each loop if a new value is submitted
@@ -811,55 +807,6 @@ static void _v_AppScreen_GetValues_PrintValues(LiquidCrystal_I2C    j_Lcd,      
                 pt_Screen->bValuesDefined = true;
                 _v_AppScreen_GetValues_Clr_IndexVars(&pt_Screen->t_Index); // Clear index variables
             }
-
-            bDebugSerialPrint = true;
-
-        }
-
-        if (bDebugSerialPrint)
-        {
-            Serial.println("");
-            Serial.println("");
-            Serial.println("/*-------------------------------------*/");
-            Serial.println("/*--          SCREEN DATA:           --*/");
-            Serial.println("/*-------------------------------------*/");
-
-            Serial.println("");
-            Serial.print  ("Decimal point? ");
-            if (bDecimalPoint)  Serial.println("TRUE");
-            else                Serial.println("FALSE");
-
-            Serial.println("");
-            Serial.print  ("Digits per value: ");
-            Serial.println(u8DigitsPerValue);
-
-            Serial.println("");
-            Serial.print  ("Values per row: ");
-            Serial.println(u8ValuesPerRow);
-
-            Serial.println("");
-            Serial.print  ("Rows available: ");
-            Serial.println(u8RowsAvailable);
-
-            Serial.println("");
-            Serial.print  ("First available row: ");
-            Serial.println(u8FirstAvailableRow);
-
-            Serial.println("");
-            Serial.print  ("Rows Needed: ");
-            Serial.println(u8RowsNeeded);
-
-            Serial.println("");
-            Serial.print  ("Rows Unused: ");
-            Serial.println(u8RowsUnused);
-
-            Serial.println("");
-            Serial.print  ("Digits Unused: ");
-            Serial.println(u8DigitsUnused);
-
-            Serial.println();
-            Serial.println("");
-            Serial.println("");
         }
     }
 }
