@@ -703,9 +703,8 @@ static uint32 u32_RequestPassword(void)
         { // Store digit
             sau8Digit[su8InputDigit] = gc_au8DigitConv[su8PrevPress];
 
-            /// \todo - create constants - remove 'magic numbers'
             // Display key press
-            mj_SmartDormLcd.setCursor(su8InputDigit + 7, 2);
+            mj_SmartDormLcd.setCursor(su8InputDigit + cu8DisplayPositionPassword_x, DISPLAY_POS_3RD_LINE_Y);
             mj_SmartDormLcd.print(String(gc_acKeyNumberRep[su8PrevPress]));
 
             su8InputDigit++;
@@ -716,7 +715,7 @@ static uint32 u32_RequestPassword(void)
 
     if (b_AppClock_TimeDelay_TLU(&Td_Digit, (su8DisplayDigit < su8InputDigit)))
     { // 300 ms after a key press is made, display asterisk for privacy
-        mj_SmartDormLcd.setCursor(su8DisplayDigit + 7, 2);
+        mj_SmartDormLcd.setCursor(su8DisplayDigit + cu8DisplayPositionPassword_x, DISPLAY_POS_3RD_LINE_Y);
         mj_SmartDormLcd.print(F("*"));
 
         v_AppClock_TimeDelay_Reset(&Td_Digit);  // Reset timer for next digit
