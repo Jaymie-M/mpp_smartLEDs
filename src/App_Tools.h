@@ -24,7 +24,6 @@
  ***************************/
 // Settings
 #define PRINT_ERROR_STATEMENTS
-//#define OLD_ANIMATIONS_MENUS
 //#define LED_STRIP_STYLE_TIKTOK
 #define LED_STRIP_STYLE_CHRISTMAS
 

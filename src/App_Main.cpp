@@ -44,28 +44,24 @@ const charn gc_macKeypadMap[NUM_ROWS][NUM_COLUMNS] =
     {':', ';', '<'},
 };
 
-const byte gc_mau8RowPins   [NUM_ROWS   ] = {PIN_DIN_KEYPAD_ROW1,
-                                             PIN_DIN_KEYPAD_ROW2,
-                                             PIN_DIN_KEYPAD_ROW3,
-                                             PIN_DIN_KEYPAD_ROW4
-                                            };
+const  byte gc_mau8RowPins   [NUM_ROWS   ]  = {PIN_DIN_KEYPAD_ROW1,
+                                               PIN_DIN_KEYPAD_ROW2,
+                                               PIN_DIN_KEYPAD_ROW3,
+                                               PIN_DIN_KEYPAD_ROW4
+                                              };
                                            
-const byte gc_mau8ColumnPins[NUM_COLUMNS] = {PIN_DIN_KEYPAD_COL1, 
-                                             PIN_DIN_KEYPAD_COL2, 
-                                             PIN_DIN_KEYPAD_COL3
-                                            };
+const  byte gc_mau8ColumnPins[NUM_COLUMNS]  = {PIN_DIN_KEYPAD_COL1,
+                                               PIN_DIN_KEYPAD_COL2,
+                                               PIN_DIN_KEYPAD_COL3
+                                              };
 
 // Define module variables
 static bool   mbInitialized                 = false;
 static bool   mbUnlocked                    = false;
 
+// Cycle time calculations
 static uint32 mu32SmartDormLedsCycleTime_us = 0;
 static uint32 mu32PrevLoopTime_us           = 0;
-
-// Animations menus
-#ifdef OLD_ANIMATIONS_MENUS
-static uint8  mu8StartingPointMenuSelect    = 0;
-#endif
 
 // Stills and Animations menus
 static uint8  mu8TempMenuSelect             = 0;
@@ -77,13 +73,12 @@ static uint8  mu8SearchMenuSelect           = 0;
 static T_AnimatedLeds   mt_AnimatedLeds;
 static T_LedStrip       mat_SmartDormLedStrip[e_NumLedStripDefinitions]; /// \todo - define default struct
 static CRGB             mat_SmartDormLeds    [NUM_LEDS];
-
-static T_MenuSelection  mt_MainMenu             = T_MAINMENU_DEFAULT();
-static T_MenuSelection  mt_LightsMenu           = T_LIGHTSMENU_DEFAULT();
-static T_MenuSelection  mt_StillLightsMenu      = T_STILLLIGHTSMENU_DEFAULT();
-static T_MenuSelection  mt_GradientLightsMenu   = T_GRADIENTLIGHTSMENU_DEFAULT();
-static T_MenuSelection  mt_AnimatedLightsMenu   = T_ANIMATEDLIGHTSMENU_DEFAULT();
-static T_MenuSelection  mt_ClockMenu            = T_CLOCKMENU_DEFAULT();
+static T_MenuSelection  mt_MainMenu             = T_MAINMENU_DEFAULT(),
+                        mt_LightsMenu           = T_LIGHTSMENU_DEFAULT(),
+                        mt_StillLightsMenu      = T_STILLLIGHTSMENU_DEFAULT(),
+                        mt_GradientLightsMenu   = T_GRADIENTLIGHTSMENU_DEFAULT(),
+                        mt_AnimatedLightsMenu   = T_ANIMATEDLIGHTSMENU_DEFAULT(),
+                        mt_ClockMenu            = T_CLOCKMENU_DEFAULT();
 
 /***************************
  *         Objects         *
@@ -99,23 +94,15 @@ static void     v_AppMain_Reset       (void);
 static void     v_ConfigureLcd        (void);
 static void     v_ResetMenuSelections (void);
 
-static void     v_MainMenu            (LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, T_MenuSelection * pt_Menu);
-static uint32   u32_RequestPassword   (void);
-
-// Lights Menus
+// Menus
 static void     v_LightsMenu          (LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, T_MenuSelection * pt_Menu);
-#ifdef OLD_ANIMATIONS_MENUS
-static uint8    u8_AnimationsMenu     (void);
-
-// Animations Menus
-static uint8    u8_StartingPointMenu  (void);
-#endif
-
-// Misc
 static uint8    u8_TempMenu           (void);
 static uint8    u8_MusicMenu          (void);
 static uint8    u8_SettingsMenu       (void);
 static uint8    u8_SearchMenu         (void);
+static void     v_MainMenu            (LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, T_MenuSelection * pt_Menu);
+
+static uint32   u32_RequestPassword   (void);
 
 /***************************
  *   Function Definitions  *
@@ -148,6 +135,8 @@ void v_AppMain_TLU(void)
 {
     if (mbUnlocked)
     {
+        /* Unlocked - Perform Main Menu Selection */
+        // Check for a request to return to main menu
         bool    bReturnToMainMenu  = RETURN_TO_MAIN_MENU(   mt_MainMenu             .u8Selection, 
                                                             mt_MainMenu             .u8MaxOptions);
                 bReturnToMainMenu |= RETURN_TO_MAIN_MENU(   mt_LightsMenu           .u8Selection, 
@@ -158,9 +147,6 @@ void v_AppMain_TLU(void)
                                                             mt_GradientLightsMenu   .u8MaxOptions);
                 bReturnToMainMenu |= RETURN_TO_MAIN_MENU(   mt_AnimatedLightsMenu   .u8Selection,
                                                             mt_AnimatedLightsMenu   .u8MaxOptions);
-#ifdef OLD_ANIMATIONS_MENUS
-                bReturnToMainMenu |= RETURN_TO_MAIN_MENU(mu8StartingPointMenuSelect,            7);
-#endif
                 bReturnToMainMenu |= RETURN_TO_MAIN_MENU(   mt_ClockMenu            .u8Selection,
                                                             mt_ClockMenu            .u8MaxOptions);
 
@@ -397,13 +383,23 @@ void v_AppMain_TLU(void)
             }
         }
 
-        /// \todo - need to handle case where overflow occurs after 71 minutes
-        mu32SmartDormLedsCycleTime_us = micros() - mu32PrevLoopTime_us; // Calculate cycle time
-        mu32PrevLoopTime_us           = micros();                       // Store previous loop time
-
         /* Updates done outside of main menu selection */
+        // Calculate cycle time
+        if (mu32PrevLoopTime_us > micros())
+        { // Overflow condition - prev loop time greater than current loop time in us
+            // Cycle time = time until overflow (us) + time after overflow (us)
+            mu32SmartDormLedsCycleTime_us = (0xFFFFFFFFUL - mu32PrevLoopTime_us) + micros();
+        }
+        else
+        { // Normally, cycle time = current loop time (us) - prev loop time (us)
+            mu32SmartDormLedsCycleTime_us = micros() - mu32PrevLoopTime_us;
+        }
+
+        mu32PrevLoopTime_us = micros(); // Store previous loop time
+
+        // Check if animations are enabled
         if (b_AppStillsLights_AnimationsEnabled() )
-        { //
+        { // Animations enabled - run task loop update
             v_AppAnimatedLights_Main_TLU(mj_SmartDormLcd,
                                          mj_SmartDormKeypad,
                                          &mt_AnimatedLeds,
@@ -413,7 +409,7 @@ void v_AppMain_TLU(void)
                                          mt_AnimatedLightsMenu.u8Selection);
         }
         else if (mt_AnimatedLeds.bDefined)
-        { // Animations were just disabled
+        { // Animations were just disabled - reset
             v_AppAnimatedLights_Reset(&mt_AnimatedLeds);
         }
 
@@ -469,157 +465,6 @@ void v_AppMain_TLU(void)
             su8PrevPress = u8CurrentPress; // Store current key press
         }
     }
-}
-
-
-/**
- * \brief  This function resets the LED strip data and the selection menus back to default
- * \return none
- */
-static void v_AppMain_Reset(void)
-{
-    v_ResetMenuSelections    ();                    // Reset menu selections
-    v_AppAnimatedLights_Reset(&mt_AnimatedLeds);    // Also reset animated lights
-
-    for (size_t i = 0; i < e_NumLedStripDefinitions; i++)
-    { // Reset all LED strip definitions
-        v_AppStillLights_LedStrip_Reset(&mat_SmartDormLedStrip[i]);
-    }
-}
-
-
-/**
- * \brief  This function initializes the LCD display and prints the starting menu
- * \return none
- */
-static void v_ConfigureLcd(void)
-{
-    mj_SmartDormLcd.init();
-    mj_SmartDormLcd.backlight();
-    mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_1ST_LINE_Y);
-    mj_SmartDormLcd.print(F("********************"));
-    mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_2ND_LINE_Y);
-    mj_SmartDormLcd.print(F("MONDAY++ Smart! LEDs"));
-    mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_3RD_LINE_Y);
-    mj_SmartDormLcd.print(F("  Press any key to"  ));
-    mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_4TH_LINE_Y);
-    mj_SmartDormLcd.print(F("      continue"      ));
-}
-
-
-/**
- * \brief  This function initializes the values of global variables in App_Main
- * \return none
- */
-static void v_ResetMenuSelections(void)
-{
-    // Main menu
-    v_AppScreen_MenuSelection_SelectionsReset(&mt_MainMenu          );
-
-    // Lights menus
-    v_AppScreen_MenuSelection_SelectionsReset(&mt_LightsMenu        );  //          Lights  Menu
-    v_AppScreen_MenuSelection_SelectionsReset(&mt_StillLightsMenu   );  // Still    Lights  Menu
-    v_AppScreen_MenuSelection_SelectionsReset(&mt_GradientLightsMenu);  // Gradient Lights  Menu
-    v_AppScreen_MenuSelection_SelectionsReset(&mt_AnimatedLightsMenu);  // Animated Lights  Menu
-    
-#ifdef OLD_ANIMATIONS_MENUS
-    mu8StartingPointMenuSelect      = SELECTION_NONE;
-#endif
-    
-    // Other menus
-    v_AppScreen_MenuSelection_SelectionsReset(&mt_ClockMenu         );  // Clock            Menu
-
-    mu8TempMenuSelect               = SELECTION_NONE;
-    mu8MusicMenuSelect              = SELECTION_NONE;
-    mu8SettingsMenuSelect           = SELECTION_NONE;
-    mu8SearchMenuSelect             = SELECTION_NONE;
-}
-
-
-/**
- * \brief  This function requests a password from the user
- * \return mu32Guess
- */
-static uint32 u32_RequestPassword(void)
-{
-    // Define function variables
-    static  T_TimeDelay     Td_Digit        = T_TIMEDELAY_DEFAULT();
-    static  bool            sbResetLcd      = true;
-    static  uint8           su8InputDigit   = 0;
-    static  uint8           su8DisplayDigit = 0;
-
-    static  uint8           sau8Digit[NUM_DIGITS_PASSWORD];
-    static  uint8           su8PrevPress    = KEYPRESS_NONE;
-            uint8           u8CurrentPress  = KEYPRESS_NONE;
-            uint32          u32Guess        = DEFAULT_GUESS;
-
-    const   charn           c_cDescription[MAX_LENGTH_DESCRIPTION]  = "Enter Password:";
-    const   uint8           cu8DisplayPositionDescription_x         = (DISPLAY_WIDTH_X - strnlen(&c_cDescription[0], MAX_LENGTH_DESCRIPTION)) / 2;
-    const   uint8           cu8DisplayPositionPassword_x            = (DISPLAY_WIDTH_X - NUM_DIGITS_PASSWORD                                ) / 2;
-
-    if (sbResetLcd)
-    { // Initialize digit timer
-        v_AppClock_TimeDelay_Init(&Td_Digit, 300);
-
-        /* Set up first screen */
-        // First    line
-        mj_SmartDormLcd.clear();
-        mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X,           DISPLAY_POS_1ST_LINE_Y);
-        mj_SmartDormLcd.print(F("********************"));
-
-        // Second   line
-        mj_SmartDormLcd.setCursor(cu8DisplayPositionDescription_x,  DISPLAY_POS_2ND_LINE_Y);
-        mj_SmartDormLcd.print(&c_cDescription[0]);
-
-        // Third    line
-        mj_SmartDormLcd.setCursor(cu8DisplayPositionPassword_x,     DISPLAY_POS_3RD_LINE_Y);
-        mj_SmartDormLcd.print(F("______"));
-
-        // Fourth   line
-        mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X,           DISPLAY_POS_4TH_LINE_Y);
-        mj_SmartDormLcd.print(F("********************"));
-
-        // Clear so first screen is only set up once per password attempt
-        sbResetLcd = false;
-    }
-
-    if (NUM_DIGITS_PASSWORD > su8InputDigit)
-    { // Get the next keypress
-        u8CurrentPress = u8_AppTools_GetKeypress(mj_SmartDormKeypad);
-
-        if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE))
-        { // Store digit
-            sau8Digit[su8InputDigit] = gc_au8DigitConv[su8PrevPress];
-
-            /// \todo - create constants - remove 'magic numbers'
-            // Display key press
-            mj_SmartDormLcd.setCursor(su8InputDigit + 7, 2);
-            mj_SmartDormLcd.print(String(gc_acKeyNumberRep[su8PrevPress]));
-
-            su8InputDigit++;
-        }
-    }
-
-    su8PrevPress = u8CurrentPress; // Store current key press
-
-    if (b_AppClock_TimeDelay_TLU(&Td_Digit, (su8DisplayDigit < su8InputDigit)))
-    { // 300 ms after a key press is made, display asterisk for privacy
-        mj_SmartDormLcd.setCursor(su8DisplayDigit + 7, 2);
-        mj_SmartDormLcd.print(F("*"));
-
-        v_AppClock_TimeDelay_Reset(&Td_Digit);  // Reset timer for next digit
-        su8DisplayDigit++;                      // Increment to record the next digit to display
-    }
-
-    if (NUM_DIGITS_PASSWORD <= su8DisplayDigit)
-    { // Done inputting characters
-        sbResetLcd      = true;
-        su8InputDigit   = 0; // Reset input and display digits back to zero
-        su8DisplayDigit = 0;
-        u32Guess        = u32_AppTools_DigitArray_to_uint32(&sau8Digit[0], NUM_DIGITS_PASSWORD); // Calculate guess to return
-    }
-
-    return u32Guess;
 }
 
 
@@ -736,4 +581,155 @@ static void v_MainMenu(LiquidCrystal_I2C  j_Lcd,    // [I, ] LCD    Object
 
     // Receive selection commands and scroll menu options (if required)
     v_AppScreen_MenuSelection_TLU(j_Lcd, j_Keypad, pt_Menu);
+}
+
+
+/**
+ * \brief  This function resets the LED strip data and the selection menus back to default
+ * \return none
+ */
+static void v_AppMain_Reset(void)
+{
+    v_ResetMenuSelections    ();                    // Reset menu selections
+    v_AppAnimatedLights_Reset(&mt_AnimatedLeds);    // Also reset animated lights
+
+    for (size_t i = 0; i < e_NumLedStripDefinitions; i++)
+    { // Reset all LED strip definitions
+        v_AppStillLights_LedStrip_Reset(&mat_SmartDormLedStrip[i]);
+    }
+}
+
+
+/**
+ * \brief  This function initializes the LCD display and prints the starting menu
+ * \return none
+ */
+static void v_ConfigureLcd(void)
+{
+    mj_SmartDormLcd.init();
+    mj_SmartDormLcd.backlight();
+    mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_1ST_LINE_Y);
+    mj_SmartDormLcd.print(F("********************"));
+    mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_2ND_LINE_Y);
+    mj_SmartDormLcd.print(F("MONDAY++ Smart! LEDs"));
+    mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_3RD_LINE_Y);
+    mj_SmartDormLcd.print(F("  Press any key to"  ));
+    mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X, DISPLAY_POS_4TH_LINE_Y);
+    mj_SmartDormLcd.print(F("      continue"      ));
+}
+
+
+/**
+ * \brief  This function initializes the values of global variables in App_Main
+ * \return none
+ */
+static void v_ResetMenuSelections(void)
+{
+    // Main menu
+    v_AppScreen_MenuSelection_SelectionsReset(&mt_MainMenu          );
+
+    // Lights menus
+    v_AppScreen_MenuSelection_SelectionsReset(&mt_LightsMenu        );  //          Lights  Menu
+    v_AppScreen_MenuSelection_SelectionsReset(&mt_StillLightsMenu   );  // Still    Lights  Menu
+    v_AppScreen_MenuSelection_SelectionsReset(&mt_GradientLightsMenu);  // Gradient Lights  Menu
+    v_AppScreen_MenuSelection_SelectionsReset(&mt_AnimatedLightsMenu);  // Animated Lights  Menu
+
+#ifdef OLD_ANIMATIONS_MENUS
+    mu8StartingPointMenuSelect      = SELECTION_NONE;
+#endif
+
+    // Other menus
+    v_AppScreen_MenuSelection_SelectionsReset(&mt_ClockMenu         );  // Clock            Menu
+
+    mu8TempMenuSelect               = SELECTION_NONE;
+    mu8MusicMenuSelect              = SELECTION_NONE;
+    mu8SettingsMenuSelect           = SELECTION_NONE;
+    mu8SearchMenuSelect             = SELECTION_NONE;
+}
+
+
+/**
+ * \brief  This function requests a password from the user
+ * \return mu32Guess
+ */
+static uint32 u32_RequestPassword(void)
+{
+    // Define function variables
+    static  T_TimeDelay     Td_Digit        = T_TIMEDELAY_DEFAULT();
+    static  bool            sbResetLcd      = true;
+    static  uint8           su8InputDigit   = 0;
+    static  uint8           su8DisplayDigit = 0;
+
+    static  uint8           sau8Digit[NUM_DIGITS_PASSWORD];
+    static  uint8           su8PrevPress    = KEYPRESS_NONE;
+            uint8           u8CurrentPress  = KEYPRESS_NONE;
+            uint32          u32Guess        = DEFAULT_GUESS;
+
+    const   charn           c_cDescription[MAX_LENGTH_DESCRIPTION]  = "Enter Password:";
+    const   uint8           cu8DisplayPositionDescription_x         = (DISPLAY_WIDTH_X - strnlen(&c_cDescription[0], MAX_LENGTH_DESCRIPTION)) / 2;
+    const   uint8           cu8DisplayPositionPassword_x            = (DISPLAY_WIDTH_X - NUM_DIGITS_PASSWORD                                ) / 2;
+
+    if (sbResetLcd)
+    { // Initialize digit timer
+        v_AppClock_TimeDelay_Init(&Td_Digit, 300);
+
+        /* Set up first screen */
+        // First    line
+        mj_SmartDormLcd.clear();
+        mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X,           DISPLAY_POS_1ST_LINE_Y);
+        mj_SmartDormLcd.print(F("********************"));
+
+        // Second   line
+        mj_SmartDormLcd.setCursor(cu8DisplayPositionDescription_x,  DISPLAY_POS_2ND_LINE_Y);
+        mj_SmartDormLcd.print(&c_cDescription[0]);
+
+        // Third    line
+        mj_SmartDormLcd.setCursor(cu8DisplayPositionPassword_x,     DISPLAY_POS_3RD_LINE_Y);
+        mj_SmartDormLcd.print(F("______"));
+
+        // Fourth   line
+        mj_SmartDormLcd.setCursor(DISPLAY_POS_LEFT_ALN_X,           DISPLAY_POS_4TH_LINE_Y);
+        mj_SmartDormLcd.print(F("********************"));
+
+        // Clear so first screen is only set up once per password attempt
+        sbResetLcd = false;
+    }
+
+    if (NUM_DIGITS_PASSWORD > su8InputDigit)
+    { // Get the next keypress
+        u8CurrentPress = u8_AppTools_GetKeypress(mj_SmartDormKeypad);
+
+        if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE))
+        { // Store digit
+            sau8Digit[su8InputDigit] = gc_au8DigitConv[su8PrevPress];
+
+            /// \todo - create constants - remove 'magic numbers'
+            // Display key press
+            mj_SmartDormLcd.setCursor(su8InputDigit + 7, 2);
+            mj_SmartDormLcd.print(String(gc_acKeyNumberRep[su8PrevPress]));
+
+            su8InputDigit++;
+        }
+    }
+
+    su8PrevPress = u8CurrentPress; // Store current key press
+
+    if (b_AppClock_TimeDelay_TLU(&Td_Digit, (su8DisplayDigit < su8InputDigit)))
+    { // 300 ms after a key press is made, display asterisk for privacy
+        mj_SmartDormLcd.setCursor(su8DisplayDigit + 7, 2);
+        mj_SmartDormLcd.print(F("*"));
+
+        v_AppClock_TimeDelay_Reset(&Td_Digit);  // Reset timer for next digit
+        su8DisplayDigit++;                      // Increment to record the next digit to display
+    }
+
+    if (NUM_DIGITS_PASSWORD <= su8DisplayDigit)
+    { // Done inputting characters
+        sbResetLcd      = true;
+        su8InputDigit   = 0; // Reset input and display digits back to zero
+        su8DisplayDigit = 0;
+        u32Guess        = u32_AppTools_DigitArray_to_uint32(&sau8Digit[0], NUM_DIGITS_PASSWORD); // Calculate guess to return
+    }
+
+    return u32Guess;
 }
