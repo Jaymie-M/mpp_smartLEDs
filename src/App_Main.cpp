@@ -625,26 +625,17 @@ static void v_ConfigureLcd(void)
  */
 static void v_ResetMenuSelections(void)
 {
-    // Main menu
-    v_AppScreen_MenuSelection_SelectionsReset(&mt_MainMenu          );
-
-    // Lights menus
+    v_AppScreen_MenuSelection_SelectionsReset(&mt_MainMenu          );  //          Main    Menu
     v_AppScreen_MenuSelection_SelectionsReset(&mt_LightsMenu        );  //          Lights  Menu
     v_AppScreen_MenuSelection_SelectionsReset(&mt_StillLightsMenu   );  // Still    Lights  Menu
     v_AppScreen_MenuSelection_SelectionsReset(&mt_GradientLightsMenu);  // Gradient Lights  Menu
     v_AppScreen_MenuSelection_SelectionsReset(&mt_AnimatedLightsMenu);  // Animated Lights  Menu
-
-#ifdef OLD_ANIMATIONS_MENUS
-    mu8StartingPointMenuSelect      = SELECTION_NONE;
-#endif
-
-    // Other menus
     v_AppScreen_MenuSelection_SelectionsReset(&mt_ClockMenu         );  // Clock            Menu
 
-    mu8TempMenuSelect               = SELECTION_NONE;
-    mu8MusicMenuSelect              = SELECTION_NONE;
-    mu8SettingsMenuSelect           = SELECTION_NONE;
-    mu8SearchMenuSelect             = SELECTION_NONE;
+    mu8TempMenuSelect       = SELECTION_NONE;
+    mu8MusicMenuSelect      = SELECTION_NONE;
+    mu8SettingsMenuSelect   = SELECTION_NONE;
+    mu8SearchMenuSelect     = SELECTION_NONE;
 }
 
 
