@@ -90,6 +90,11 @@ LiquidCrystal_I2C mj_SmartDormLcd(DEFAULT_ADDRESS_LCD, 20, 4); // 0x27 is the de
 /***************************
  *   Function Prototypes   *
  ***************************/
+static void     v_DefineLedStripFrame (LiquidCrystal_I2C j_Lcd,                 Keypad            j_Keypad,
+                                       CRGB            * pat_Leds,              T_LedStrip      * pat_LedStrip,
+                                       T_MenuSelection * pt_StillLightsMenu,    T_MenuSelection * pt_GradientLightsMenu,
+                                       uint8           * pu8Frame,              bool              bDefineMultipleFrames);
+
 static void     v_AppMain_Reset       (void);
 static void     v_ConfigureLcd        (void);
 static void     v_ResetMenuSelections (void);
@@ -193,54 +198,16 @@ void v_AppMain_TLU(void)
                         {
                             case e_Stills:
                                 // Stills menu
-                                if (NO_SELECTION(mt_StillLightsMenu.u8Selection))
-                                {
-                                    v_AppStillsLights_MainMenu(mj_SmartDormLcd, 
-                                                               mj_SmartDormKeypad, 
-                                                               &mt_StillLightsMenu);
-                                }
-                                else
-                                {
-                                    if (e_StillGradient == mt_StillLightsMenu.u8Selection)
-                                    {
-                                        if (NO_SELECTION(mt_GradientLightsMenu.u8Selection))
-                                        {
-                                            v_AppStillsLights_GradientMenu(mj_SmartDormLcd, 
-                                                                           mj_SmartDormKeypad, 
-                                                                           &mt_GradientLightsMenu);
-                                        }
-                                        else if(NOT_BACK_TO_MAIN_MENU(mt_GradientLightsMenu.u8Selection))
-                                        {
-                                            if (mat_SmartDormLedStrip[e_InitialFrame].bDefined)
-                                            { // LED Strip defined, send back to main menu
-                                                mt_GradientLightsMenu.u8Selection = BACK_TO_MAIN_MENU;
-                                            }
-                                            else
-                                            {
-                                                v_AppStillsLights_Gradient_TLU(mj_SmartDormLcd,
-                                                                               mj_SmartDormKeypad,
-                                                                               &mat_SmartDormLeds[0],
-                                                                               &mat_SmartDormLedStrip[e_InitialFrame],
-                                                                               mt_GradientLightsMenu.u8Selection);
-                                            }
-                                        }
-                                    }
-                                    else if (NOT_BACK_TO_MAIN_MENU(mt_StillLightsMenu.u8Selection))
-                                    {
-                                        if (mat_SmartDormLedStrip[e_InitialFrame].bDefined)
-                                        { // LED Strip defined, send back to main menu
-                                            mt_StillLightsMenu.u8Selection = BACK_TO_MAIN_MENU;
-                                        }
-                                        else
-                                        {
-                                            v_AppStillsLights_Main_TLU(mj_SmartDormLcd,
-                                                                       mj_SmartDormKeypad,
-                                                                       &mat_SmartDormLeds[0],
-                                                                       &mat_SmartDormLedStrip[e_InitialFrame],
-                                                                       mt_StillLightsMenu.u8Selection);
-                                        }
-                                    }
-                                }
+                                uint8 u8InitialFrame = e_InitialFrame;
+
+                                v_DefineLedStripFrame(mj_SmartDormLcd,              // [I, ] LCD    Object
+                                                      mj_SmartDormKeypad,           // [I, ] Keypad Object
+                                                      &mat_SmartDormLeds[0],        // [I,O] LED struct array
+                                                      &mat_SmartDormLedStrip[0],    // [I,O] LED strip struct
+                                                      &mt_StillLightsMenu,          // [I,O] Still      Lights Menu data
+                                                      &mt_GradientLightsMenu,       // [I,O] Gradient   Lights Menu data
+                                                      &u8InitialFrame,              // [I,O] Initial LED strip frame being defined
+                                                      false);                       // [I, ] FALSE = Define single frame
                                 break;
                                 
                             case e_Animations:
@@ -257,68 +224,30 @@ void v_AppMain_TLU(void)
 
                                     if (!st_ScreenFrames.bValuesDefined)
                                     {
-                                        v_AppAnimatedLights_ChooseNumberOfFrames   (mj_SmartDormLcd,
-                                                                                    mj_SmartDormKeypad,
-                                                                                    &mt_AnimatedLeds,
-                                                                                    &st_ScreenFrames);
+                                        if ((e_AnimatedCutFrames    == mt_AnimatedLightsMenu.u8Selection) ||    // Cut  Frames animation option selected -OR-
+                                            (e_AnimatedFadeFrames   == mt_AnimatedLightsMenu.u8Selection))      // Fade Frames animation option selected
+                                        { // Frames transition animations style selected - choose number of LED strip frames
+                                            v_AppAnimatedLights_ChooseNumberOfFrames   (mj_SmartDormLcd,
+                                                                                        mj_SmartDormKeypad,
+                                                                                        &mt_AnimatedLeds,
+                                                                                        &st_ScreenFrames);
+                                        }
+                                        else
+                                        { // Else - default to one LED strip frame
+                                            st_ScreenFrames.bValuesDefined  = true;
+                                            mt_AnimatedLeds.u8NumberFrames  = 1;
+                                        }
                                     }
                                     else if (!mt_AnimatedLeds.bFramesDefined)
                                     {
-                                        /// \todo - replace below with function
-                                        if (NO_SELECTION(mt_StillLightsMenu.u8Selection))
-                                        {
-                                            v_AppStillsLights_MainMenu(mj_SmartDormLcd,
-                                                                       mj_SmartDormKeypad,
-                                                                       &mt_StillLightsMenu);
-                                        }
-                                        else
-                                        {
-                                            if (e_StillGradient == mt_StillLightsMenu.u8Selection)
-                                            {
-                                                if (NO_SELECTION(mt_GradientLightsMenu.u8Selection))
-                                                {
-                                                    v_AppStillsLights_GradientMenu(mj_SmartDormLcd,
-                                                                                   mj_SmartDormKeypad,
-                                                                                   &mt_GradientLightsMenu);
-                                                }
-                                                else if(NOT_BACK_TO_MAIN_MENU(mt_GradientLightsMenu.u8Selection))
-                                                {
-                                                    if (mat_SmartDormLedStrip[mt_AnimatedLeds.u8CurrentFrame].bDefined)
-                                                    { // LED Strip defined, reset still and gradient lights selection and increment current frame
-                                                        v_AppScreen_MenuSelection_SelectionsReset(&mt_StillLightsMenu   );  // Still    Lights  Menu
-                                                        v_AppScreen_MenuSelection_SelectionsReset(&mt_GradientLightsMenu);  // Gradient Lights  Menu
-                                                        
-                                                        mt_AnimatedLeds.u8CurrentFrame++; // Increment current frame
-                                                    }
-                                                    else
-                                                    {
-                                                        v_AppStillsLights_Gradient_TLU(mj_SmartDormLcd,
-                                                                                       mj_SmartDormKeypad,
-                                                                                       &mat_SmartDormLeds[0],
-                                                                                       &mat_SmartDormLedStrip[mt_AnimatedLeds.u8CurrentFrame],
-                                                                                       mt_GradientLightsMenu.u8Selection);
-                                                    }
-                                                }
-                                            }
-                                            else if (NOT_BACK_TO_MAIN_MENU(mt_StillLightsMenu.u8Selection))
-                                            {
-                                                if (mat_SmartDormLedStrip[mt_AnimatedLeds.u8CurrentFrame].bDefined)
-                                                { // LED Strip defined, reset still lights selection and increment current frame
-                                                    v_AppScreen_MenuSelection_SelectionsReset(&mt_StillLightsMenu);
-                                                    
-                                                    mt_AnimatedLeds.u8CurrentFrame++; // Increment current frame
-                                                }
-                                                else
-                                                {
-                                                    v_AppStillsLights_Main_TLU(mj_SmartDormLcd,
-                                                                               mj_SmartDormKeypad,
-                                                                               &mat_SmartDormLeds[0],
-                                                                               &mat_SmartDormLedStrip[mt_AnimatedLeds.u8CurrentFrame],
-                                                                               mt_StillLightsMenu.u8Selection);
-                                                }
-                                            }
-                                        }
-                                        /// \todo - replace above with function
+                                        v_DefineLedStripFrame(mj_SmartDormLcd,                  // [I, ] LCD    Object
+                                                              mj_SmartDormKeypad,               // [I, ] Keypad Object
+                                                              &mat_SmartDormLeds[0],            // [I,O] LED struct array
+                                                              &mat_SmartDormLedStrip[0],        // [I,O] LED strip struct
+                                                              &mt_StillLightsMenu,              // [I,O] Still      Lights Menu data
+                                                              &mt_GradientLightsMenu,           // [I,O] Gradient   Lights Menu data
+                                                              &mt_AnimatedLeds.u8CurrentFrame,  // [I,O] Current frame being defined
+                                                              true);                            // [I, ] TRUE = Define multiple frames
 
                                         // Set all frames defined once current frame is equal to number of frames
                                         mt_AnimatedLeds.bFramesDefined = (mt_AnimatedLeds.u8NumberFrames <= mt_AnimatedLeds.u8CurrentFrame);
@@ -470,7 +399,7 @@ void v_AppMain_TLU(void)
 
 /** \brief This function brings the user to the lights menu and returns a selection
  *
- *  \return: pt_Menu->u8OptionOffset and pt_Menu->u8Selection are set 
+ *  \return: pt_Menu->u8OptionOffset and pt_Menu->u8Selection are set
  */
 static void v_LightsMenu(LiquidCrystal_I2C  j_Lcd,      // [I, ] LCD    Object
                          Keypad             j_Keypad,   // [I, ] Keypad Object
@@ -581,6 +510,89 @@ static void v_MainMenu(LiquidCrystal_I2C  j_Lcd,    // [I, ] LCD    Object
 
     // Receive selection commands and scroll menu options (if required)
     v_AppScreen_MenuSelection_TLU(j_Lcd, j_Keypad, pt_Menu);
+}
+
+
+/** \brief This function is used to define an LED strip frame either for still lights or animations
+ *
+ *  \return: pat_LedStrip[*pu8Frame] data set
+ */
+static void v_DefineLedStripFrame(LiquidCrystal_I2C  j_Lcd,                 // [I, ] LCD    Object
+                                  Keypad             j_Keypad,              // [I, ] Keypad Object
+                                  CRGB             * pat_Leds,              // [I,O] LED struct array
+                                  T_LedStrip       * pat_LedStrip,          // [I,O] LED strip struct
+                                  T_MenuSelection  * pt_StillLightsMenu,    // [I,O] Still      Lights Menu data
+                                  T_MenuSelection  * pt_GradientLightsMenu, // [I,O] Gradient   Lights Menu data
+                                  uint8            * pu8Frame,              // [I,O] Current LED strip frame being defined
+                                  bool               bDefineMultipleFrames) // [I, ] TRUE = reset menu selections and increment frame
+{
+    if (NO_SELECTION(pt_StillLightsMenu->u8Selection))
+    {
+        v_AppStillsLights_MainMenu(j_Lcd,
+                                   j_Keypad,
+                                   pt_StillLightsMenu);
+    }
+    else
+    {
+        if (e_StillGradient == pt_StillLightsMenu->u8Selection)
+        {
+            if (NO_SELECTION(pt_GradientLightsMenu->u8Selection))
+            {
+                v_AppStillsLights_GradientMenu(j_Lcd,
+                                               j_Keypad,
+                                               pt_GradientLightsMenu);
+            }
+            else if(NOT_BACK_TO_MAIN_MENU(pt_GradientLightsMenu->u8Selection))
+            {
+                if (pat_LedStrip[*pu8Frame].bDefined)
+                { // LED Strip defined
+                    if (bDefineMultipleFrames)
+                    { // Define next frame - reset still and gradient lights selection and increment current frame
+                        v_AppScreen_MenuSelection_SelectionsReset(pt_StillLightsMenu   );  // Still    Lights  Menu
+                        v_AppScreen_MenuSelection_SelectionsReset(pt_GradientLightsMenu);  // Gradient Lights  Menu
+
+                        (*pu8Frame)++; // Increment current frame
+                    }
+                    else
+                    { // Single frame defined - send back to main menu
+                        pt_GradientLightsMenu->u8Selection = BACK_TO_MAIN_MENU;
+                    }
+                }
+                else
+                {
+                    v_AppStillsLights_Gradient_TLU(j_Lcd,
+                                                   j_Keypad,
+                                                   &pat_Leds[0],
+                                                   &pat_LedStrip[*pu8Frame],
+                                                   pt_GradientLightsMenu->u8Selection);
+                }
+            }
+        }
+        else if (NOT_BACK_TO_MAIN_MENU(pt_StillLightsMenu->u8Selection))
+        {
+            if (pat_LedStrip[*pu8Frame].bDefined)
+            { // LED Strip defined
+                if (bDefineMultipleFrames)
+                { // Define next frame - reset still lights selection and increment current frame
+                    v_AppScreen_MenuSelection_SelectionsReset(pt_StillLightsMenu);
+
+                    (*pu8Frame)++; // Increment current frame
+                }
+                else
+                { // Single frame defined - send back to main menu
+                    pt_StillLightsMenu->u8Selection = BACK_TO_MAIN_MENU;
+                }
+            }
+            else
+            {
+                v_AppStillsLights_Main_TLU(j_Lcd,
+                                           j_Keypad,
+                                           &pat_Leds[0],
+                                           &pat_LedStrip[*pu8Frame],
+                                           pt_StillLightsMenu->u8Selection);
+            }
+        }
+    }
 }
 
 
