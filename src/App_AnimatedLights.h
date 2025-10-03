@@ -187,7 +187,7 @@ typedef struct
     float32             f32Period_100pct;   // Percentage of period completed thus far
     uint8               u8CurrentFrame;     // Current frame in this animation
     uint8               u8NumberFrames;     // Number of frames in this animation
-    bool                bFadeTransition     // Fade transition enabled
+    bool                bFadeTransition;    // Fade transition enabled
 
 } T_FrameTransition;
 
