@@ -672,6 +672,13 @@ static uint32 u32_RequestPassword(void)
     const   uint8           cu8DisplayPositionDescription_x         = (DISPLAY_WIDTH_X - strnlen(&c_cDescription[0], MAX_LENGTH_DESCRIPTION)) / 2;
     const   uint8           cu8DisplayPositionPassword_x            = (DISPLAY_WIDTH_X - NUM_DIGITS_PASSWORD                                ) / 2;
 
+    /// \todo - debug
+    static  uint32          su32ResetCounter            = 0;
+    static  uint32          su32DigitsIncompleteCounter = 0;
+    static  uint32          su32KeypressCounter         = 0;
+    static  uint32          su32DelayExpirationCounter  = 0;
+    static  uint32          su32DigitsCompleteCounter   = 0;
+
     if (sbResetLcd)
     { // Initialize digit timer
         v_AppClock_TimeDelay_Init(&Td_Digit, 300);
@@ -696,11 +703,15 @@ static uint32 u32_RequestPassword(void)
 
         // Clear so first screen is only set up once per password attempt
         sbResetLcd = false;
+
+        su32ResetCounter++; /// \todo - debug
     }
 
     if (NUM_DIGITS_PASSWORD > su8InputDigit)
     { // Get the next keypress
         u8CurrentPress = u8_AppTools_GetKeypress(mj_SmartDormKeypad);
+
+        su32DigitsIncompleteCounter++; /// \todo - debug
 
         if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE))
         { // Store digit
@@ -711,6 +722,8 @@ static uint32 u32_RequestPassword(void)
             mj_SmartDormLcd.print(String(gc_acKeyNumberRep[su8PrevPress]));
 
             su8InputDigit++;
+
+            su32KeypressCounter++; /// \todo - debug
         }
     }
 
@@ -723,6 +736,8 @@ static uint32 u32_RequestPassword(void)
 
         v_AppClock_TimeDelay_Reset(&Td_Digit);  // Reset timer for next digit
         su8DisplayDigit++;                      // Increment to record the next digit to display
+
+        su32DelayExpirationCounter++; /// \todo - debug
     }
 
     if (NUM_DIGITS_PASSWORD <= su8DisplayDigit)
@@ -731,7 +746,85 @@ static uint32 u32_RequestPassword(void)
         su8InputDigit   = 0; // Reset input and display digits back to zero
         su8DisplayDigit = 0;
         u32Guess        = u32_AppTools_DigitArray_to_uint32(&sau8Digit[0], NUM_DIGITS_PASSWORD); // Calculate guess to return
+
+        su32DigitsCompleteCounter++; /// \todo - debug
     }
+
+    /// \todo - debug
+    Serial.println("");
+    Serial.println("");
+
+    Serial.println("/*--------------------------------------------------------*/");
+    Serial.println("/*-                    PASSWORD DATA                     -*/");
+    Serial.println("/*--------------------------------------------------------*/");
+    Serial.println("");
+
+    // Time Delay
+    Serial.print  ("Time Delay Expired? ");
+    if (Td_Digit.bExpired)  Serial.println("TRUE!" );
+    else                    Serial.println("FALSE!");
+
+    Serial.print  ("Time Delay (ms): ");
+    Serial.println(Td_Digit.u32Delay_ms);
+
+    Serial.print  ("Start Time (ms): ");
+    Serial.println(Td_Digit._u32StartTime_ms);
+
+    // Local Variables
+    Serial.print  ("Reset? ");
+    if (sbResetLcd)         Serial.println("TRUE!" );
+    else                    Serial.println("FALSE!");
+
+    Serial.print  ("Input Digit: ");
+    Serial.println(su8InputDigit);
+
+    Serial.print  ("Display Digit: ");
+    Serial.println(su8DisplayDigit);
+
+    Serial.print  ("Password Digits: ");
+    Serial.print  (sau8Digit[5]);
+    Serial.print  (sau8Digit[4]);
+    Serial.print  (sau8Digit[3]);
+    Serial.print  (sau8Digit[2]);
+    Serial.print  (sau8Digit[1]);
+    Serial.println(sau8Digit[0]);
+
+    Serial.print  ("Previous Press: ");
+    Serial.println(su8PrevPress);
+
+    Serial.print  ("Current Press: ");
+    Serial.println(u8CurrentPress);
+
+    Serial.print  ("Password Guess: ");
+    Serial.println(u32Guess);
+
+    Serial.print  ("Description: ");
+    Serial.println(&c_cDescription[0]);
+
+    Serial.print  ("Description X-Position: ");
+    Serial.println(cu8DisplayPositionDescription_x);
+
+    Serial.print  ("Password X-Position: ");
+    Serial.println(cu8DisplayPositionPassword_x);
+
+    // Loop Counters
+    Serial.print  ("Number of LCD Resets: ");
+    Serial.println(su32ResetCounter);
+
+    Serial.print  ("Number of Loops Where Digits Incomplete: ");
+    Serial.println(su32DigitsIncompleteCounter);
+
+    Serial.print  ("Number of Key Presses: ");
+    Serial.println(su32KeypressCounter);
+
+    Serial.print  ("Number of Time Delay Expirations: ");
+    Serial.println(su32DelayExpirationCounter);
+
+    Serial.print  ("Number of Times Digits Completed: ");
+    Serial.println(su32DigitsCompleteCounter);
+
+    Serial.println("");
+    Serial.println("");
 
     return u32Guess;
 }
