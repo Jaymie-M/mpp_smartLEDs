@@ -572,25 +572,24 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                 u16EndLeds   = u16SumLeds + (uint16) pt_LedStrip->t_SectionData.u8NumLeds;  // Sum thus far + num in current section
             }
 
-            if (bShiftStyle)
-            { /* Display section shift animation */
-                /// \todo
-            }
-            else
-            {
-                bool    bDisplayNewSection  = ((pt_LedStrip->t_SectionData.u8SectionNumber + 1)
-                                            <   pt_LedStrip->t_SectionData.u8NumUniqueSections )        //       Next section number is less than number of unique sections
-                                           && ((e_StyleUnequalSections      == pt_LedStrip->e_Style) || // -AND- Unequal   sections     style is selected
-                                               (e_StyleUnequalCheckpoints   == pt_LedStrip->e_Style) || // -OR-  Unequal   checkpoints  style is selected
-                                               (e_StylePatternedSections    == pt_LedStrip->e_Style) || // -OR-  Patterned sections     style is selected
-                                               (e_StylePatternedCheckpoints == pt_LedStrip->e_Style) ); // -OR-  Patterned checkpoints  style is selected
-                        bDisplayNewSection |= ((pt_LedStrip->t_SectionData.u8SectionNumber + 1)
-                                            <   pt_LedStrip->t_SectionData.u8NumPatternedSections)      // -OR-  Next section number is less than number of patterned sections
-                                           && ((e_StyleEqualSections        == pt_LedStrip->e_Style) || // -AND- Equal     sections     style is selected
-                                               (e_StyleEqualCheckpoints     == pt_LedStrip->e_Style) ); // -OR-  Equal     checkpoints  style is selected
+            bool    bDisplayNewSection  = ((pt_LedStrip->t_SectionData.u8SectionNumber + 1)
+                                        <   pt_LedStrip->t_SectionData.u8NumUniqueSections )        //       Next section number is less than number of unique sections
+                                       && ((e_StyleUnequalSections      == pt_LedStrip->e_Style) || // -AND- Unequal   sections     style is selected
+                                           (e_StyleUnequalCheckpoints   == pt_LedStrip->e_Style) || // -OR-  Unequal   checkpoints  style is selected
+                                           (e_StyleUnequalShift         == pt_LedStrip->e_Style) || // -OR-  Unequal   shift        style is selected
+                                           (e_StylePatternedSections    == pt_LedStrip->e_Style) || // -OR-  Patterned sections     style is selected
+                                           (e_StylePatternedCheckpoints == pt_LedStrip->e_Style) || // -OR-  Patterned checkpoints  style is selected
+                                           (e_StylePatternedShift       == pt_LedStrip->e_Style) ); // -OR-  Patterned shift        style is selected
+                    bDisplayNewSection |= ((pt_LedStrip->t_SectionData.u8SectionNumber + 1)
+                                        <   pt_LedStrip->t_SectionData.u8NumPatternedSections)      // -OR-  Next section number is less than number of patterned sections
+                                       && ((e_StyleEqualSections        == pt_LedStrip->e_Style) || // -AND- Equal     sections     style is selected
+                                           (e_StyleEqualCheckpoints     == pt_LedStrip->e_Style) || // -OR-  Equal     checkpoints  style is selected
+                                           (e_StyleEqualShift           == pt_LedStrip->e_Style) ); // -OR-  Equal     shift        style is selected
 
-                if (bDisplayNewSection)
-                {
+            if (bDisplayNewSection)
+            {
+                if (!bShiftStyle)
+                { // Not shift style - display new section of LEDs instead of animating new section
                     if (bGradientDisplay)
                     { // Display gradient for reference
                         for (size_t i = u16StartLeds; i < u16EndLeds; i++)
@@ -623,14 +622,19 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                                                pn_Section->t_Color.u8Blue);
                         }
                     }
-                    
+
                     FastLED.show();                               // Show LEDs
-                    pt_LedStrip->t_SectionData.u8SectionNumber++; // Define next section
                 }
-                else
-                {
-                    if (!pt_LedStrip->bDisplayed)
-                    { // Display LEDs
+
+                pt_LedStrip->t_SectionData.u8SectionNumber++; // Define next section
+            }
+            else
+            {
+                if (!pt_LedStrip->bDisplayed)
+                { // Display LEDs
+
+                    if (!bShiftStyle)
+                    { // Not shift style - display final LED strip instead of animating it
                         T_Color t_Color = T_COLOR_CLEAR();
 
                         for (size_t i = 0; i < NUM_LEDS; i++)
@@ -644,30 +648,30 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                         }
 
                         FastLED.show(); // Show LEDs
-
-                        // Request operator input to continue
-                        v_AppScreen_PressZeroIfDone(j_Lcd,
-                                                    "Press any other key",
-                                                    "to pick more colors.");
-
-                        // Set displayed flag true to avoid coming back in here
-                        pt_LedStrip->bDisplayed = true;
                     }
 
-                    u8CurrentPress = u8_AppTools_GetKeypress(j_Keypad);
+                    // Request operator input to continue
+                    v_AppScreen_PressZeroIfDone(j_Lcd,
+                                                "Press any other key",
+                                                "to pick more colors.");
 
-                    if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE))  // Falling edge of keypress
-                    { // LED strip is now defined if zero key is pressed
-                        if (0 == gc_au8DigitConv[su8PrevPress])
-                        { // 0 key was pressed - set LED strip to defined
-                            pt_LedStrip->bDefined = true;
-                        }
-
-                        bReturn = true; // Return true to indicate that this step is complete
-                    }
-
-                    su8PrevPress = u8CurrentPress; // Store current keypress
+                    // Set displayed flag true to avoid coming back in here
+                    pt_LedStrip->bDisplayed = true;
                 }
+
+                u8CurrentPress = u8_AppTools_GetKeypress(j_Keypad);
+
+                if (b_AppTools_FallingEdge(u8CurrentPress, su8PrevPress, KEYPRESS_NONE))  // Falling edge of keypress
+                { // LED strip is now defined if zero key is pressed
+                    if (0 == gc_au8DigitConv[su8PrevPress])
+                    { // 0 key was pressed - set LED strip to defined
+                        pt_LedStrip->bDefined = true;
+                    }
+
+                    bReturn = true; // Return true to indicate that this step is complete
+                }
+
+                su8PrevPress = u8CurrentPress; // Store current keypress
             }
         }
     }
@@ -929,6 +933,9 @@ void v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
             bool                bCheckpointStyle        = (e_StyleEqualCheckpoints      == pt_LedStrip->e_Style)
                                                        || (e_StyleUnequalCheckpoints    == pt_LedStrip->e_Style)
                                                        || (e_StylePatternedCheckpoints  == pt_LedStrip->e_Style);
+            bool                bShiftStyle             = (e_StyleEqualShift            == pt_LedStrip->e_Style)
+                                                       || (e_StyleUnequalShift          == pt_LedStrip->e_Style)
+                                                       || (e_StylePatternedShift        == pt_LedStrip->e_Style);
             uint32              u32TempCalc             = 0UL;
 
     switch (e_StillSectionsStep)
@@ -936,9 +943,12 @@ void v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
         /* Clear LED strip before proceeding */
         case e_StillSectionsClearLedStrip:
 
-            mbEnableAnimations = false; // Clear flag that enables animations
-            FastLED.clear();            // Clear and update LEDs
-            FastLED.show();
+            if (!bShiftStyle)
+            { // Only clear the LED strip and animations if not shift style
+                mbEnableAnimations = false; // Clear flag that enables animations
+                FastLED.clear();            // Clear and update LEDs
+                FastLED.show();
+            }
 
             // Once LED strip is cleared, define new LED strip
             e_StillSectionsStep = e_StillSectionsInit;
@@ -1077,7 +1087,8 @@ void v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
                                 break;
 #ifdef PRINT_ERROR_STATEMENTS
                             case e_StyleUnequalSections:
-                            case e_StyleUnequalCheckpoints: // Invalid cases
+                            case e_StyleUnequalCheckpoints:
+                            case e_StyleUnequalShift: // Invalid cases
                             default: 
                                 Serial.println("IT'S COARSE AND ROUGH AND GETS EVERYWHERE!"); // Error message
                                 break;
@@ -1251,7 +1262,8 @@ void v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
                         break;
 #ifdef PRINT_ERROR_STATEMENTS
                     case e_StyleEqualSections:
-                    case e_StyleEqualCheckpoints: // Invalid cases
+                    case e_StyleEqualCheckpoints:
+                    case e_StyleEqualShift: // Invalid cases
                     default: 
                         Serial.println("UNLIMITED POWER!"); // Error message
                         break;
@@ -1377,6 +1389,23 @@ void v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
             Serial.println("ANAKIN, MY ALLEGIENCE IS TO THE REPUBLIC. TO DEMOCRACY!"); // Error print statement
             break;
 #endif
+    }
+
+    /* Display section shift animation */
+    if (bShiftStyle)
+    { // Only display if shift style animation is enabled
+        /// \todo - 1. Need to pass in cycle time.
+        ///         2. If a section is defined, need to get start LEDs and end LEDs for that section. (Would be good to create function for this.)
+        ///
+        ///         FOR "FROM CONTROLLER" direction, on every period expiration:
+        ///         3. st_ColorTemp = pat_Leds[u16EndLeds - 1];
+        ///         4. for (size_t i = u16EndLeds - 1; i > u16StartLeds; i--) pat_Leds[i] = pat_Leds[i - 1];
+        ///         5. pat_Leds[u16StartLeds] = st_ColorTemp;
+        ///
+        ///         FOR "TO CONTROLLER" direction, on every period expiration:
+        ///         3. st_ColorTemp = pat_Leds[u16StartLeds];
+        ///         4. for (size_t i = u16StartLeds; i < (u16EndLeds - 1); i++) pat_Leds[i] = pat_Leds[i + 1];
+        ///         5. pat_Leds[u16EndLeds - 1] = st_ColorTemp;
     }
 }
 
