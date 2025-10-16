@@ -39,10 +39,10 @@
  *   Function Prototypes   *
  ***************************/
 static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C j_Lcd,            Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds,
-                                                    CRGB            * pat_Leds,         T_LedStrip    * pat_LedStrip,   uint32              u32CycleTime_us,
+                                                    CRGB            * paj_Leds,         T_LedStrip    * pat_LedStrip,   uint32              u32CycleTime_us,
                                                     uint8             u8Selection                                                                           );
 static void _v_AppAnimatedLights_ShiftSects        (LiquidCrystal_I2C j_Lcd,            Keypad          j_Keypad,       T_AnimatedLeds    * pt_AnimatedLeds,
-                                                    CRGB            * pat_Leds,         T_LedStrip    * pt_Frame,       T_LedStrip        * pt_Shift,
+                                                    CRGB            * paj_Leds,         T_LedStrip    * pt_Frame,       T_LedStrip        * pt_Shift,
                                                     uint32            u32CycleTime_us,  uint8           u8Selection                                         );
 /***************************
  *         Objects         *
@@ -59,7 +59,7 @@ static void _v_AppAnimatedLights_ShiftSects        (LiquidCrystal_I2C j_Lcd,    
 static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
                                                     Keypad              j_Keypad,
                                                     T_AnimatedLeds    * pt_AnimatedLeds,
-                                                    CRGB              * pat_Leds,
+                                                    CRGB              * paj_Leds,
                                                     T_LedStrip        * pat_LedStrip,
                                                     uint32              u32CycleTime_us,
                                                     uint8               u8Selection)
@@ -148,7 +148,7 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
                 Serial.println("");
 
                 Serial.println("/*------------------------------------------*/");
-                Serial.println("/*---             CYCLE DATA             ---*/");
+                Serial.println("/*---    FRAME TRANSITIONS CYCLE DATA    ---*/");
                 Serial.println("/*------------------------------------------*/");
 
                 Serial.println("");
@@ -197,7 +197,7 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
 
                         // Set LED color
                                             /* Red   */
-                        pat_Leds[i].setRGB ((uint8)   (pt_AnimatedLeds->t_Frame.f32Period_100pct *
+                        paj_Leds[i].setRGB ((uint8)   (pt_AnimatedLeds->t_Frame.f32Period_100pct *
                                             (float32) (t_NextColor.u8Red    - t_Color.u8Red  )) +
                                                        t_Color    .u8Red,
                                             /* Green */
@@ -212,7 +212,7 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
                     }
                     else
                     { // Set LED color
-                        pat_Leds[i].setRGB (t_Color.u8Red,      // Red
+                        paj_Leds[i].setRGB (t_Color.u8Red,      // Red
                                             t_Color.u8Green,    // Green
                                             t_Color.u8Blue);    // Blue
                     }
@@ -250,12 +250,13 @@ static void _v_AppAnimatedLights_FrameTransition   (LiquidCrystal_I2C   j_Lcd,
 static void _v_AppAnimatedLights_ShiftSects(LiquidCrystal_I2C   j_Lcd,    
                                             Keypad              j_Keypad,       
                                             T_AnimatedLeds    * pt_AnimatedLeds, 
-                                            CRGB              * pat_Leds,
+                                            CRGB              * paj_Leds,
                                             T_LedStrip        * pt_Frame,    
                                             T_LedStrip        * pt_Shift,   
                                             uint32              u32CycleTime_us,
                                             uint8               u8Selection)
 {
+    /* Define shift sections */
     if ((e_AnimatedLightsMenuUnd != u8Selection) && (e_MaxAnimatedLightsMenu >= u8Selection))
     { // If animated selection is valid, select style
         /* Set LED strip style */
@@ -268,7 +269,153 @@ static void _v_AppAnimatedLights_ShiftSects(LiquidCrystal_I2C   j_Lcd,
             pt_Shift->e_Style = e_StyleEqualShift;
         }
 
-        v_AppStillLights_StillSectsChkpts(j_Lcd, j_Keypad, pat_Leds, pt_Shift, u8Selection - SHIFT_OPTION_OFFSET);
+        v_AppStillLights_StillSectsChkpts(j_Lcd, j_Keypad, paj_Leds, pt_Shift, u8Selection - SHIFT_OPTION_OFFSET);
+    }
+
+    // Local variables for code-shortening
+    uint16      u16SumLeds          = 0,
+                u16StartLeds        = 0,
+                u16EndLeds          = 0;
+    uint8       u8NumberSections    = pt_Shift->t_SectionData.u8NumPatternedSections; // Default to animating number of patterned sections
+    N_Section * pn_Section;
+
+    /* Find number of sections in unequal shift sects animation */
+    if ((e_StyleUnequalSections     == pt_Shift->e_Style) ||
+        (e_StyleUnequalCheckpoints  == pt_Shift->e_Style) )
+    { // If unequal sections/checkpoints are selected, set number of sections to number unique sections
+        u8NumberSections = pt_Shift->t_SectionData.u8NumUniqueSections;
+    }
+
+    /* Loop through each section in the animation */
+    for (size_t i = 0; i < u8NumberSections; i++)
+    {
+        // Defaults for equal sections
+        u16StartLeds    = (uint16) ( pt_Shift->t_SectionData.u8NumLeds *  i     );
+        u16EndLeds      = (uint16) ( pt_Shift->t_SectionData.u8NumLeds * (i + 1));
+
+        /* Get pointer to section based on style */
+        switch (pt_Shift->e_Style)
+        {
+            case e_StylePatternedShift:
+
+                if (0 < pt_Shift->n_Style.t_Pattern.au8Order[i])
+                { // Set pn_Section to next section in pattern order
+                                        pn_Section      = &pt_Shift->n_Style.t_Pattern.n_Section[
+                                                           pt_Shift->n_Style.t_Pattern.au8Order  [i] - 1];
+                }
+                break;
+
+            case e_StyleEqualShift: // Set pn_Section to next section in array order
+                                        pn_Section      = &pt_Shift->n_Style.t_Equal  .n_Section [i];
+                break;
+
+            case e_StyleUnequalShift:
+
+                // Sum LEDs from all unequal sections up to but not equal to current section
+                if (0 != i) for (size_t k = 0; k < i; k++) u16SumLeds += pt_Shift->n_Style.t_Unequal.au8NumberOfLeds[k];
+
+                // Find the start LEDs (equal to sum) and end LEDs (sum plus current section)
+                u16StartLeds    = u16SumLeds;
+                u16EndLeds      = u16SumLeds + pt_Shift->n_Style.t_Unequal.au8NumberOfLeds[i];
+
+                // Set pn_Section to next section in array order
+                                        pn_Section      = &pt_Shift->n_Style.t_Unequal.n_Section [i];
+                break;
+#ifdef PRINT_ERROR_STATEMENTS
+            default: // Invalid case
+                Serial.println("THE WORLD IS A VAMPIRE!"); // Error print statement
+                break;
+#endif
+        }
+
+        /* Animate shift sections */
+        if (pn_Section->t_Shift.bDefined)
+        { // Only animate this section if defined
+
+            /// \todo - period percentage should be reset whenever animations are disabled - check this for still lights as well!
+            /* Calculate percentage of period elapsed - cycle time (us) divided by period (us) */
+            pt_AnimatedLeds->t_Shift.af32Period_100pct[i] += (float32) u32CycleTime_us
+                                                           / (1000.0f * (float32) (pn_Section->t_Shift.u16Period_ms));
+
+            Serial.println("");
+            Serial.println("");
+
+            Serial.println("/*------------------------------------------*/");
+            Serial.println("/*---     SHIFT SECTIONS CYCLE DATA      ---*/");
+            Serial.println("/*------------------------------------------*/");
+
+            Serial.println("");
+            Serial.print  ("Cycle time (us): ");
+            Serial.println((float32) u32CycleTime_us);
+
+            Serial.println("");
+            Serial.print  ("Period (us): ");
+            Serial.println(1000.0f * (float32) (pn_Section->t_Shift.u16Period_ms));
+
+            Serial.println("");
+            Serial.print  ("Period (%): ");
+            Serial.println(100.0f * pt_AnimatedLeds->t_Shift.af32Period_100pct[i]);
+
+            Serial.println("");
+            Serial.println("");
+
+            while (1.0f <= pt_AnimatedLeds->t_Shift.af32Period_100pct[i])
+            { // Full period has elapsed - should only come in here once every several loops,
+                // but set to while loop in case of excessively long loop time or fairly small period
+                pt_AnimatedLeds->t_Shift.af32Period_100pct[i] -= 1.0f; // Subtract 100% from period
+
+                /* Shift LEDs by one LED based on defined direction once period expires */
+                switch (pn_Section->t_Shift.u8Direction)
+                {
+                    case e_DirectionOut:
+
+                        // Store last LED in section in temp color
+                        pt_AnimatedLeds->t_Shift.t_ColorTemp.u8Red      = paj_Leds[u16EndLeds - 1].red;
+                        pt_AnimatedLeds->t_Shift.t_ColorTemp.u8Green    = paj_Leds[u16EndLeds - 1].green;
+                        pt_AnimatedLeds->t_Shift.t_ColorTemp.u8Blue     = paj_Leds[u16EndLeds - 1].blue;
+
+                        for (size_t j = u16EndLeds - 1; j > u16StartLeds; j--)
+                        { // Set each LED color to previous LED color
+                            paj_Leds[j].setRGB (paj_Leds[j - 1].red,      // Red
+                                                paj_Leds[j - 1].green,    // Green
+                                                paj_Leds[j - 1].blue);    // Blue
+                        }
+
+                        // Set start LED to stored end LED color
+                        paj_Leds[u16StartLeds].setRGB(pt_AnimatedLeds->t_Shift.t_ColorTemp.u8Red,      // Red
+                                                      pt_AnimatedLeds->t_Shift.t_ColorTemp.u8Green,    // Green
+                                                      pt_AnimatedLeds->t_Shift.t_ColorTemp.u8Blue);    // Blue
+                        break;
+
+                    case e_DirectionIn:
+
+                        // Store first LED in section in temp color
+                        pt_AnimatedLeds->t_Shift.t_ColorTemp.u8Red      = paj_Leds[u16StartLeds].red;
+                        pt_AnimatedLeds->t_Shift.t_ColorTemp.u8Green    = paj_Leds[u16StartLeds].green;
+                        pt_AnimatedLeds->t_Shift.t_ColorTemp.u8Blue     = paj_Leds[u16StartLeds].blue;
+
+                        for (size_t j = u16StartLeds; j < (u16EndLeds - 1); j++)
+                        { // Set each LED color to next LED color
+                            paj_Leds[j].setRGB (paj_Leds[j + 1].red,      // Red
+                                                paj_Leds[j + 1].green,    // Green
+                                                paj_Leds[j + 1].blue);    // Blue
+                        }
+
+                        // Set end LED to stored start LED color
+                        paj_Leds[u16EndLeds - 1].setRGB  (pt_AnimatedLeds->t_Shift.t_ColorTemp.u8Red,      // Red
+                                                          pt_AnimatedLeds->t_Shift.t_ColorTemp.u8Green,    // Green
+                                                          pt_AnimatedLeds->t_Shift.t_ColorTemp.u8Blue);    // Blue
+                        break;
+
+#ifdef PRINT_ERROR_STATEMENTS
+                    case e_DirectionUndefined:
+                    default: // Invalid case
+                    Serial.println("I AM THE ONE WHO KNOCKS!"); // Error print statement
+                        break;
+#endif
+                }
+            }
+        }
     }
 }
 
@@ -316,7 +463,7 @@ void v_AppAnimatedLights_MainMenu(LiquidCrystal_I2C  j_Lcd,     // [I, ] LCD    
 void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,              // [I, ] LCD    Object
                                     Keypad              j_Keypad,           // [I, ] Keypad Object
                                     T_AnimatedLeds    * pt_AnimatedLeds,    // [I,O] Animated LED data
-                                    CRGB              * pat_Leds,           // [I,O] LED struct array
+                                    CRGB              * paj_Leds,           // [I,O] LED struct array
                                     T_LedStrip        * pat_LedStrip,       // [I, ] LED strip struct array
                                     uint32              u32CycleTime_us,    // [I, ] Cycle time
                                     uint8               u8Selection)        // [I, ] Animations selection
@@ -351,7 +498,7 @@ void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,              // [
             _v_AppAnimatedLights_FrameTransition   (j_Lcd,
                                                     j_Keypad,
                                                     pt_AnimatedLeds,
-                                                    pat_Leds,
+                                                    paj_Leds,
                                                     pat_LedStrip,
                                                     u32CycleTime_us,
                                                     u8Selection);
@@ -360,7 +507,7 @@ void v_AppAnimatedLights_Main_TLU  (LiquidCrystal_I2C   j_Lcd,              // [
             _v_AppAnimatedLights_ShiftSects        (j_Lcd,
                                                     j_Keypad,
                                                     pt_AnimatedLeds,
-                                                    pat_Leds,
+                                                    paj_Leds,
                                                     &pat_LedStrip[e_InitialFrame],
                                                     &pat_LedStrip[e_Shift],
                                                     u32CycleTime_us,

@@ -38,8 +38,8 @@ static bool mbEnableAnimations = false;
  ***************************/
 static void _v_AppStillLights_GetLedColor_Rainbow       (                                          T_LedStrip * pt_LedStrip,    T_Color    * pt_Color,      uint16  u16CurrentLed);
 static void _v_AppStillLights_GetLedColor_SectsChkpts   (                                          T_LedStrip * pt_LedStrip,    T_Color    * pt_Color,      uint16  u16CurrentLed);
-static bool _b_AppStillLights_DefineLedStripSections    (LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, CRGB       * pat_Leds,       T_LedStrip * pt_LedStrip,   uint8	u8Selection  );
-static void _v_AppStillLights_StillRainbow              (LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, CRGB       * pat_Leds,       T_LedStrip * pt_LedStrip                         );
+static bool _b_AppStillLights_DefineLedStripSections    (LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, CRGB       * paj_Leds,       T_LedStrip * pt_LedStrip,   uint8	u8Selection  );
+static void _v_AppStillLights_StillRainbow              (LiquidCrystal_I2C j_Lcd, Keypad j_Keypad, CRGB       * paj_Leds,       T_LedStrip * pt_LedStrip                         );
 
 /***************************
  *         Objects         *
@@ -312,7 +312,7 @@ static void _v_AppStillLights_GetLedColor_SectsChkpts  (T_LedStrip    * pt_LedSt
  */
 static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lcd,
                                                      Keypad                 j_Keypad,
-                                                     CRGB                 * pat_Leds,
+                                                     CRGB                 * paj_Leds,
                                                      T_LedStrip           * pt_LedStrip,
                                                      uint8			        u8Selection)
 {
@@ -599,7 +599,7 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                                                        / (float32) (u16EndLeds - u16StartLeds);
 
                                                 /* Red   */
-                            pat_Leds[i].setRGB ((uint8)   (f32Dist_100Percent *
+                            paj_Leds[i].setRGB ((uint8)   (f32Dist_100Percent *
                                                 (float32) (pn_Section    ->t_Color.u8Red     - pn_PrevSection->t_Color.u8Red  )) +
                                                            pn_PrevSection->t_Color.u8Red,
                                                 /* Green */
@@ -617,7 +617,7 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                     { // Display section for reference
                         for (size_t i = u16StartLeds; i < u16EndLeds; i++)
                         { // Set RGB values to struct
-                            pat_Leds[i].setRGB(pn_Section->t_Color.u8Red,
+                            paj_Leds[i].setRGB(pn_Section->t_Color.u8Red,
                                                pn_Section->t_Color.u8Green,
                                                pn_Section->t_Color.u8Blue);
                         }
@@ -642,7 +642,7 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
                             _v_AppStillLights_GetLedColor_SectsChkpts(pt_LedStrip, &t_Color, i);
 
                             // Set current LED color
-                            pat_Leds[i].setRGB(t_Color.u8Red,
+                            paj_Leds[i].setRGB(t_Color.u8Red,
                                                t_Color.u8Green,
                                                t_Color.u8Blue);
                         }
@@ -692,7 +692,7 @@ static bool _b_AppStillLights_DefineLedStripSections(LiquidCrystal_I2C      j_Lc
  */
 static void _v_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,
                                            Keypad               j_Keypad,
-                                           CRGB               * pat_Leds,
+                                           CRGB               * paj_Leds,
                                            T_LedStrip         * pt_LedStrip)
 
 {
@@ -808,7 +808,7 @@ static void _v_AppStillLights_StillRainbow(LiquidCrystal_I2C    j_Lcd,
                     _v_AppStillLights_GetLedColor_Rainbow(pt_LedStrip, &t_Color, i);
 
                     // Set current LED color
-                    pat_Leds[i].setRGB(t_Color.u8Red,
+                    paj_Leds[i].setRGB(t_Color.u8Red,
                                        t_Color.u8Green,
                                        t_Color.u8Blue);
                 }
@@ -918,7 +918,7 @@ void v_AppStillsLights_GradientMenu(LiquidCrystal_I2C  j_Lcd,       // [I, ] LCD
  */
 void v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
                                        Keypad            j_Keypad,
-                                       CRGB            * pat_Leds,
+                                       CRGB            * paj_Leds,
                                        T_LedStrip      * pt_LedStrip,
                                        uint8             u8Selection)
 {
@@ -1377,7 +1377,7 @@ void v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
         case e_StillSectionsDefineLedStrip:
             
             if (_b_AppStillLights_DefineLedStripSections   (j_Lcd,          j_Keypad, 
-                                                            pat_Leds,       pt_LedStrip, 
+                                                            paj_Leds,       pt_LedStrip, 
                                                             u8Selection))
             { // Return to clear LED strip step once LED strip is defined or new definition requested
                 e_StillSectionsStep = e_StillSectionsClearLedStrip;
@@ -1390,23 +1390,6 @@ void v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
             break;
 #endif
     }
-
-    /* Display section shift animation */
-    if (bShiftStyle)
-    { // Only display if shift style animation is enabled
-        /// \todo - 1. Need to pass in cycle time.
-        ///         2. If a section is defined, need to get start LEDs and end LEDs for that section. (Would be good to create function for this.)
-        ///
-        ///         FOR "FROM CONTROLLER" direction, on every period expiration:
-        ///         3. st_ColorTemp = pat_Leds[u16EndLeds - 1];
-        ///         4. for (size_t i = u16EndLeds - 1; i > u16StartLeds; i--) pat_Leds[i] = pat_Leds[i - 1];
-        ///         5. pat_Leds[u16StartLeds] = st_ColorTemp;
-        ///
-        ///         FOR "TO CONTROLLER" direction, on every period expiration:
-        ///         3. st_ColorTemp = pat_Leds[u16StartLeds];
-        ///         4. for (size_t i = u16StartLeds; i < (u16EndLeds - 1); i++) pat_Leds[i] = pat_Leds[i + 1];
-        ///         5. pat_Leds[u16EndLeds - 1] = st_ColorTemp;
-    }
 }
 
 
@@ -1418,7 +1401,7 @@ void v_AppStillLights_StillSectsChkpts(LiquidCrystal_I2C j_Lcd,
  */
 void v_AppStillsLights_Main_TLU(LiquidCrystal_I2C    j_Lcd,          // [I, ] LCD    Object
                                 Keypad               j_Keypad,       // [I, ] Keypad Object
-                                CRGB               * pat_Leds,       // [ ,O] LED struct array
+                                CRGB               * paj_Leds,       // [ ,O] LED    Object array
                                 T_LedStrip         * pt_LedStrip,    // [I,O] LED strip struct
                                 uint8                u8Selection)    // [I, ] Stills menu selection
 {    
@@ -1454,15 +1437,15 @@ void v_AppStillsLights_Main_TLU(LiquidCrystal_I2C    j_Lcd,          // [I, ] LC
 
             /* Call function to setup sections/checkpoints */
             v_AppStillLights_StillSectsChkpts  (j_Lcd,      j_Keypad,
-                                                pat_Leds,   pt_LedStrip, u8Selection);
+                                                paj_Leds,   pt_LedStrip, u8Selection);
             break;
 
         case e_StillRainbow:
             pt_LedStrip->e_Style = e_StyleRainbow; // Set style
 
             /* Call function to setup rainbow */
-            _v_AppStillLights_StillRainbow     (j_Lcd,      j_Keypad, 
-                                                pat_Leds,   pt_LedStrip);
+            _v_AppStillLights_StillRainbow     (j_Lcd,      j_Keypad,
+                                                paj_Leds,   pt_LedStrip);
             break;
 
 #ifdef PRINT_ERROR_STATEMENTS
@@ -1483,7 +1466,7 @@ void v_AppStillsLights_Main_TLU(LiquidCrystal_I2C    j_Lcd,          // [I, ] LC
  */
 void v_AppStillsLights_Gradient_TLU(LiquidCrystal_I2C   j_Lcd,          // [I, ] LCD    Object
                                     Keypad              j_Keypad,       // [I, ] Keypad Object
-                                    CRGB              * pat_Leds,       // [ ,O] LED struct array
+                                    CRGB              * paj_Leds,       // [ ,O] LED    Object array
                                     T_LedStrip        * pt_LedStrip,    // [I,O] LED strip struct
                                     uint8               u8Selection)    // [I, ] Gradient menu selection
 {   
@@ -1506,7 +1489,7 @@ void v_AppStillsLights_Gradient_TLU(LiquidCrystal_I2C   j_Lcd,          // [I, ]
         }
 
         // Select checkpoints
-        v_AppStillLights_StillSectsChkpts(j_Lcd, j_Keypad, pat_Leds, pt_LedStrip, u8Selection - CHECKPOINT_OPTION_OFFSET);
+        v_AppStillLights_StillSectsChkpts(j_Lcd, j_Keypad, paj_Leds, pt_LedStrip, u8Selection - CHECKPOINT_OPTION_OFFSET);
     }
 }
 

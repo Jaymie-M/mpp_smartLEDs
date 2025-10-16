@@ -86,7 +86,7 @@
  */
 #define T_FRAMETRANSITION_DEFAULT(...)                                          \
 {                                                                               \
-    .t_ScreenPeriod   = T_TRANSITIONPERIODSCREEN_DEFAULT(),           \
+    .t_ScreenPeriod   = T_TRANSITIONPERIODSCREEN_DEFAULT(),                     \
     .f32Period_100pct           = 0.0f,                                         \
     .u8CurrentFrame             = 0,                                            \
     .u8NumberFrames             = 0,                                            \
@@ -193,11 +193,24 @@ typedef struct
 
 
 /**
+ * \brief - Data needed to run animated frame transitions
+ */
+typedef struct
+{
+    float32 af32Period_100pct[MAX_PATTERNED_SECTIONS];  // Percentage of period completed thus far for each section
+    T_Color t_ColorTemp;                                // Temporary storage of color for end of shifted section
+
+} T_ShiftSections;
+
+
+/**
  * \brief - Data needed to run LED animations
  */
 typedef struct
 {
+    /// \todo - could put T_FrameTransition and T_ShiftSections into union since both animation styles are mutually exclusive
     T_FrameTransition       t_Frame;                             // Data needed to run animated frame transitions
+    T_ShiftSections         t_Shift;                             // Data needed to run animated shift sections
     E_AnimationStyle        e_Style;                             // Animation style
     E_FrameTransitionStep   e_FrameTransitionStep;               // Frame transition step
     uint8                   au8Period_01s[e_NumLedStripFrames];  // Period between frames
@@ -213,7 +226,7 @@ typedef struct
  ***************************/
 void v_AppAnimatedLights_MainMenu               (LiquidCrystal_I2C  j_Lcd,      Keypad              j_Keypad,           T_MenuSelection   * pt_Menu           );
 void v_AppAnimatedLights_Main_TLU               (LiquidCrystal_I2C  j_Lcd,      Keypad              j_Keypad,           T_AnimatedLeds    * pt_AnimatedLeds,
-                                                 CRGB             * pat_Leds,   T_LedStrip        * pat_LedStrip,       uint32              u32CycleTime_us,
+                                                 CRGB             * paj_Leds,   T_LedStrip        * pat_LedStrip,       uint32              u32CycleTime_us,
                                                  uint8              u8Selection                                                                               );
 void v_AppAnimatedLights_Reset                  (                                                                       T_AnimatedLeds    * pt_AnimatedLeds   );
 void v_AppAnimatedLights_FramesScreenReset      (                               T_ScreenGetValues * pt_FramesScreen,    T_AnimatedLeds    * pt_AnimatedLeds   );

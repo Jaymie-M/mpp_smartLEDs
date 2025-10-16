@@ -71,7 +71,7 @@ static uint8  mu8SearchMenuSelect           = 0;
 
 // Structs
 static T_LedStrip       mat_SmartDormLedStrip[e_NumLedStripDefinitions]; /// \todo - define default struct
-static CRGB             mat_SmartDormLeds    [NUM_LEDS];
+static CRGB             maj_SmartDormLeds    [NUM_LEDS];
 static T_AnimatedLeds   mt_AnimatedLeds         = T_ANIMATEDLEDS_DEFAULT();
 static T_MenuSelection  mt_MainMenu             = T_MAINMENU_DEFAULT(),
                         mt_LightsMenu           = T_LIGHTSMENU_DEFAULT(),
@@ -91,7 +91,7 @@ LiquidCrystal_I2C mj_SmartDormLcd(DEFAULT_ADDRESS_LCD, 20, 4); // 0x27 is the de
  *   Function Prototypes   *
  ***************************/
 static void     v_DefineLedStripFrame (LiquidCrystal_I2C j_Lcd,                 Keypad            j_Keypad,
-                                       CRGB            * pat_Leds,              T_LedStrip      * pat_LedStrip,
+                                       CRGB            * paj_Leds,              T_LedStrip      * pat_LedStrip,
                                        T_MenuSelection * pt_StillLightsMenu,    T_MenuSelection * pt_GradientLightsMenu,
                                        uint8           * pu8Frame,              bool              bDefineMultipleFrames);
 
@@ -120,7 +120,7 @@ static uint32   u32_RequestPassword   (void);
 void v_AppMain_Init(void)
 {
     // Initialize FastLED object and clear LEDs to start
-    FastLED.addLeds<LED_STRIP_DRIVER_CHIP, PIN_DOUT_LED_DATA, LED_STRIP_RGB_SEQUENCE>(mat_SmartDormLeds, NUM_LEDS);
+    FastLED.addLeds<LED_STRIP_DRIVER_CHIP, PIN_DOUT_LED_DATA, LED_STRIP_RGB_SEQUENCE>(maj_SmartDormLeds, NUM_LEDS);
     FastLED.clear();
 
     // Start serial monitor
@@ -202,7 +202,7 @@ void v_AppMain_TLU(void)
 
                                 v_DefineLedStripFrame(mj_SmartDormLcd,              // [I, ] LCD    Object
                                                       mj_SmartDormKeypad,           // [I, ] Keypad Object
-                                                      &mat_SmartDormLeds[0],        // [I,O] LED struct array
+                                                      &maj_SmartDormLeds[0],        // [I,O] LED    Object Array
                                                       &mat_SmartDormLedStrip[0],    // [I,O] LED strip struct
                                                       &mt_StillLightsMenu,          // [I,O] Still      Lights Menu data
                                                       &mt_GradientLightsMenu,       // [I,O] Gradient   Lights Menu data
@@ -242,7 +242,7 @@ void v_AppMain_TLU(void)
                                     {
                                         v_DefineLedStripFrame(mj_SmartDormLcd,                  // [I, ] LCD    Object
                                                               mj_SmartDormKeypad,               // [I, ] Keypad Object
-                                                              &mat_SmartDormLeds[0],            // [I,O] LED struct array
+                                                              &maj_SmartDormLeds[0],            // [I,O] LED    Object array
                                                               &mat_SmartDormLedStrip[0],        // [I,O] LED strip struct
                                                               &mt_StillLightsMenu,              // [I,O] Still      Lights Menu data
                                                               &mt_GradientLightsMenu,           // [I,O] Gradient   Lights Menu data
@@ -332,7 +332,7 @@ void v_AppMain_TLU(void)
             v_AppAnimatedLights_Main_TLU(mj_SmartDormLcd,
                                          mj_SmartDormKeypad,
                                          &mt_AnimatedLeds,
-                                         &mat_SmartDormLeds[0],
+                                         &maj_SmartDormLeds[0],
                                          &mat_SmartDormLedStrip[0],
                                          mu32SmartDormLedsCycleTime_us,
                                          mt_AnimatedLightsMenu.u8Selection);
@@ -519,7 +519,7 @@ static void v_MainMenu(LiquidCrystal_I2C  j_Lcd,    // [I, ] LCD    Object
  */
 static void v_DefineLedStripFrame(LiquidCrystal_I2C  j_Lcd,                 // [I, ] LCD    Object
                                   Keypad             j_Keypad,              // [I, ] Keypad Object
-                                  CRGB             * pat_Leds,              // [I,O] LED struct array
+                                  CRGB             * paj_Leds,              // [I,O] LED    Object array
                                   T_LedStrip       * pat_LedStrip,          // [I,O] LED strip struct
                                   T_MenuSelection  * pt_StillLightsMenu,    // [I,O] Still      Lights Menu data
                                   T_MenuSelection  * pt_GradientLightsMenu, // [I,O] Gradient   Lights Menu data
@@ -562,7 +562,7 @@ static void v_DefineLedStripFrame(LiquidCrystal_I2C  j_Lcd,                 // [
                 {
                     v_AppStillsLights_Gradient_TLU(j_Lcd,
                                                    j_Keypad,
-                                                   &pat_Leds[0],
+                                                   &paj_Leds[0],
                                                    &pat_LedStrip[*pu8Frame],
                                                    pt_GradientLightsMenu->u8Selection);
                 }
@@ -587,7 +587,7 @@ static void v_DefineLedStripFrame(LiquidCrystal_I2C  j_Lcd,                 // [
             {
                 v_AppStillsLights_Main_TLU(j_Lcd,
                                            j_Keypad,
-                                           &pat_Leds[0],
+                                           &paj_Leds[0],
                                            &pat_LedStrip[*pu8Frame],
                                            pt_StillLightsMenu->u8Selection);
             }
