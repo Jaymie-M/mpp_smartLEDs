@@ -86,11 +86,24 @@
  */
 #define T_FRAMETRANSITION_DEFAULT(...)                                          \
 {                                                                               \
-    .t_ScreenPeriod   = T_TRANSITIONPERIODSCREEN_DEFAULT(),                     \
-    .f32Period_100pct           = 0.0f,                                         \
-    .u8CurrentFrame             = 0,                                            \
-    .u8NumberFrames             = 0,                                            \
-    .bFadeTransition            = false,                                        \
+    .t_ScreenPeriod     = T_TRANSITIONPERIODSCREEN_DEFAULT(),                   \
+    .f32Period_100pct   = 0.0f,                                                 \
+    .u8CurrentFrame     = 0,                                                    \
+    .u8NumberFrames     = 0,                                                    \
+    .bFadeTransition    = false,                                                \
+}
+
+
+/**
+ * \brief Default definition for shift sections data
+ */
+#define T_SHIFTSECTIONS_DEFAULT(...)                                            \
+{                                                                               \
+    .af32Period_100pct  = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,      \
+                           0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,      \
+                           0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,      \
+                           0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,            },    \
+    .t_ColorTemp        = T_COLOR_CLEAR(),                                      \
 }
 
 
@@ -100,6 +113,7 @@
 #define T_ANIMATEDLEDS_DEFAULT(...)                                             \
 {                                                                               \
     .t_Frame                    = T_FRAMETRANSITION_DEFAULT(),                  \
+    .t_Shift                    = T_SHIFTSECTIONS_DEFAULT(),                    \
     .e_Style                    = e_AnimationStyleUndefined,                    \
     .e_FrameTransitionStep      = e_FrameTransitionInit,                        \
     .au8Period_01s              = {0, 0, 0},                                    \
@@ -132,9 +146,9 @@
  */
 typedef enum
 {
-    e_FrameTransitionInit               = 0,
-    e_FrameTransitionPeriod 		    = 1,
-    e_FrameTransitionLoop		        = 2,
+    e_FrameTransitionInit              = 0,
+    e_FrameTransitionPeriod 		   = 1,
+    e_FrameTransitionLoop		       = 2,
     e_FrameTransitionNumberofSteps,
     
 } E_FrameTransitionStep;

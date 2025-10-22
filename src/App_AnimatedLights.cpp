@@ -256,8 +256,11 @@ static void _v_AppAnimatedLights_ShiftSects(LiquidCrystal_I2C   j_Lcd,
                                             uint32              u32CycleTime_us,
                                             uint8               u8Selection)
 {
-    /* Define shift sections */
-    if ((e_AnimatedLightsMenuUnd != u8Selection) && (e_MaxAnimatedLightsMenu >= u8Selection))
+    /* If shift sections are defined, set animated LEDs defined TRUE */
+    if (pt_Shift->bDefined) pt_AnimatedLeds->bDefined = true;
+
+    /* If not defined, define shift sections */
+    else if ((e_AnimatedLightsMenuUnd != u8Selection) && (e_MaxAnimatedLightsMenu >= u8Selection))
     { // If animated selection is valid, select style
         /* Set LED strip style */
         if      (e_AnimatedShiftUnequalSections == u8Selection)

@@ -166,8 +166,8 @@ void v_AppMain_TLU(void)
         {
             v_ResetMenuSelections(); // Reset all menu selections to SELECTION_NONE
 
-            for (size_t i = 0; i < e_NumLedStripDefinitions; i++)
-            { // Reset all LED strip definitions to FALSE, without resetting all
+            for (size_t i = 0; i < e_NumLedStripFrames; i++)
+            { // Reset all LED strip frames to FALSE, without resetting all
                 // LED strip data (that may be needed for animations)
                 mat_SmartDormLedStrip[i].bDefined = false;
             }
@@ -340,6 +340,9 @@ void v_AppMain_TLU(void)
         else if (mt_AnimatedLeds.bDefined)
         { // Animations were just disabled - reset
             v_AppAnimatedLights_Reset(&mt_AnimatedLeds);
+
+            // Set shift sections undefined when animations disabled
+            mat_SmartDormLedStrip[e_Shift].bDefined = false;
         }
 
         /// \todo - do other loops here - e.g., clock update, animations update, music update
